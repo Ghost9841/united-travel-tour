@@ -1,12 +1,17 @@
+import Footer from "@/components/Footer";
+import HeroCarousel from "@/components/landingpage/HeroSection";
+import Newsletter from "@/components/landingpage/Newsettler";
+import Navbar from "@/components/NavBar";
 import Image from "next/image";
-import Navbar from "@/components/ui/navbar";
-import Footer from "@/components/ui/footer";
+
 
 export default function Home() {
   return (
     <div>
-      <Navbar/>
-      {/* <HeroSection/> */}
+      {/* <Navbar/> */}
+      <HeroCarousel/>
+      <div className="h-screen"></div>
+      <Newsletter/>
       <Footer/>
     </div>  
   );
