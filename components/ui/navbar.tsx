@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Navbar() {
   return (
-    <nav className="flex flex-row justify-between items-center w-[1920px] h-32 px-[182px] py-8  bg-black">
+    <nav className="flex flex-row justify-between items-center w-full max-w-[1920px] mx-auto h-32 px-[182px] py-8  bg-black">
       <div className=" flex justify-center items-center">
         <Image
           src="/Logo.svg" 
@@ -35,7 +35,7 @@ export default function Navbar() {
         <button className="w-52px h-6 text-white hover:opacity-80 transition-opacity ">
             Login
         </button>
-        <button className="w-[134px] h-16 px-8 py-5 bg-[#FF7757] text-white rounded-xl hover:bg-[#FF5533] transition-colors">
+        <button className="w-[134px] h-16 px-8 py-5 bg-[#FF7757] text-white rounded-xl transition-colors">
             Sign up
         </button>
 
