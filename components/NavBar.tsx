@@ -1,44 +1,41 @@
-import Image from "next/image";
+'use client';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import CustomLink from './manual-ui/CustomLink';
 
+const navItems = [
+  { href: '/', title: 'Home' },
+  { href: '/explore', title: 'Explore' },
+  { href: '/travel', title: 'Travel' },
+  { href: '/blog', title: 'Blog' },
+  { href: '/pricing', title: 'Pricing' },
+];
 
 export default function Navbar() {
   return (
-    <nav className="flex flex-row justify-between items-center w-full mx-auto ">
-      <div className=" flex justify-center items-center">
-        <Image
-          src="/Logo.svg" 
-          alt="Logo" 
-          width={234} 
-          height={45.61}
-        />
-
+    <nav className="flex items-center justify-between w-full mx-auto">
+    
+      <div className="flex items-center">
+        <Image src="/Logo.svg" alt="Logo" width={180} height={36} />
       </div>
-      <div className="flex flex-row items-center w-[417px] h-[28px] gap-8">
-        <a href="#" className="text-white hover:opacity-80 transistion-opacity">
-            Home
-        </a>
-        <a href="#" className="text-white hover:opacity-80 transistion-opacity">
-            Explore
-        </a>
-        <a href="#" className="text-white hover:opacity-80 transistion-opacity">
-            Travel
-        </a>
-        <a href="#" className="text-white hover:opacity-80 transistion-opacity">
-            Blog
-        </a>
-        <a href="#" className="text-white hover:opacity-80 transistion-opacity">
-            Pricing
-        </a>
 
+      <div className="hidden md:flex items-center gap-8">
+        {navItems.map(({ href, title }) => (
+          <CustomLink
+            key={href}
+            href={href}
+            title={title}
+            className="text-white"
+          />
+        ))}
       </div>
-      <div className="flex flex-row items-center w-[222px] h-16 gap-9">
-        <button className="w-52px h-6 text-white hover:opacity-80 transition-opacity ">
-            Login
-        </button>
-        <button className="w-[134px] h-16 px-8 py-5 bg-[#FF7757] text-white rounded-xl transition-colors">
-            Sign up
-        </button>
 
+      {/* Actions */}
+      <div className="flex items-center gap-6">
+        <CustomLink href="/login" title="Login" className="text-white" />
+        <Button size="lg" className="rounded-full text-base">
+          Book Tour
+        </Button>
       </div>
     </nav>
   );
