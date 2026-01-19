@@ -84,7 +84,6 @@ export default function DestinationGallery() {
           </button>
         </div>
       </div>
-
      
     </section>
   );
