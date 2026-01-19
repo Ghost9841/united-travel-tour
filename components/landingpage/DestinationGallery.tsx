@@ -7,6 +7,7 @@ import {
   CarouselItem,
   CarouselApi,
 } from '@/components/ui/carousel';
+import Autoplay from "embla-carousel-autoplay"
 
 const DESTINATIONS = [
   {
@@ -100,6 +101,11 @@ export default function DestinationGallery() {
 
       {/* Carousel with consistent aspect ratio */}
       <Carousel
+       plugins={[
+        Autoplay({
+          delay: 2000,
+        }),
+      ]}
         setApi={setApi}
         opts={{
           align: 'start',
