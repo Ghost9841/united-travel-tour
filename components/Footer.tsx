@@ -1,7 +1,22 @@
 'use client';
 import Image from 'next/image';
+import CustomLink from './manual-ui/CustomLink';
 
 export default function Footer() {
+  const menuItems = [
+  { href: '/', title: 'Home' },
+  { href: '/explore', title: 'Explore' },
+  { href: '/travel', title: 'Travel' },
+  { href: '/blog', title: 'Blog' },
+  { href: '/pricing', title: 'Pricing' },
+];
+  const infoItems = [
+  { href: '/destinations', title: 'Destinations' },
+  { href: '/Supports', title: 'Supports' },
+  { href: '/terms-and-conditions', title: 'Terms & Conditions' },
+  { href: '/privacy', title: 'Privacy' },
+];
+
   return (
     <footer className="w-full bg-[#172432]">
       <div className="max-w-7xl mx-auto px-6 py-16 md:py-24">
@@ -23,20 +38,28 @@ export default function Footer() {
           {/* Menu */}
           <div className="flex flex-col gap-3">
             <h3 className="text-white font-semibold mb-1">Menu</h3>
-            {['Home', 'Explore', 'Travel', 'Blog', 'Pricing'].map(l => (
-              <a key={l} href={`/${l.toLowerCase()}`} className="text-white/80 hover:text-white">
-                {l}
-              </a>
+            {menuItems.map(({href,title}) => (
+              <CustomLink
+              key={href}
+              href={href}
+              title={title}
+               showActive={false}
+              className="text-white/80 hover:text-white active:w-0"
+              />
             ))}
           </div>
 
           {/* Information */}
           <div className="flex flex-col gap-3">
             <h3 className="text-white font-semibold mb-1">Information</h3>
-            {['Destinations', 'Supports', 'Terms & Conditions', 'Privacy'].map(l => (
-              <a key={l} href={`/${l.split(' ')[0].toLowerCase()}`} className="text-white/80 hover:text-white">
-                {l}
-              </a>
+            {infoItems.map(({href,title}) => (
+              <CustomLink
+              key={href}
+              href={href}
+              title={title}
+               showActive={false}
+              className="text-white/80 hover:text-white active:w-0"
+              />
             ))}
           </div>
 
