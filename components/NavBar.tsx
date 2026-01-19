@@ -2,6 +2,7 @@
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import CustomLink from './manual-ui/CustomLink';
+import Link from 'next/link';
 
 const navItems = [
   { href: '/', title: 'Home' },
@@ -34,7 +35,9 @@ export default function Navbar() {
       <div className="flex items-center gap-6">
         <CustomLink href="/login" title="Login" className="text-white" />
         <Button size="lg" className="rounded-full text-base">
+          <Link href={'/signup'}>
           Book Tour
+          </Link>
         </Button>
       </div>
     </nav>
