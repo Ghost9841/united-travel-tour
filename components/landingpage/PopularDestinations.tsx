@@ -1,5 +1,5 @@
 'use client';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, MapPin} from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 const DESTINATIONS = [
@@ -40,15 +40,14 @@ const DESTINATIONS = [
   },
 ];
 
-export default function DestinationGallery() {
+export default function PopularDestinations() {
   const [idx, setIdx] = useState(0);
 
   const next = () => setIdx((i) => (i + 1) % DESTINATIONS.length);
   const prev = () => setIdx((i) => (i - 1 + DESTINATIONS.length) % DESTINATIONS.length);
 
-  
-  
 
+  const visibleDestinations = DESTINATIONS.slice(idx, idx + 4);
 
   // keyboard arrows
   useEffect(() => {
@@ -65,11 +64,11 @@ export default function DestinationGallery() {
   return (
     <section className="max-w-7xl mx-auto px-6 py-10">
       {/* heading */}
-      <h1 className="text-4xl font-semibold">Destination Gallery</h1>
+      <h1 className="text-4xl font-semibold">Popular Destinations</h1>
       <div className="border-t-2 border-orange-500 w-2xs mt-2 mb-4" />
 
       <div className="flex items-center justify-between mb-6">
-        <h4 className="text-gray-600">Our photo gallery on trip</h4>
+        <h4 className="text-gray-600">Most popular destinations around the world, from historical places to natural wonders.</h4>
 
         <div className="flex items-center gap-3">
           <button
@@ -88,7 +87,37 @@ export default function DestinationGallery() {
           </button>
         </div>
       </div>
-      
+       <div className="flex gap-6 items-center justify-center overflow-hidden px-4">
+        {visibleDestinations.map((destination, i) => (
+          <div
+            key={`${destination.id}-${i}`}
+            className="shrink-0 transition-all duration-500 ease-out"
+            style={{
+              transform: i === 1 ? 'scale(1.05)' : 'scale(0.95)',
+              opacity: i === 1 ? 1 : 0.85,
+            }}
+          >
+            <div className="relative w-75 h-105 rounded-2xl overflow-hidden group cursor-pointer  bg-white">
+              <img
+                src={destination.src}
+                alt={destination.alt}
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              
+              
+              
+              {/* Text Content */}
+              <div className="absolute bottom-6 left-6 text-white z-10">
+                <h3 className="text-xl font-semibold mb-2">{destination.name}</h3>
+                <div className="flex items-center gap-1.5 text-sm">
+                  <MapPin className="w-4 h-4" />
+                  <span>{destination.location}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </section>
   );
 }

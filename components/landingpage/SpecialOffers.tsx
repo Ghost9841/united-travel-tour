@@ -2,7 +2,9 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
-const DESTINATIONS = [
+
+ {/* SPECIAL OFFERS LEFT TO ADD */}
+const OFFERS = [
   {
     id: 1,
     name: 'Monument of Berlin',
@@ -40,11 +42,11 @@ const DESTINATIONS = [
   },
 ];
 
-export default function DestinationGallery() {
+export default function SpecialOffers() {
   const [idx, setIdx] = useState(0);
 
-  const next = () => setIdx((i) => (i + 1) % DESTINATIONS.length);
-  const prev = () => setIdx((i) => (i - 1 + DESTINATIONS.length) % DESTINATIONS.length);
+  const next = () => setIdx((i) => (i + 1) % OFFERS.length);
+  const prev = () => setIdx((i) => (i - 1 + OFFERS.length) % OFFERS.length);
 
   
   
@@ -60,32 +62,33 @@ export default function DestinationGallery() {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  const { src, alt, name, location } = DESTINATIONS[idx];
 
   return (
     <section className="max-w-7xl mx-auto px-6 py-10">
       {/* heading */}
-      <h1 className="text-4xl font-semibold">Destination Gallery</h1>
-      <div className="border-t-2 border-orange-500 w-2xs mt-2 mb-4" />
-
-      <div className="flex items-center justify-between mb-6">
-        <h4 className="text-gray-600">Our photo gallery on trip</h4>
-
-        <div className="flex items-center gap-3">
-          <button
-            onClick={prev}
-            className="p-3 rounded-full bg-gray-900 hover:bg-gray-800 text-white transition"
-            aria-label="Previous"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-          <button
-            onClick={next}
-            className="p-3 rounded-full bg-orange-500 hover:bg-orange-600 text-white transition"
-            aria-label="Next"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
+      <div className="mb-6">
+        <div className="text-right">
+          <h1 className="text-4xl font-semibold">Special Offers</h1>
+          <div className="border-t-2 border-orange-500 w-24 mt-2 mb-4 ml-auto" />
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={prev}
+              className="p-3 rounded-full bg-gray-900 hover:bg-gray-800 text-white transition"
+              aria-label="Previous"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+            <button
+              onClick={next}
+              className="p-3 rounded-full bg-orange-500 hover:bg-orange-600 text-white transition"
+              aria-label="Next"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          </div>
+          <h4 className="text-gray-600">Check out our special offers and discounts</h4>
         </div>
       </div>
       
