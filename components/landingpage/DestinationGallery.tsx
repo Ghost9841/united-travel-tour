@@ -46,6 +46,10 @@ export default function DestinationGallery() {
   const next = () => setIdx((i) => (i + 1) % DESTINATIONS.length);
   const prev = () => setIdx((i) => (i - 1 + DESTINATIONS.length) % DESTINATIONS.length);
 
+  
+  const visibleDestinations = DESTINATIONS.slice(idx, idx + 4);
+
+
   // keyboard arrows
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -84,7 +88,26 @@ export default function DestinationGallery() {
           </button>
         </div>
       </div>
-     
+       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {visibleDestinations.map((destination) => (
+            <div
+              key={destination.id}
+              className="relative aspect-[3/4] rounded-2xl overflow-hidden group cursor-pointer"
+            >
+              <img
+                src={destination.src}
+                alt={destination.alt}
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="absolute bottom-4 left-4 text-white">
+                  <p className="font-semibold">{destination.name}</p>
+                  <p className="text-sm opacity-90">{destination.location}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
     </section>
   );
 }
