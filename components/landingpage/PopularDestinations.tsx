@@ -1,13 +1,6 @@
 'use client';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, MapPin} from 'lucide-react';
 import { useState, useEffect } from 'react';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselApi,
-} from '@/components/ui/carousel';
-import Autoplay from "embla-carousel-autoplay"
 
 const DESTINATIONS = [
   {
@@ -47,45 +40,46 @@ const DESTINATIONS = [
   },
 ];
 
-export default function DestinationGallery() {
+export default function PopularDestinations() {
   const [idx, setIdx] = useState(0);
 
   const next = () => setIdx((i) => (i + 1) % DESTINATIONS.length);
   const prev = () => setIdx((i) => (i - 1 + DESTINATIONS.length) % DESTINATIONS.length);
 
-  
-  const visibleDestinations = DESTINATIONS.slice(idx, idx + 4);
 
+  const visibleDestinations = DESTINATIONS.slice(idx, idx + 4);
 
   // keyboard arrows
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') api?.scrollPrev();
-      if (e.key === 'ArrowRight') api?.scrollNext();
+      if (e.key === 'ArrowLeft') prev();
+      if (e.key === 'ArrowRight') next();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [api]);
+  }, []);
+
+  const { src, alt, name, location } = DESTINATIONS[idx];
 
   return (
     <section className="max-w-7xl mx-auto px-6 py-10">
       {/* heading */}
-      <h1 className="text-4xl font-semibold">Destination Gallery</h1>
-      <div className="border-t-2 border-orange-500 w-20 mt-2 mb-4" />
+      <h1 className="text-4xl font-semibold">Popular Destinations</h1>
+      <div className="border-t-2 border-orange-500 w-2xs mt-2 mb-4" />
 
       <div className="flex items-center justify-between mb-6">
-        <h4 className="text-gray-600">Our photo gallery on trip</h4>
+        <h4 className="text-gray-600">Most popular destinations around the world, from historical places to natural wonders.</h4>
 
         <div className="flex items-center gap-3">
           <button
-            onClick={() => api?.scrollPrev()}
+            onClick={prev}
             className="p-3 rounded-full bg-gray-900 hover:bg-gray-800 text-white transition"
             aria-label="Previous"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
           <button
-            onClick={() => api?.scrollNext()}
+            onClick={next}
             className="p-3 rounded-full bg-orange-500 hover:bg-orange-600 text-white transition"
             aria-label="Next"
           >
@@ -93,26 +87,37 @@ export default function DestinationGallery() {
           </button>
         </div>
       </div>
-       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {visibleDestinations.map((destination) => (
-            <div
-              key={destination.id}
-              className="relative aspect-[3/4] rounded-2xl overflow-hidden group cursor-pointer"
-            >
+       <div className="flex gap-6 items-center justify-center overflow-hidden px-4">
+        {visibleDestinations.map((destination, i) => (
+          <div
+            key={`${destination.id}-${i}`}
+            className="shrink-0 transition-all duration-500 ease-out"
+            style={{
+              transform: i === 1 ? 'scale(1.05)' : 'scale(0.95)',
+              opacity: i === 1 ? 1 : 0.85,
+            }}
+          >
+            <div className="relative w-75 h-105 rounded-2xl overflow-hidden group cursor-pointer  bg-white">
               <img
                 src={destination.src}
                 alt={destination.alt}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="absolute bottom-4 left-4 text-white">
-                  <p className="font-semibold">{destination.name}</p>
-                  <p className="text-sm opacity-90">{destination.location}</p>
+              
+              
+              
+              {/* Text Content */}
+              <div className="absolute bottom-6 left-6 text-white z-10">
+                <h3 className="text-xl font-semibold mb-2">{destination.name}</h3>
+                <div className="flex items-center gap-1.5 text-sm">
+                  <MapPin className="w-4 h-4" />
+                  <span>{destination.location}</span>
                 </div>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
+      </div>
     </section>
   );
 }
