@@ -1,5 +1,5 @@
 'use client';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 
@@ -7,40 +7,41 @@ import { useState, useEffect } from 'react';
 const OFFERS = [
   {
     id: 1,
-    name: 'Monument of Berlin',
-    location: 'Berlin, Germany',
-    src: 'https://images.unsplash.com/photo-1524422926292-d321c3ff46f2?w=1200&h=800&fit=crop',
-    alt: 'Berlin Cathedral',
+    name: 'Pashupatinath Temple',
+    location: 'Kathmandu, Nepal',
+    src: 'https://images.openai.com/thumbnails/url/LuMSHnicu5mVUVJSUGylr5-al1xUWVCSmqJbkpRnoJdeXJJYkpmsl5yfq5-Zm5ieWmxfaAuUsXL0S7F0Tw5KNLNMj_T3S4s3z45IM_YzSDYuL3f1jjfw1XV1CS4sKS1PzwvMS48wM8o0CjQwyXbzUSsGAG9pJa4',
+    alt: 'Pashupatinath Temple Kathmandu',
   },
   {
     id: 2,
-    name: 'Millennium Bridge',
-    location: 'London, United Kingdom',
-    src: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1200&h=800&fit=crop',
-    alt: 'Millennium Bridge London',
+    name: 'Swayambhunath Stupa',
+    location: 'Kathmandu, Nepal',
+    src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Swayambhunath_2018.jpg/1280px-Swayambhunath_2018.jpg',
+    alt: 'Swayambhunath Monkey Temple',
   },
   {
     id: 3,
-    name: 'Rialto Bridge',
-    location: 'Venice, Italy',
-    src: 'https://images.unsplash.com/photo-1514921295671-29d763e5ded7?w=1200&h=800&fit=crop',
-    alt: 'Rialto Bridge Venice',
+    name: 'Pokhara Lakeside',
+    location: 'Pokhara, Nepal',
+    src: 'https://www.nepalindependentguide.com/wp-content/uploads/2025/02/Swayambhunath.gif',
+    alt: 'Phewa Lake Pokhara',
   },
   {
     id: 4,
-    name: 'Sacré-Cœur',
-    location: 'Paris, France',
-    src: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1200&h=800&fit=crop',
-    alt: 'Sacré-Cœur Paris',
+    name: 'Mount Everest',
+    location: 'Solukhumbu, Nepal',
+    src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Swayambhunath_2018.jpg/1280px-Swayambhunath_2018.jpg',
+    alt: 'Mount Everest Himalayas',
   },
   {
     id: 5,
-    name: 'Colosseum',
-    location: 'Rome, Italy',
-    src: 'https://images.unsplash.com/photo-1552832860-cfde47f1dda5?w=1200&h=800&fit=crop',
-    alt: 'Colosseum Rome',
+    name: 'Bhaktapur Durbar Square',
+    location: 'Bhaktapur, Nepal',
+    src: 'https://images.unsplash.com/photo-1622044029152-8f8b9e7c5e90?w=1200&h=800&fit=crop',
+    alt: 'Bhaktapur Durbar Square',
   },
 ];
+
 
 export default function SpecialOffers() {
   const [idx, setIdx] = useState(0);
@@ -91,7 +92,37 @@ export default function SpecialOffers() {
           <h4 className="text-gray-600">Check out our special offers and discounts</h4>
         </div>
       </div>
-      
+        <div className="flex gap-6 items-center justify-center overflow-hidden px-4">
+        {OFFERS.map((destination, i) => (
+          <div
+            key={`${destination.id}-${i}`}
+            className="shrink-0 transition-all duration-500 ease-out"
+            style={{
+              transform: i === 1 ? 'scale(1.05)' : 'scale(0.95)',
+              opacity: i === 1 ? 1 : 0.85,
+            }}
+          >
+            <div className="relative w-75 h-105 rounded-2xl overflow-hidden group cursor-pointer  bg-white">
+              <img
+                src={destination.src}
+                alt={destination.alt}
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              
+              
+              
+              {/* Text Content */}
+              <div className="absolute bottom-6 left-6 text-white z-10">
+                <h3 className="text-xl font-semibold mb-2">{destination.name}</h3>
+                <div className="flex items-center gap-1.5 text-sm">
+                  <MapPin className="w-4 h-4" />
+                  <span>{destination.location}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </section>
   );
 }
