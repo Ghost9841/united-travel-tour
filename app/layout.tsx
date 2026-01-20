@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "United Travel & Tours - A Travel Agency",
   description: "A Travel Agency for All The United Travel & Tours",
-  icons: "/logo.jpeg"
+  icons: "/unitetravellogo300x300px.svg"
 };
 
 export default function RootLayout({

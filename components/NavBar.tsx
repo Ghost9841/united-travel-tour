@@ -17,7 +17,7 @@ export default function Navbar() {
     <nav className="flex items-center justify-between w-full mx-auto">
     
       <div className="flex items-center">
-        <Image src="/logo.jpeg" alt="Logo" width={80} height={36} className= "rounded-2xl"/>
+        <Image src="/UNITED_Logo-01.svg" alt="Logo" width={256} height={64}/>
       </div>
 
       <div className="hidden md:flex items-center gap-8">
