@@ -24,14 +24,14 @@ export default function Footer() {
           {/* Logo + copyright */}
           <div className="col-span-2 md:col-span-1">
             <Image
-              src="/Logo.svg"
+              src="/logo.jpeg"
               alt="Logo"
               width={180}
               height={36}
               className="mb-4"
             />
             <p className="text-white/80">
-              Copyright © Travellian 2020<br />All rights reserved
+              Copyright © United Travel & Tours 2020<br />All rights reserved
             </p>
           </div>
 
@@ -67,8 +67,8 @@ export default function Footer() {
           <div className="flex flex-col gap-3">
             <h3 className="text-white font-semibold mb-1">Contact Info</h3>
             <p className="text-white/80">+123 456 789</p>
-            <p className="text-white/80">info@travellian.com</p>
-            <p className="text-white/80">1245, New York, USA</p>
+            <p className="text-white/80">info@unitedtravels.com</p>
+            <p className="text-white/80">12345, New York, USA</p>
           </div>
 
           {/* Social */}
