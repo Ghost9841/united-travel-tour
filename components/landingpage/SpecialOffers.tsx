@@ -64,7 +64,7 @@ export default function SpecialOffers() {
 
 
   return (
-    <section className="max-w-7xl mx-auto px-6 py-10">
+    <section className="max-w-8xl mx-auto px-6 py-10">
       {/* heading */}
       <div className="mb-6">
         <div className="text-right">
