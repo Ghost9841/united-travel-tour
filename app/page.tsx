@@ -5,6 +5,7 @@ import HeroCarousel from "@/components/landingpage/HeroSection";
 import Newsletter from "@/components/landingpage/Newsettler";
 import PopularDestinations from "@/components/landingpage/PopularDestinations";
 import SpecialOffers from "@/components/landingpage/SpecialOffers";
+import TripPlanners from "@/components/landingpage/TripPlanners";
 
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
       <SpecialOffers/>
       <Blogs/>
       <div className="h-screen"></div>
+      <TripPlanners/>
       <DestinationGallery/>
       <Newsletter/>
       <Footer/>
