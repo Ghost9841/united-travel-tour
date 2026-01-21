@@ -68,10 +68,10 @@ export default function HeroCarousel() {
     return (
         <section className="relative w-full h-screen overflow-hidden">
             {/* Top Thin Navbar */}
-            <div className=''>
+            {/* <div className=''>
             <TopThinNavbar/>
 
-            </div>
+            </div> */}
             {/* Background Images */}
             <div className="relative w-full h-full">
                 {HERO_IMAGES.map((image, index) => (

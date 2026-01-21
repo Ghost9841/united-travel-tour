@@ -15,7 +15,7 @@ const navItems = [
 
 export default function Navbar() {
   return (
-    <nav className="flex items-center justify-between w-full mx-auto mt-4">
+    <nav className="flex items-center justify-between w-full mx-auto "> {/* mt-4 can be used here if using top thin navbar*/}
     
       <div className="flex items-center">
         <Image src="/UNITED_Logo-01.svg" alt="Logo" width={256} height={64}/>
