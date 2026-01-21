@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import Navbar from '../NavBar'
+import TopThinNavbar from './TopThinNavbar'
 
 const HERO_IMAGES = [
     {
@@ -66,6 +67,11 @@ export default function HeroCarousel() {
 
     return (
         <section className="relative w-full h-screen overflow-hidden">
+            {/* Top Thin Navbar */}
+            <div className=''>
+            <TopThinNavbar/>
+
+            </div>
             {/* Background Images */}
             <div className="relative w-full h-full">
                 {HERO_IMAGES.map((image, index) => (

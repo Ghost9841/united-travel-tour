@@ -6,15 +6,16 @@ import Link from 'next/link';
 
 const navItems = [
   { href: '/', title: 'Home' },
+  { href: '/aboutus', title: 'About Us' },
   { href: '/explore', title: 'Explore' },
   { href: '/travel', title: 'Travel' },
+  { href: '/hotels', title: 'Hotels' },
   { href: '/blog', title: 'Blog' },
-  { href: '/pricing', title: 'Pricing' },
 ];
 
 export default function Navbar() {
   return (
-    <nav className="flex items-center justify-between w-full mx-auto">
+    <nav className="flex items-center justify-between w-full mx-auto mt-4">
     
       <div className="flex items-center">
         <Image src="/UNITED_Logo-01.svg" alt="Logo" width={256} height={64}/>

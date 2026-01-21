@@ -61,19 +61,6 @@ export default function DestinationGallery() {
       api.off('select', onSelect);
     };
   }, [api]);
-  const [api, setApi] = useState<CarouselApi>();
-  const [current, setCurrent] = useState(0);
-
-  useEffect(() => {
-    if (!api) return;
-
-    const onSelect = () => setCurrent(api.selectedScrollSnap());
-
-    api.on('select', onSelect);
-    return () => {
-      api.off('select', onSelect);
-    };
-  }, [api]);
 
   // keyboard arrows
   useEffect(() => {
@@ -86,7 +73,7 @@ export default function DestinationGallery() {
   }, [api]);
 
   return (
-    <section className="max-w-8xl mx-auto px-6 py-10">
+    <section className="max-w-7xl mx-auto px-6 py-10">
       {/* heading */}
       <h1 className="text-4xl font-semibold">Destination Gallery</h1>
       <div className="border-t-2 border-orange-500 w-20 mt-2 mb-4" />
@@ -130,43 +117,9 @@ export default function DestinationGallery() {
         <CarouselContent className="-ml-4">
           {DESTINATIONS.map((destination) => (
             <CarouselItem
-
-      {/* Carousel with consistent aspect ratio */}
-      <Carousel
-       plugins={[
-        Autoplay({
-          delay: 2000,
-        }),
-      ]}
-        setApi={setApi}
-        opts={{
-          align: 'start',
-          loop: false,
-          slidesToScroll: 1,
-        }}
-        className="w-full"
-      >
-        <CarouselContent className="-ml-4">
-          {DESTINATIONS.map((destination) => (
-            <CarouselItem
               key={destination.id}
               className="pl-4 basis-full sm:basis-1/2 lg:basis-1/4"
-              className="pl-4 basis-full sm:basis-1/2 lg:basis-1/4"
             >
-              <div className="relative aspect-[3/4] rounded-2xl overflow-hidden group cursor-pointer">
-                <img
-                  src={destination.src}
-                  alt={destination.alt}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <p className="font-semibold">{destination.name}</p>
-                    <p className="text-sm opacity-90">{destination.location}</p>
-                  </div>
-                </div>
-              </div>
-            </CarouselItem>
               <div className="relative aspect-3/4 rounded-2xl overflow-hidden group cursor-pointer">
                 <img
                   src={destination.src}
@@ -184,8 +137,6 @@ export default function DestinationGallery() {
           ))}
         </CarouselContent>
       </Carousel>
-        </CarouselContent>
-      </Carousel>
     </section>
   );
-}
+};
