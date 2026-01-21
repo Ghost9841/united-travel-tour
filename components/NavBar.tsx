@@ -8,9 +8,9 @@ const navItems = [
   { href: '/', title: 'Home' },
   { href: '/aboutus', title: 'About Us' },
   { href: '/explore', title: 'Explore' },
-  { href: '/travel', title: 'Travel' },
+  { href: '/travels', title: 'Travels' },
   { href: '/hotels', title: 'Hotels' },
-  { href: '/blog', title: 'Blog' },
+  { href: '/blogs', title: 'Blogs' },
 ];
 
 export default function Navbar() {
