@@ -62,7 +62,7 @@ export default function PopularDestinations() {
   const { src, alt, name, location } = DESTINATIONS[idx];
 
   return (
-    <section className="max-w-7xl mx-auto px-6 py-10">
+    <section className="max-w-8xl mx-auto px-6 py-10">
       {/* heading */}
       <h1 className="text-4xl font-semibold">Popular Destinations</h1>
       <div className="border-t-2 border-orange-500 w-2xs mt-2 mb-4" />
