@@ -45,7 +45,7 @@ export function LoginForm({
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Welcome back</CardTitle>
           <CardDescription>
-            Login with your Google account
+            Login or Create with your Google account
           </CardDescription>
         </CardHeader>
         <CardContent>
