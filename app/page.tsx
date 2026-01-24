@@ -16,7 +16,6 @@ export default function Home() {
       <PopularDestinations/>
       <SpecialOffers/>
       <Blogs/>
-      <div className="h-screen"></div>
       <TripPlanners/>
       <DestinationGallery/>
       <Newsletter/>

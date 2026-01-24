@@ -1,96 +1,99 @@
 'use client';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselApi,
-} from '@/components/ui/carousel';
-import Autoplay from "embla-carousel-autoplay"
 
 const DESTINATIONS = [
   {
     id: 1,
-    name: 'Monument of Berlin',
-    location: 'Berlin, Germany',
-    src: 'https://images.unsplash.com/photo-1524422926292-d321c3ff46f2?w=1200&h=800&fit=crop',
-    alt: 'Berlin Cathedral',
+    name: "Urban Explorer",
+    location: "City Streets",
+    image: "https://images.unsplash.com/photo-1499696010180-025ef28d15bb?auto=format&fit=crop&w=600&q=80",
+    alt: "Traveler standing near colorful mural"
   },
   {
     id: 2,
-    name: 'Millennium Bridge',
-    location: 'London, United Kingdom',
-    src: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1200&h=800&fit=crop',
-    alt: 'Millennium Bridge London',
+    name: "Beach Sunset",
+    location: "Coastal Paradise",
+    image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=80",
+    alt: "Person sitting on rocky beach during sunset"
   },
   {
     id: 3,
-    name: 'Rialto Bridge',
-    location: 'Venice, Italy',
-    src: 'https://images.unsplash.com/photo-1514921295671-29d763e5ded7?w=1200&h=800&fit=crop',
-    alt: 'Rialto Bridge Venice',
+    name: "European Streets",
+    location: "Historic District",
+    image: "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=600&q=80",
+    alt: "Backpacker walking through narrow European street"
   },
   {
     id: 4,
-    name: 'Sacré-Cœur',
-    location: 'Paris, France',
-    src: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1200&h=800&fit=crop',
-    alt: 'Sacré-Cœur Paris',
+    name: "Urban Adventure",
+    location: "City Railway",
+    image: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=600&q=80",
+    alt: "Traveler walking on railway track in urban area"
   },
   {
     id: 5,
-    name: 'Colosseum',
-    location: 'Rome, Italy',
-    src: 'https://images.unsplash.com/photo-1552832860-cfde47f1dda5?w=1200&h=800&fit=crop',
-    alt: 'Colosseum Rome',
+    name: "Mountain Explorer",
+    location: "Highland Peaks",
+    image: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=600&q=80",
+    alt: "Solo traveler exploring mountain landscape"
   },
+  {
+    id: 6,
+    name: "Desert Cliffs",
+    location: "Coastal Desert",
+    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=600&q=80",
+    alt: "Person exploring desert cliffs by the sea"
+  }
 ];
 
 export default function DestinationGallery() {
-  const [api, setApi] = useState<CarouselApi>();
-  const [current, setCurrent] = useState(0);
+  const [startIndex, setStartIndex] = useState(0);
+  const itemsToShow = 4;
 
-  useEffect(() => {
-    if (!api) return;
+  const next = () => {
+    setStartIndex((prev) => 
+      prev + itemsToShow >= DESTINATIONS.length ? 0 : prev + 1
+    );
+  };
 
-    const onSelect = () => setCurrent(api.selectedScrollSnap());
-
-    api.on('select', onSelect);
-    return () => {
-      api.off('select', onSelect);
-    };
-  }, [api]);
+  const prev = () => {
+    setStartIndex((prev) => 
+      prev === 0 ? Math.max(0, DESTINATIONS.length - itemsToShow) : prev - 1
+    );
+  };
 
   // keyboard arrows
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') api?.scrollPrev();
-      if (e.key === 'ArrowRight') api?.scrollNext();
+      if (e.key === 'ArrowLeft') prev();
+      if (e.key === 'ArrowRight') next();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [api]);
+  }, []);
+
+  const visibleDestinations = DESTINATIONS.slice(startIndex, startIndex + itemsToShow);
 
   return (
-    <section className="max-w-7xl mx-auto px-6 py-10">
+    <section className="max-w-8xl mx-auto px-6 py-10">
       {/* heading */}
       <h1 className="text-4xl font-semibold">Destination Gallery</h1>
-      <div className="border-t-2 border-orange-500 w-20 mt-2 mb-4" />
+      <div className="border-t-2 border-orange-500 w-32 mt-2 mb-4" />
 
       <div className="flex items-center justify-between mb-6">
         <h4 className="text-gray-600">Our photo gallery on trip</h4>
 
         <div className="flex items-center gap-3">
           <button
-            onClick={() => api?.scrollPrev()}
+            onClick={prev}
             className="p-3 rounded-full bg-gray-900 hover:bg-gray-800 text-white transition"
             aria-label="Previous"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
           <button
-            onClick={() => api?.scrollNext()}
+            onClick={next}
             className="p-3 rounded-full bg-orange-500 hover:bg-orange-600 text-white transition"
             aria-label="Next"
           >
@@ -99,44 +102,37 @@ export default function DestinationGallery() {
         </div>
       </div>
 
-      {/* Carousel with consistent aspect ratio */}
-      <Carousel
-       plugins={[
-        Autoplay({
-          delay: 2000,
-        }),
-      ]}
-        setApi={setApi}
-        opts={{
-          align: 'start',
-          loop: false,
-          slidesToScroll: 1,
-        }}
-        className="w-full"
-      >
-        <CarouselContent className="-ml-4">
-          {DESTINATIONS.map((destination) => (
-            <CarouselItem
-              key={destination.id}
-              className="pl-4 basis-full sm:basis-1/2 lg:basis-1/4"
-            >
-              <div className="relative aspect-3/4 rounded-2xl overflow-hidden group cursor-pointer">
-                <img
-                  src={destination.src}
-                  alt={destination.alt}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <p className="font-semibold">{destination.name}</p>
-                    <p className="text-sm opacity-90">{destination.location}</p>
-                  </div>
-                </div>
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-      </Carousel>
+      {/* Gallery Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {visibleDestinations.map((destination) => (
+          <div
+            key={destination.id}
+            className="group relative rounded-2xl overflow-hidden cursor-pointer h-72 bg-white shadow-lg hover:shadow-2xl transition-all duration-500"
+          >
+            {/* Image Container */}
+            <div className="absolute inset-0 transition-transform duration-500 group-hover:-translate-y-16">
+              <img
+                src={destination.image}
+                alt={destination.alt}
+                className="w-full h-full object-cover"
+              />
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+            </div>
+
+            {/* Details Container - Hidden by default, slides up on hover */}
+            <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 bg-gradient-to-t from-black via-black/95 to-transparent pt-12">
+              <h3 className="text-lg font-bold mb-1">{destination.name}</h3>
+              <p className="text-sm text-gray-300">{destination.location}</p>
+            </div>
+
+            {/* Title visible when not hovering */}
+            <div className="absolute bottom-4 left-4 right-4 text-white group-hover:opacity-0 transition-opacity duration-300">
+              <p className="font-semibold drop-shadow-lg">{destination.name}</p>
+            </div>
+          </div>
+        ))}
+      </div>
     </section>
   );
-};
+}
