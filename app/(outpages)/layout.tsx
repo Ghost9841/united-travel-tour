@@ -7,12 +7,12 @@ export default function OutPageLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>
+<div className="">
+
         <Navbar/>
         {children}
         <Footer/>
-      </body>
-    </html>
+</div>
+
   );
 }
