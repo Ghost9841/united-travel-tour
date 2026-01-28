@@ -92,9 +92,9 @@ export default function HeroCarousel() {
             </div>
 
             {/* Navigation Bar */}
-            <nav className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-8 md:px-16 py-6">
+            {/* <nav className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-8 md:px-16 py-6">
                 <Navbar />
-            </nav>
+            </nav> */}
             {/* Content Overlay */}
             <div className="absolute inset-0 flex flex-col justify-between px-8 md:px-16 py-16 z-10">
                 {/* Text Content */}

@@ -6,12 +6,13 @@ import Newsletter from "@/components/landingpage/Newsettler";
 import PopularDestinations from "@/components/landingpage/PopularDestinations";
 import SpecialOffers from "@/components/landingpage/SpecialOffers";
 import TripPlanners from "@/components/landingpage/TripPlanners";
+import Navbar from "@/components/NavBar";
 
 
 export default function Home() {
   return (
     <div>
-      {/* <Navbar/> */}
+      <Navbar/>
       <HeroCarousel/>
       <PopularDestinations/>
       <SpecialOffers/>

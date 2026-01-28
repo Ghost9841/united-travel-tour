@@ -83,11 +83,11 @@ export default function TravelDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-orange-500">
       {/* Header Section */}
       <div className="max-w-8xl mx-auto px-6 py-8">
         {/* Breadcrumb */}
-        <div className="mb-6 text-sm text-gray-600">
+        <div className="mb-6 text-sm text-gray-600 mt-20">
           <a href="/" className="hover:text-orange-500">Home</a>
           <span className="mx-2">/</span>
           <a href="/travels" className="hover:text-orange-500">Travels</a>
@@ -350,7 +350,7 @@ export default function TravelDetailPage() {
 
           {/* Right Section - Booking Card (1/4 width) */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl p-6 shadow-lg sticky top-8">
+            <div className="bg-white rounded-2xl p-6 shadow-lg sticky top-32">
               <div className="mb-6">
                 <p className="text-gray-500 text-sm mb-2">From</p>
                 <div className="flex items-baseline gap-2 mb-1">

@@ -135,7 +135,7 @@ export default function TravelsPage() {
       {/* Header Section */}
       <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white py-20">
         <div className="max-w-8xl mx-auto px-6">
-          <h1 className="text-5xl font-bold mb-4">Discover Amazing Travel Packages</h1>
+          <h1 className="text-5xl font-bold mb-4 mt-10">Discover Amazing Travel Packages</h1>
           <p className="text-xl text-orange-100">Handpicked destinations with expertly curated itineraries for unforgettable experiences</p>
         </div>
       </div>

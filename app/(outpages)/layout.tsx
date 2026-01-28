@@ -7,12 +7,11 @@ export default function OutPageLayout({
   children: React.ReactNode;
 }>) {
   return (
-<div className="">
-
-        <Navbar/>
-        {children}
-        <Footer/>
-</div>
+    <div className="bg-black">
+      <Navbar />
+      {children}
+      <Footer />
+    </div>
 
   );
 }
