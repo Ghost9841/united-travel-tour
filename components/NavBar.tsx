@@ -37,12 +37,14 @@ export default function Navbar() {
     >
       <div className="flex items-center justify-between w-full mx-auto px-6 py-4">
         <div className="flex items-center">
+          <a href="/">
           <Image
             src="/UNITED_Logo-01.svg"
             alt="Logo"
             width={256}
             height={64}
-          />
+            />
+            </a>
         </div>
 
         <div className="hidden md:flex items-center gap-8">
