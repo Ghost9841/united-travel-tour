@@ -28,7 +28,7 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  return (
+  return ( 
     <nav
       className={clsx(
         'fixed top-0 z-50 w-full transition-colors duration-300',
