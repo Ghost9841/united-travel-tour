@@ -169,7 +169,7 @@ export default function BlogsDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-orange-500">
       {/* Back Button */}
       <div className="max-w-4xl mx-auto px-6 pt-24 pb-4">
         <a href="/blogs" className="inline-flex items-center gap-2 text-orange-500 hover:text-orange-600 font-medium">
