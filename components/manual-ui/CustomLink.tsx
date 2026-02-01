@@ -8,12 +8,14 @@ type CustomLinkProps = {
   title: string;
   className?: string;
   showActive?: boolean; // 👈 NEW
+  target?: '_blank';
 };
 
 export default function CustomLink({
   href,
   title,
   className = '',
+  target,
   showActive = true, // default ON (navbar behavior)
 }: CustomLinkProps) {
   const pathname = usePathname();
@@ -23,6 +25,7 @@ export default function CustomLink({
     <Link
       href={href}
       className={clsx('relative inline-block pb-1 group', className)}
+      target={target}
     >
       {title}
 

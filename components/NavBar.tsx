@@ -32,10 +32,10 @@ export default function Navbar() {
     <nav
       className={clsx(
         'fixed top-0 z-50 w-full transition-colors duration-300',
-        isSticky ? 'bg-primary shadow-md' : 'bg-transparent'
+        isSticky ? 'bg-primary shadow-md' : 'bg-transparent mt-6'
       )}
     >
-      <div className="flex items-center justify-between w-full mx-auto px-6 py-4">
+      <div className="flex items-center justify-between w-full mx-auto px-6 py-4 ">
         <div className="flex items-center">
           <a href="/">
           <Image
