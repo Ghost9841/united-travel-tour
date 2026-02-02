@@ -61,7 +61,7 @@ export default function Navbar() {
         <div className="flex items-center gap-6">
           <CustomLink href="/login" title="Login" className="text-white" />
           <Button size="lg" className="rounded-full text-base">
-            <Link href="/login">Book Tour</Link>
+            <Link href="/booknow">Book Tour</Link>
           </Button>
         </div>
       </div>
