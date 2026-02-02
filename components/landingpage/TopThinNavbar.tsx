@@ -5,7 +5,7 @@ import { FaFacebookF, FaTwitter, FaShareAlt } from 'react-icons/fa';
 
 const TopThinNavbar = () => {
   return (
-    <nav className="absolute top-0 left-0 right-0 z-100">
+    <nav className="absolute top-0 left-0 right-0 z-100 hidden sm:block">
       <div className="bg-primary/70 text-white text-xs md:text-sm">
         <div className="max-w-8xl mx-auto md:px-16 py-2 flex items-center justify-end">
 

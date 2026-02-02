@@ -5,6 +5,7 @@ import HeroCarousel from "@/components/landingpage/HeroSection";
 import Newsletter from "@/components/landingpage/Newsettler";
 import PopularDestinations from "@/components/landingpage/PopularDestinations";
 import SpecialOffers from "@/components/landingpage/SpecialOffers";
+import TopThinNavbar from "@/components/landingpage/TopThinNavbar";
 import TripPlanners from "@/components/landingpage/TripPlanners";
 import Navbar from "@/components/NavBar";
 
@@ -12,6 +13,7 @@ import Navbar from "@/components/NavBar";
 export default function Home() {
   return (
     <div>
+      <TopThinNavbar/>
       <Navbar/>
       <HeroCarousel/>
       <PopularDestinations/>

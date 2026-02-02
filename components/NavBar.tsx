@@ -3,9 +3,17 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetTitle,
+} from '@/components/ui/sheet';
+import { Menu } from 'lucide-react';
 import CustomLink from './manual-ui/CustomLink';
 import Link from 'next/link';
 import clsx from 'clsx';
+import { useIsMobile } from '@/hooks/use-mobile'; // adjust path as needed
 
 const navItems = [
   { href: '/', title: 'Home' },
@@ -18,6 +26,8 @@ const navItems = [
 
 export default function Navbar() {
   const [isSticky, setIsSticky] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,25 +38,26 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  return ( 
+  return (
     <nav
       className={clsx(
         'fixed top-0 z-50 w-full transition-colors duration-300',
         isSticky ? 'bg-primary shadow-md' : 'bg-transparent mt-6'
       )}
     >
-      <div className="flex items-center justify-between w-full mx-auto px-6 py-4 ">
+      <div className="flex items-center justify-between w-full mx-auto px-6 py-4">
         <div className="flex items-center">
           <a href="/">
-          <Image
-            src="/UNITED_Logo-01.svg"
-            alt="Logo"
-            width={256}
-            height={64}
+            <Image
+              src="/UNITED_Logo-01.svg"
+              alt="Logo"
+              width={256}
+              height={64}
             />
-            </a>
+          </a>
         </div>
 
+        {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
           {navItems.map(({ href, title }) => (
             <CustomLink
@@ -58,11 +69,56 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div className="flex items-center gap-6">
+        {/* Desktop CTA Buttons */}
+        <div className="hidden md:flex items-center gap-6">
           <CustomLink href="/login" title="Login" className="text-white" />
           <Button size="lg" className="rounded-full text-base">
             <Link href="/booknow">Book Tour</Link>
           </Button>
+        </div>
+
+        {/* Mobile Hamburger Menu */}
+        <div className="md:hidden">
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="text-white hover:bg-white/20">
+                <Menu className="h-6 w-6" />
+                <span className="sr-only">Toggle menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[300px] bg-primary border-primary/20">
+              <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+              <div className="flex flex-col gap-6 mt-8">
+                {/* Mobile Nav Items */}
+                <div className="flex flex-col gap-4">
+                  {navItems.map(({ href, title }) => (
+                    <CustomLink
+                      key={href}
+                      href={href}
+                      title={title}
+                      className="text-white text-lg py-2 border-b border-white/10"
+                    />
+                  ))}
+                </div>
+
+                {/* Mobile CTA Section */}
+                <div className="flex flex-col gap-4 mt-4">
+                  <CustomLink
+                    href="/login"
+                    title="Login"
+                    className="text-white text-lg"
+                  />
+                  <Button
+                    size="lg"
+                    className="rounded-full text-base w-full"
+                    asChild
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <Link href="/booknow">Book Tour</Link>
+                  </Button>
+                </div>              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </nav>

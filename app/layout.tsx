@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
-import TopThinNavbar from "@/components/landingpage/TopThinNavbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,11 +29,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <TopThinNavbar/>
         {children}
         <Script
           id="tawk-to"
-           strategy="afterInteractive"
+          strategy="afterInteractive"
         >
           {`
             var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
