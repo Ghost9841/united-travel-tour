@@ -5,8 +5,8 @@ import { useState, useEffect } from 'react';
 const DESTINATIONS = [
   {
     id: 1,
-    name: "Monument of Berlin",
-    location: "Berlin, Germany",
+    name: "Pasupati Nath",
+    location: "Kathmandu, Nepal",
     description: "A powerful historical landmark reflecting Berlin's rich past, culture, and architectural legacy.",
     src: "https://images.unsplash.com/photo-1524422926292-d321c3ff46f2?w=1200&h=800&fit=crop",
     alt: "Berlin Cathedral"
@@ -21,24 +21,24 @@ const DESTINATIONS = [
   },
   {
     id: 3,
-    name: "Rialto Bridge",
-    location: "Venice, Italy",
+    name: "Rara Lake",
+    location: "Mugu & Jumla, Nepal",
     description: "One of Venice's oldest bridges, connecting history, romance, and vibrant canal life.",
     src: "https://images.unsplash.com/photo-1514921295671-29d763e5ded7?w=1200&h=800&fit=crop",
     alt: "Rialto Bridge Venice"
   },
   {
     id: 4,
-    name: "Sacré-Cœur",
-    location: "Paris, France",
+    name: "Phewa Lake",
+    location: "Pokhara Valley",
     description: "A breathtaking basilica perched above Paris, offering panoramic city views and timeless beauty.",
     src: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1200&h=800&fit=crop",
     alt: "Sacré-Cœur Paris"
   },
   {
     id: 5,
-    name: "Colosseum",
-    location: "Rome, Italy",
+    name: "Patan Durbar Square",
+    location: "Patan, Nepal",
     description: "An ancient Roman amphitheater symbolizing the grandeur, history, and drama of the Roman Empire.",
     src: "https://images.unsplash.com/photo-1552832860-cfde47f1dda5?w=1200&h=800&fit=crop",
     alt: "Colosseum Rome"
@@ -115,11 +115,11 @@ export default function PopularDestinations() {
                 className="w-full h-full object-cover"
               />
               {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
             </div>
 
             {/* Details Container - Hidden by default, slides up on hover */}
-            <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 bg-gradient-to-t from-black via-black/95 to-transparent pt-16">
+            <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 bg-linear-to-t from-black via-black/95 to-transparent pt-16">
               <h3 className="text-lg font-bold mb-2">{destination.name}</h3>
               <div className="flex items-center gap-1.5 text-sm mb-2">
                 <MapPin className="w-4 h-4" />

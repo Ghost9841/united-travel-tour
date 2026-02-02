@@ -34,7 +34,7 @@ export default function RootLayout({
         {children}
         <Script
           id="tawk-to"
-          strategy="afterInteractive"
+           strategy="afterInteractive"
         >
           {`
             var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
@@ -42,7 +42,7 @@ export default function RootLayout({
               var s1=document.createElement("script"),
               s0=document.getElementsByTagName("script")[0];
               s1.async=true;
-              s1.src='https://embed.tawk.to/697f673d2eff4e1c3ce8a24f/1jgcqmj5m';
+              s1.src='https://embed.tawk.to/698090bf23b2011c36edddaf/1jgf3areo';
               s1.charset='UTF-8';
               s1.setAttribute('crossorigin','*');
               s0.parentNode.insertBefore(s1,s0);
