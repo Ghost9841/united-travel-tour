@@ -14,22 +14,22 @@ const TopThinNavbar = () => {
 
             {/* Contact Info using CustomLink */}
             <CustomLink
-              href="tel:+123456789"
-              title="+123 456 789"
+              href="tel:+07366234404"
+              title="+07 366 234 404"
               className="hover:text-white hover:cursor-pointer"
               target='_blank'
             />
 
             <CustomLink
-              href="mailto:info@unitedtravels.com"
-              title="info@unitedtravels.com"
+              href="mailto:info@unitedtravels.co.uk"
+              title="info@unitedtravels.co.uk"
               className="hover:text-white"
               target='_blank'
             />
 
             <CustomLink
               href="/offices"
-              title="12345, New York, USA"
+              title="2 High Street, Bracknell, RG12 1AA"
               className="hover:text-white"
               target='_blank'
             />

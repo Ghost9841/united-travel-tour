@@ -61,9 +61,9 @@ export default function Footer() {
           {/* Contact */}
           <div className="flex flex-col gap-3">
             <h3 className="text-white font-semibold mb-1">Contact Info</h3>
-            <p className="text-white/80">+123 456 789</p>
-            <p className="text-white/80">info@unitedtravels.com</p>
-            <p className="text-white/80">12345, New York, USA</p>
+            <p className="text-white/80">+07 366 234 404</p>
+            <p className="text-white/80">info@unitedtravels.co.uk</p>
+            <p className="text-white/80">2 High Street, Bracknell, RG12 1AA</p>
           </div>
 
           {/* Social */}
