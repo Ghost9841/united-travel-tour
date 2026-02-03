@@ -37,7 +37,7 @@ export default function BookNow() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-300 via-white to-orange-300 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-orange-500 via-white to-orange-300 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12 mt-16">
