@@ -14,8 +14,8 @@ const TopThinNavbar = () => {
 
             {/* Contact Info using CustomLink */}
             <CustomLink
-              href="tel:+07366234404"
-              title="+07 366 234 404"
+              href="wa.me/447366234404"
+              title="+44 7366 234 404"
               className="hover:text-white hover:cursor-pointer"
               target='_blank'
             />
