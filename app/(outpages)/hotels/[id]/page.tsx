@@ -392,10 +392,10 @@ export default function HotelDetailPage() {
               <div className="mb-6">
                 <p className="text-gray-500 text-sm mb-2">Price per night</p>
                 <div className="flex items-baseline gap-2 mb-1">
-                  <span className="text-4xl font-bold text-orange-500">€{hotel.pricePerNight}</span>
+                  <span className="text-4xl font-bold text-orange-500">£{hotel.pricePerNight}</span>
                 </div>
                 {hotel.originalPrice && (
-                  <p className="text-gray-400 line-through text-sm">€{hotel.originalPrice}</p>
+                  <p className="text-gray-400 line-through text-sm">£{hotel.originalPrice}</p>
                 )}
               </div>
 

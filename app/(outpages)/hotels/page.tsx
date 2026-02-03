@@ -236,7 +236,7 @@ export default function HotelsListingPage() {
                 {hotel.originalPrice && (
                   <div className="absolute top-4 right-4">
                     <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                      Save €{hotel.originalPrice - hotel.pricePerNight}
+                      Save £{hotel.originalPrice - hotel.pricePerNight}
                     </span>
                   </div>
                 )}
@@ -297,9 +297,9 @@ export default function HotelsListingPage() {
                   <div>
                     <p className="text-sm text-gray-500">Per night</p>
                     <div className="flex items-baseline gap-2">
-                      <span className="text-2xl font-bold text-orange-500">€{hotel.pricePerNight}</span>
+                      <span className="text-2xl font-bold text-orange-500">£{hotel.pricePerNight}</span>
                       {hotel.originalPrice && (
-                        <span className="text-sm text-gray-400 line-through">€{hotel.originalPrice}</span>
+                        <span className="text-sm text-gray-400 line-through">£{hotel.originalPrice}</span>
                       )}
                     </div>
                   </div>

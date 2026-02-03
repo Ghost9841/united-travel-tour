@@ -183,7 +183,8 @@ export default function AboutUsPage() {
               </div>
               <h3 className="font-bold text-gray-900 mb-2">Phone</h3>
               <p className="text-gray-600">
-                +44 1234 567 890<br />
+                +07 366 234 404<br />
+                +44 20 3725 3460<br />
                 <span className="text-sm">Mon-Fri: 9AM - 6PM</span>
               </p>
             </div>

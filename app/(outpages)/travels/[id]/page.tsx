@@ -354,11 +354,11 @@ export default function TravelDetailPage() {
               <div className="mb-6">
                 <p className="text-gray-500 text-sm mb-2">From</p>
                 <div className="flex items-baseline gap-2 mb-1">
-                  <span className="text-4xl font-bold text-orange-500">€{destination.price}</span>
+                  <span className="text-4xl font-bold text-orange-500">£{destination.price}</span>
                   <span className="text-gray-500">/ person</span>
                 </div>
                 {destination.originalPrice && (
-                  <p className="text-gray-400 line-through text-sm">€{destination.originalPrice}</p>
+                  <p className="text-gray-400 line-through text-sm">£{destination.originalPrice}</p>
                 )}
               </div>
 

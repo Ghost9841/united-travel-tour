@@ -146,7 +146,7 @@ export default function BookNow() {
 
               <div>
                 <label htmlFor="budget" className="block text-sm font-medium text-gray-700 mb-2">
-                  Budget Range (USD)
+                  Budget Range (Pound)
                 </label>
                 <select
                   name="budget"
@@ -154,10 +154,10 @@ export default function BookNow() {
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none bg-white"
                 >
                   <option value="">Select budget</option>
-                  <option value="$1,000 - $3,000">$1,000 - $3,000</option>
-                  <option value="$3,000 - $5,000">$3,000 - $5,000</option>
-                  <option value="$5,000 - $10,000">$5,000 - $10,000</option>
-                  <option value="$10,000+">$10,000+</option>
+                  <option value="£1,000 - £3,000">£1,000 - £3,000</option>
+                  <option value="£3,000 - £5,000">£3,000 - £5,000</option>
+                  <option value="£5,000 - £10,000">£5,000 - £10,000</option>
+                  <option value="£10,000+">£10,000+</option>
                 </select>
               </div>
             </div>
@@ -209,7 +209,7 @@ export default function BookNow() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`w-full py-4 px-6 rounded-lg font-semibold text-white text-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] ${
+                className={`w-full py-4 px-6 rounded-lg font-semibold text-white text-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] £{
                   isSubmitting
                     ? 'bg-gray-400 cursor-not-allowed'
                     : 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg hover:shadow-xl'

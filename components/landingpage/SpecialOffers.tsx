@@ -153,11 +153,11 @@ export default function SpecialOffers() {
                   <p className="text-gray-500 text-sm">From</p>
                   <div className="flex items-center gap-2">
                     <span className="text-2xl font-bold text-orange-500">
-                      €{offer.discountedPrice}
+                      £{offer.discountedPrice}
                     </span>
                     {offer.price !== offer.discountedPrice && (
                       <span className="text-gray-400 line-through text-sm">
-                        €{offer.price}
+                        £{offer.price}
                       </span>
                     )}
                   </div>

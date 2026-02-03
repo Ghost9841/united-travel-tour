@@ -194,7 +194,7 @@ export default function TravelsPage() {
                 {pkg.originalPrice && (
                   <div className="absolute top-4 right-4">
                     <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                      Save €{pkg.originalPrice - pkg.price}
+                      Save £{pkg.originalPrice - pkg.price}
                     </span>
                   </div>
                 )}
@@ -243,9 +243,9 @@ export default function TravelsPage() {
                   <div>
                     <p className="text-sm text-gray-500">From</p>
                     <div className="flex items-baseline gap-2">
-                      <span className="text-2xl font-bold text-orange-500">€{pkg.price}</span>
+                      <span className="text-2xl font-bold text-orange-500">£{pkg.price}</span>
                       {pkg.originalPrice && (
-                        <span className="text-sm text-gray-400 line-through">€{pkg.originalPrice}</span>
+                        <span className="text-sm text-gray-400 line-through">£{pkg.originalPrice}</span>
                       )}
                     </div>
                   </div>
