@@ -82,3 +82,5 @@ import {
       color: "from-rose-400 to-pink-400"
     }
   ];
+
+  export default services;

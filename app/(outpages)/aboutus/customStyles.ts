@@ -65,3 +65,5 @@ export const customStyles = `
     }
   }
 `;
+
+export default customStyles;

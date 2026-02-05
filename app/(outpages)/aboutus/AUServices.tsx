@@ -1,6 +1,6 @@
 import React from 'react';
 import { Sparkles, ArrowRight } from 'lucide-react';
-import { services } from './service';
+import services  from './service';
 import ServiceCard from './AUServiceCard';
 
 const ServicesSection = () => {
