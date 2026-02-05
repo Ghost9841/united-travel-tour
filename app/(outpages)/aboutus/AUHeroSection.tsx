@@ -3,7 +3,7 @@ import { Star, Zap } from 'lucide-react';
 
 const HeroSection = () => {
   return (
-    <div className="relative h-[70vh] bg-gradient-to-r from-orange-500 via-orange-600 to-red-500 overflow-hidden">
+    <div className="relative h-[70vh] bg-gradient-to-r from-orange-500 via-orange-600 to-red-500 overflow-hidden mt-16">
       <div className="absolute inset-0">
         <img 
           src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1920&h=1080&fit=crop"
