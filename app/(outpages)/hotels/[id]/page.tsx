@@ -389,7 +389,7 @@ export default function HotelDetailPage() {
           {/* Right Section - Booking Card (1/4 width) */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-2xl p-6 shadow-lg sticky top-32">
-              <div className="mb-6">
+              {/* <div className="mb-6">
                 <p className="text-gray-500 text-sm mb-2">Price per night</p>
                 <div className="flex items-baseline gap-2 mb-1">
                   <span className="text-4xl font-bold text-orange-500">£{hotel.pricePerNight}</span>
@@ -397,7 +397,7 @@ export default function HotelDetailPage() {
                 {hotel.originalPrice && (
                   <p className="text-gray-400 line-through text-sm">£{hotel.originalPrice}</p>
                 )}
-              </div>
+              </div> */}
 
               {/* Date Selection */}
               <div className="mb-4 space-y-3">

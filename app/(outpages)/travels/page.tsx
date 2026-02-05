@@ -250,6 +250,11 @@ export default function TravelsPage() {
                     </div>
                   </div> */}
                   
+                   <a href="/booknow">
+                    <button className="px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors">
+                      BOOK NOW
+                    </button>
+                  </a>
                   <button className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-lg font-medium transition-colors">
                     View Details
                   </button>

@@ -294,16 +294,11 @@ export default function HotelsListingPage() {
 
                 {/* Price & Button */}
                 <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                  <div>
-                    <p className="text-sm text-gray-500">Per night</p>
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-2xl font-bold text-orange-500">£{hotel.pricePerNight}</span>
-                      {hotel.originalPrice && (
-                        <span className="text-sm text-gray-400 line-through">£{hotel.originalPrice}</span>
-                      )}
-                    </div>
-                  </div>
-                  
+                  <a href="/booknow">
+                    <button className="px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors">
+                      BOOK NOW
+                    </button>
+                  </a>
                   <button className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-lg font-medium transition-colors">
                     View Details
                   </button>

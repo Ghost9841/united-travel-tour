@@ -351,7 +351,7 @@ export default function TravelDetailPage() {
           {/* Right Section - Booking Card (1/4 width) */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-2xl p-6 shadow-lg sticky top-32">
-              <div className="mb-6">
+              {/* <div className="mb-6">
                 <p className="text-gray-500 text-sm mb-2">From</p>
                 <div className="flex items-baseline gap-2 mb-1">
                   <span className="text-4xl font-bold text-orange-500">£{destination.price}</span>
@@ -360,7 +360,7 @@ export default function TravelDetailPage() {
                 {destination.originalPrice && (
                   <p className="text-gray-400 line-through text-sm">£{destination.originalPrice}</p>
                 )}
-              </div>
+              </div> */}
 
               <a href="/book-now">
                 <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 rounded-lg transition-colors mb-4">
