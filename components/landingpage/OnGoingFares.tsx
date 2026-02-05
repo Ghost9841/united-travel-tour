@@ -242,7 +242,7 @@ export default function CompactFaresBanner() {
           </div>
 
           {/* CTA */}
-          <a href="/booknow">
+          <a href="/booknow/travels">
           <button 
             className="px-6 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg text-sm font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg pointer-events-auto"
             onMouseEnter={() => setIsAutoPlaying(false)}

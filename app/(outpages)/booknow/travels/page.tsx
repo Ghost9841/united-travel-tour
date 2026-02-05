@@ -226,8 +226,8 @@ export default function FlightBookNow() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 via-white to-white py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-b from-blue-500 via-orange-300 to-orange-500 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto mt-16">
         {/* Header */}
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-full mb-6 shadow-lg">
