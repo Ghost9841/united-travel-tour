@@ -240,7 +240,7 @@ export default function TravelsPage() {
 
                 {/* Price & Button */}
                 <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                  <div>
+                  {/* <div>
                     <p className="text-sm text-gray-500">From</p>
                     <div className="flex items-baseline gap-2">
                       <span className="text-2xl font-bold text-orange-500">£{pkg.price}</span>
@@ -248,7 +248,7 @@ export default function TravelsPage() {
                         <span className="text-sm text-gray-400 line-through">£{pkg.originalPrice}</span>
                       )}
                     </div>
-                  </div>
+                  </div> */}
                   
                   <button className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-lg font-medium transition-colors">
                     View Details
