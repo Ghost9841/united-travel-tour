@@ -420,7 +420,7 @@ export default function HotelDetailPage() {
                 </div>
               </div>
 
-              <a href="/book-now">
+              <a href="/booknow">
                 <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 rounded-lg transition-colors mb-4">
                   BOOK NOW
                 </button>
