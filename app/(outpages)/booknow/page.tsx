@@ -177,7 +177,7 @@ export default function ModernBookNow() {
   return (
     <>
       <style jsx global>{fadeInStyle}</style>
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 via-white to-orange-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-gradient-to-b from-blue-500 via-orange-400 to-orange-500 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto mt-16">
           {/* Header Section */}
           <div className="text-center mb-12 mt-8">
