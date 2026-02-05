@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { Globe } from 'lucide-react';
 
@@ -36,6 +38,7 @@ const CircularGallery: React.FC<CircularGalleryProps> = ({ images }) => {
           </p>
         </div>
 
+        {/* 3D Circular Gallery */}
         <div className="relative h-96 flex items-center justify-center perspective-1000">
           <div className="relative w-full h-full preserve-3d animate-spin-slow">
             {images.map((image, index) => {
@@ -63,6 +66,30 @@ const CircularGallery: React.FC<CircularGalleryProps> = ({ images }) => {
           </div>
         </div>
       </div>
+
+      {/* Custom CSS for animations */}
+      <style jsx>{`
+        .perspective-1000 {
+          perspective: 1000px;
+        }
+        
+        .preserve-3d {
+          transform-style: preserve-3d;
+        }
+        
+        .animate-spin-slow {
+          animation: rotate3d 30s linear infinite;
+        }
+        
+        @keyframes rotate3d {
+          from {
+            transform: rotateY(0deg);
+          }
+          to {
+            transform: rotateY(360deg);
+          }
+        }
+      `}</style>
     </section>
   );
 };
