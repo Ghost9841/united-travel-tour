@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import Navbar from '../NavBar'
 import TopThinNavbar from './TopThinNavbar'
+import SearchFlightHotelsSection from './SearchFlightsHotelsSection'
 
 const HERO_IMAGES = [
     {
@@ -106,112 +107,7 @@ export default function HeroCarousel() {
                         The best travel for your journey begins now
                     </p>
                 </div>
-
-                {/* Bottom Section with Booking Form and Navigation */}
-                <div className="flex flex-col md:flex-row items-end justify-between mt-8 gap-8">
-                    {/* Booking Form */}
-                    <div className="bg-white rounded-lg shadow-2xl p-6 md:p-8 max-w-4xl flex-1">
-                        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-6 items-end">
-                            {/* Destination */}
-                            <div className="flex flex-col">
-                                <label className="text-xs font-bold text-gray-600 tracking-wider mb-2">
-                                    DESTINATION
-                                </label>
-                                <input
-                                    type="text"
-                                    placeholder="Dubai"
-                                    className="border-b border-gray-300 pb-2 focus:outline-none focus:border-blue-600 text-gray-900"
-                                />
-                            </div>
-
-                            {/* Person */}
-                            <div className="flex flex-col">
-                                <label className="text-xs font-bold text-gray-600 tracking-wider mb-2">
-                                    PERSON
-                                </label>
-                                <input
-                                    type="number"
-                                    defaultValue="1"
-                                    className="border-b border-gray-300 pb-2 focus:outline-none focus:border-blue-600 text-gray-900"
-                                />
-                            </div>
-
-                            {/* Check In */}
-                            <div className="flex flex-col">
-                                <label className="text-xs font-bold text-gray-600 tracking-wider mb-2">
-                                    CHECK IN
-                                </label>
-                                <input
-                                    type="text"
-                                    placeholder="Sun, 17th Sep 2023"
-                                    className="border-b border-gray-300 pb-2 focus:outline-none focus:border-blue-600 text-gray-900"
-                                />
-                            </div>
-
-                            {/* Check Out */}
-                            <div className="flex flex-col">
-                                <label className="text-xs font-bold text-gray-600 tracking-wider mb-2">
-                                    CHECK OUT
-                                </label>
-                                <input
-                                    type="text"
-                                    placeholder="Tue, 18th Oct 2023"
-                                    className="border-b border-gray-300 pb-2 focus:outline-none focus:border-blue-600 text-gray-900"
-                                />
-                            </div>
-
-                            {/* Book Now Button */}
-                            <div className="flex flex-col">
-                                <a href="/booknow">
-                                <button className="bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-6 py-4 font-bold text-lg transition-colors shadow-lg flex items-center justify-center gap-2 w-full">
-                                    <span>Book Now</span>
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                    </svg>
-                                </button>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Combined Navigation - Dots and Arrows */}
-                    <div className="flex flex-col items-center gap-6">
-                        {/*  Vertical nav – centred on the right edge  */}
-                        <div className="absolute right-6 top-1/2 -translate-y-1/2 z-30 flex flex-col items-center gap-6">
-                            {/* Dots */}
-                            <div className="flex flex-col gap-4">
-                                {HERO_IMAGES.map((_, idx) => (
-                                    <button
-                                        key={idx}
-                                        onClick={() => goToSlide(idx)}
-                                        className={`rounded-full transition-all duration-300 ${idx === currentSlide ? 'bg-white w-3 h-8' : 'bg-white/50 hover:bg-white/80 w-3 h-3'
-                                            }`}
-                                        aria-label={`Go to slide ${idx + 1}`}
-                                    />
-                                ))}
-                            </div>
-
-                            {/* Chevrons */}
-                            <div className="flex flex-col gap-2">
-                                <button
-                                    onClick={prevSlide}
-                                    className="p-2 rounded-full bg-white/20 hover:bg-white/40 text-white transition"
-                                    aria-label="Previous slide"
-                                >
-                                    <ChevronUp className="w-6 h-6" />
-                                </button>
-                                <button
-                                    onClick={nextSlide}
-                                    className="p-2 rounded-full bg-white/20 hover:bg-white/40 text-white transition"
-                                    aria-label="Next slide"
-                                >
-                                    <ChevronDown className="w-6 h-6" />
-                                </button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
+                <SearchFlightHotelsSection/>
             </div>
         </section>
     )
