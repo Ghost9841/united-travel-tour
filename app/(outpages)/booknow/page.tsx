@@ -18,7 +18,7 @@ export default function BookNow() {
     emailjs
       .sendForm(
         'service_unitedtravels',
-        'template_mz4e7hk',
+        'template_qklfgbt',
         form.current,
         'CvvGr0snxHNqeez6V'
       )

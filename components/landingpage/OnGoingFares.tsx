@@ -7,8 +7,8 @@ const ONGOING_FARES = [
     id: 1,
     title: "Kathmandu to Dubai",
     description: "Experience luxury shopping and desert adventures.",
-    originalPrice: "$850",
-    discountedPrice: "$599",
+    originalPrice: "£850",
+    discountedPrice: "£599",
     discount: "30% OFF",
     duration: "5h 30m",
     image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&h=400&fit=crop",
@@ -21,8 +21,8 @@ const ONGOING_FARES = [
     id: 3,
     title: "Lumbini to Delhi",
     description: "Immerse yourself in India's rich cultural heritage.",
-    originalPrice: "$320",
-    discountedPrice: "$199",
+    originalPrice: "£320",
+    discountedPrice: "£199",
     discount: "40% OFF",
     duration: "1h 50m",
     image: "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800&h=400&fit=crop",
@@ -35,8 +35,8 @@ const ONGOING_FARES = [
     id: 5,
     title: "Nepalgunj to Kuala Lumpur",
     description: "Modern skyscrapers and cultural landmarks.",
-    originalPrice: "$520",
-    discountedPrice: "$349",
+    originalPrice: "£520",
+    discountedPrice: "£349",
     discount: "33% OFF",
     duration: "4h 45m",
     image: "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800&h=400&fit=crop",
@@ -176,7 +176,7 @@ export default function CompactFaresBanner() {
       <div 
         className="absolute inset-0 transition-transform duration-200"
         style={{ 
-          transform: `translateX(${currentTranslate}px)`,
+          transform: `translateX(£{currentTranslate}px)`,
           transition: isDragging ? 'none' : 'transform 0.3s ease-out'
         }}
       >
@@ -192,7 +192,7 @@ export default function CompactFaresBanner() {
       <div 
         className="relative h-full flex items-center px-6 sm:px-10 transition-transform duration-200"
         style={{ 
-          transform: `translateX(${currentTranslate}px)`,
+          transform: `translateX(£{currentTranslate}px)`,
           transition: isDragging ? 'none' : 'transform 0.3s ease-out'
         }}
       >
@@ -272,8 +272,8 @@ export default function CompactFaresBanner() {
             <button
               key={index}
               onClick={(e) => { e.stopPropagation(); handleDotClick(index); }}
-              className={`h-1.5 rounded-full transition-all ${index === currentIndex ? 'bg-orange-500 w-4' : 'bg-white/50 w-1.5 hover:bg-white'}`}
-              aria-label={`Go to slide ${index + 1}`}
+              className={`h-1.5 rounded-full transition-all £{index === currentIndex ? 'bg-orange-500 w-4' : 'bg-white/50 w-1.5 hover:bg-white'}`}
+              aria-label={`Go to slide £{index + 1}`}
             />
           ))}
         </div>

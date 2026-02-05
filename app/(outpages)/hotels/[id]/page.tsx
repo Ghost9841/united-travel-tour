@@ -443,7 +443,7 @@ export default function HotelDetailPage() {
 
               <div className="mt-6 pt-6 border-t border-gray-200">
                 <p className="text-sm text-gray-600 mb-3">Need help with booking?</p>
-                <p className="text-lg font-semibold text-gray-900">Call: +1 234 567 890</p>
+                <p className="text-lg font-semibold text-gray-900">Call: +44 20 3725 3460</p>
               </div>
             </div>
           </div>
