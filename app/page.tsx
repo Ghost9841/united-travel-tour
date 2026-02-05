@@ -3,6 +3,7 @@ import Blogs from "@/components/landingpage/Blogs";
 import DestinationGallery from "@/components/landingpage/DestinationGallery";
 import HeroCarousel from "@/components/landingpage/HeroSection";
 import Newsletter from "@/components/landingpage/Newsettler";
+import OnGoingFaresCarousel from "@/components/landingpage/OnGoingFares";
 import PopularDestinations from "@/components/landingpage/PopularDestinations";
 import SpecialOffers from "@/components/landingpage/SpecialOffers";
 import TopThinNavbar from "@/components/landingpage/TopThinNavbar";
@@ -16,6 +17,7 @@ export default function Home() {
       <TopThinNavbar/>
       <Navbar/>
       <HeroCarousel/>
+      <OnGoingFaresCarousel/>
       <PopularDestinations/>
       <SpecialOffers/>
       <Blogs/>

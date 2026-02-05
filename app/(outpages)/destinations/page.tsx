@@ -133,8 +133,8 @@ export default function DestinationsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header Section */}
-      <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white py-20 mt-16">
-        <div className="max-w-8xl mx-auto px-6">
+      <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white py-20">
+        <div className="max-w-8xl mx-auto px-6 mt-16">
           <h1 className="text-5xl font-bold mb-4">Explore Top Destinations</h1>
           <p className="text-xl text-orange-100">Discover the world's most captivating places with our expertly curated destination guides</p>
         </div>
@@ -194,7 +194,7 @@ export default function DestinationsPage() {
                 {destination.originalPrice && (
                   <div className="absolute top-4 right-4">
                     <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                      Save €{destination.originalPrice - destination.price}
+                      Save £{destination.originalPrice - destination.price}
                     </span>
                   </div>
                 )}
@@ -243,9 +243,9 @@ export default function DestinationsPage() {
                   <div>
                     <p className="text-sm text-gray-500">Starting from</p>
                     <div className="flex items-baseline gap-2">
-                      <span className="text-2xl font-bold text-orange-500">€{destination.price}</span>
+                      <span className="text-2xl font-bold text-orange-500">£{destination.price}</span>
                       {destination.originalPrice && (
-                        <span className="text-sm text-gray-400 line-through">€{destination.originalPrice}</span>
+                        <span className="text-sm text-gray-400 line-through">£{destination.originalPrice}</span>
                       )}
                     </div>
                   </div>
