@@ -82,67 +82,7 @@ const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({ images }) => {
         <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10"></div>
       </div>
 
-      {/* Manual Scroll Gallery */}
-      <div className="relative max-w-7xl mx-auto px-6">
-        <div 
-          ref={infiniteMenuRef}
-          className="flex gap-4 overflow-x-auto py-4 scrollbar-hide"
-          style={{ scrollSnapType: 'x mandatory' }}
-        >
-          {images.map((img, index) => (
-            <div
-              key={index}
-              className="relative flex-shrink-0 w-80 h-56 rounded-2xl overflow-hidden group cursor-pointer shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 border-4 border-gray-100"
-              style={{ scrollSnapAlign: 'start' }}
-            >
-              <img
-                src={img}
-                alt={`Gallery ${index + 1}`}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                <div className="text-white">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  </div>
-                  <span className="font-bold">Featured Destination</span>
-                </div>
-              </div>
-              
-              {/* Floating Badge */}
-              <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-gray-900 transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                Hot Deal
-              </div>
-            </div>
-          ))}
-        </div>
-        
-        {/* Navigation Arrows */}
-        <button 
-          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 backdrop-blur-sm w-10 h-10 rounded-full flex items-center justify-center shadow-lg hover:bg-white hover:scale-110 transition-all duration-300 z-20"
-          onClick={() => {
-            if (infiniteMenuRef.current) {
-              infiniteMenuRef.current.scrollBy({ left: -300, behavior: 'smooth' });
-            }
-          }}
-        >
-          <ChevronLeft className="w-5 h-5 text-gray-900" />
-        </button>
-        <button 
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 backdrop-blur-sm w-10 h-10 rounded-full flex items-center justify-center shadow-lg hover:bg-white hover:scale-110 transition-all duration-300 z-20"
-          onClick={() => {
-            if (infiniteMenuRef.current) {
-              infiniteMenuRef.current.scrollBy({ left: 300, behavior: 'smooth' });
-            }
-          }}
-        >
-          <ChevronRight className="w-5 h-5 text-gray-900" />
-        </button>
-      </div>
+     
     </section>
   );
 };

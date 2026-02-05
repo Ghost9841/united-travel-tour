@@ -6,6 +6,7 @@ import ServicesSection from './AUServices';
 import GallerySection from './GallerySelection';
 import ValuesSection from './ValuesSelection';
 import InfiniteGallery from './InfiniteGallery';
+import ManualScrollGallery from './ManualScrollGallery';
 
 
 export default function AboutUsPage() {
@@ -25,7 +26,7 @@ export default function AboutUsPage() {
       <GallerySection />
       <ValuesSection />
       <InfiniteGallery images={infiniteImages} />
-
+<ManualScrollGallery/>
       
       {/* Add Custom Styles */}
       <style jsx>{`
