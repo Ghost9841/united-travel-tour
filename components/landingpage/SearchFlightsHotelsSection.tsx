@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import { Calendar, MapPin, Users, Plane, Hotel, ArrowLeftRight } from 'lucide-react';
 
@@ -5,7 +6,7 @@ type TabType = 'flights' | 'hotels';
 type TripType = 'return' | 'oneWay' | 'multicity';
 
 const SearchFlightHotelsSection: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<TabType>('hotels');
+  const [activeTab, setActiveTab] = useState<TabType>('flights');
   
   // Flight states
   const [tripType, setTripType] = useState<TripType>('return');
@@ -50,7 +51,7 @@ const SearchFlightHotelsSection: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-5xl">
+    <div className="w-full max-w-7xl">
       <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden">
         {/* Tabs */}
         <div className="flex border-b border-gray-200">
