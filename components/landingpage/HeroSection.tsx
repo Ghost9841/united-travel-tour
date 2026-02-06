@@ -1,9 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ChevronDown, ChevronUp } from 'lucide-react'
-import Navbar from '../NavBar'
-import TopThinNavbar from './TopThinNavbar'
 import SearchFlightHotelsSection from './SearchFlightsHotelsSection'
 
 const HERO_IMAGES = [
