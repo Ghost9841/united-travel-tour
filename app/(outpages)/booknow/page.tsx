@@ -123,20 +123,44 @@ export default function ModernBookNow() {
       );
   };
 
-  const getNextWeekDate = () => {
-    const date = new Date();
-    date.setDate(date.getDate() + 7);
+  // Helper functions for date calculations
+  const formatDateForInput = (date: Date): string => {
     return date.toISOString().split('T')[0];
   };
 
-  const getTwoWeeksDate = () => {
-    const date = new Date();
-    date.setDate(date.getDate() + 14);
-    return date.toISOString().split('T')[0];
+  const getTodayDate = (): string => {
+    return formatDateForInput(new Date());
   };
 
-  const getTodayDate = () => {
-    return new Date().toISOString().split('T')[0];
+  const getDateDaysFromNow = (days: number): string => {
+    const date = new Date();
+    date.setDate(date.getDate() + days);
+    return formatDateForInput(date);
+  };
+
+  const getDateDaysAfter = (startDate: string, daysToAdd: number): string => {
+    if (!startDate) return getDateDaysFromNow(daysToAdd);
+    const date = new Date(startDate);
+    date.setDate(date.getDate() + daysToAdd);
+    return formatDateForInput(date);
+  };
+
+  const setQuickDeparture = () => {
+    setFormData(prev => ({ 
+      ...prev, 
+      departure_date: getDateDaysFromNow(7) 
+    }));
+  };
+
+  const setQuickReturn = () => {
+    const departureDate = formData.departure_date || getDateDaysFromNow(7);
+    const returnDate = getDateDaysAfter(departureDate, 7);
+    
+    setFormData(prev => ({ 
+      ...prev, 
+      departure_date: departureDate,
+      return_date: returnDate
+    }));
   };
 
   // Add custom styles for fadeIn animation
@@ -153,7 +177,7 @@ export default function ModernBookNow() {
   return (
     <>
       <style jsx global>{fadeInStyle}</style>
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 via-white to-orange-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-gradient-to-b from-blue-500 via-orange-400 to-orange-500 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto mt-16">
           {/* Header Section */}
           <div className="text-center mb-12 mt-8">
@@ -396,16 +420,14 @@ export default function ModernBookNow() {
                             <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
                               📅
                             </div>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setFormData(prev => ({ ...prev, departure_date: getNextWeekDate() }));
-                              }}
-                              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-blue-600 hover:text-blue-700 font-medium bg-transparent border-none cursor-pointer"
-                            >
-                              Next Week
-                            </button>
                           </div>
+                          <button
+                            type="button"
+                            onClick={setQuickDeparture}
+                            className="mt-2 text-sm text-blue-600 hover:text-blue-700 font-medium hover:underline"
+                          >
+                            Set to next week
+                          </button>
                         </div>
 
                         <div>
@@ -426,20 +448,14 @@ export default function ModernBookNow() {
                             <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
                               📅
                             </div>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setFormData(prev => ({ 
-                                  ...prev, 
-                                  return_date: getTwoWeeksDate(),
-                                  departure_date: formData.departure_date || getNextWeekDate()
-                                }));
-                              }}
-                              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-blue-600 hover:text-blue-700 font-medium bg-transparent border-none cursor-pointer"
-                            >
-                              2 Weeks
-                            </button>
                           </div>
+                          <button
+                            type="button"
+                            onClick={setQuickReturn}
+                            className="mt-2 text-sm text-blue-600 hover:text-blue-700 font-medium hover:underline"
+                          >
+                            Set to 1 week trip
+                          </button>
                         </div>
                       </div>
                     </div>
