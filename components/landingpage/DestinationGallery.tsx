@@ -7,7 +7,7 @@ const DESTINATIONS = [
     id: 1,
     name: "Urban Explorer",
     location: "City Streets",
-    image: "https://images.unsplash.com/photo-1499696010180-025ef28d15bb?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1534008897995-27a23e859048?w=600&h=400&fit=crop",
     alt: "Traveler standing near colorful mural"
   },
   {
