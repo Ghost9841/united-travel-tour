@@ -199,10 +199,10 @@ export default function CompactFaresBanner() {
         <div className="flex-1 max-w-2xl pointer-events-none">
           {/* Top Row: Timer & Discount */}
           <div className="flex flex-wrap items-center gap-3 mb-3">
-            <div className="inline-flex items-center gap-1.5 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-medium">
+            {/* <div className="inline-flex items-center gap-1.5 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-medium">
               <Clock className="w-3 h-3" />
               {currentFare.expires}
-            </div>
+            </div> */}
             <span className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">
               {currentFare.discount}
             </span>
