@@ -10,6 +10,8 @@ import SpecialOffers from "@/components/landingpage/SpecialOffers";
 import TopThinNavbar from "@/components/landingpage/TopThinNavbar";
 import TripPlanners from "@/components/landingpage/TripPlanners";
 import Navbar from "@/components/NavBar";
+import CircularGallery from "./(outpages)/aboutus/CircularGallery";
+import { destinationImages } from "./(outpages)/aboutus/InfiniteGallery";
 
 
 export default function Home() {
@@ -26,6 +28,7 @@ export default function Home() {
       <OnGoingFaresCarousel/>
       <PopularDestinations/>
       <SpecialOffers/>
+      <CircularGallery images={destinationImages}/>
       <Blogs/>
       <TripPlanners/>
       <DestinationGallery/>
