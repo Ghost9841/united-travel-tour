@@ -6,12 +6,12 @@ import { ChevronDown, ChevronUp } from 'lucide-react'
 const HERO_IMAGES = [
     {
         id: 1,
-        src: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop',
+        src: '/2026/herosection/passport.jpeg',
         alt: 'Alpine Village',
     },
     {
         id: 2,
-        src: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1920&h=1080&fit=crop',
+        src: '/2026/herosection/passport_1.jpeg',
         alt: 'Beach Paradise',
     },
     {

@@ -25,7 +25,7 @@ const ONGOING_FARES = [
     discountedPrice: "£700",
     discount: "5% OFF",
     duration: "1h 50m",
-    image: "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800&h=400&fit=crop",
+    image: "/2026/ongoingfares/kathmandu.jpeg",
     alt: "Delhi architecture",
     departure: "London",
     arrival: "Kathmandu",
