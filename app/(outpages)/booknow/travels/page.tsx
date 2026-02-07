@@ -244,7 +244,7 @@ export default function FlightBookNow() {
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left Column - Flight Deals */}
-          <div className="lg:col-span-1">
+          {/* <div className="lg:col-span-1">
             <div className="sticky top-8">
               <div className="bg-gradient-to-b from-blue-600 to-blue-800 rounded-2xl p-6 mb-6 shadow-xl">
                 <div className="flex items-center justify-between mb-4">
@@ -315,7 +315,7 @@ export default function FlightBookNow() {
                 </div>
               </div>
 
-              {/* Why Book With Us */}
+             
               <div className="bg-white rounded-2xl p-6 shadow-xl border border-gray-100">
                 <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                   <Shield className="w-6 h-6 text-blue-600" />
@@ -341,7 +341,7 @@ export default function FlightBookNow() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Middle Column - Booking Form */}
           <div className="lg:col-span-2">
