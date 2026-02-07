@@ -143,7 +143,7 @@ const SearchFlightHotelsSection: React.FC = () => {
               </div>
 
               {/* Flight Search Form - Row 1 */}
-              <div className="grid grid-cols-3 gap-4 mb-4">
+              <div className="grid grid-cols-5 gap-4 mb-4">
                 {/* Leaving From */}
                 <div className="col-span-1">
                   <label className="block text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
@@ -162,7 +162,7 @@ const SearchFlightHotelsSection: React.FC = () => {
                 </div>
 
                 {/* Swap Button */}
-                <div className="flex items-end justify-center pb-3">
+                <section className="flex items-end justify-center pb-3">
                   <button
                     onClick={swapLocations}
                     className="p-2 rounded-full hover:bg-gray-100 transition-colors"
@@ -170,7 +170,7 @@ const SearchFlightHotelsSection: React.FC = () => {
                   >
                     <ArrowLeftRight className="w-5 h-5 text-orange-500" />
                   </button>
-                </div>
+                </section>
 
                 {/* Arrive To */}
                 <div className="col-span-1">
