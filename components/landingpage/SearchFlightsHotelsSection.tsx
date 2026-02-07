@@ -326,12 +326,14 @@ const SearchFlightHotelsSection: React.FC = () => {
                 </div>
 
                 {/* Search Button */}
+                <a href="/booknow">
                 <button
                   onClick={handleSearch}
                   className="px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold rounded-lg transition-colors whitespace-nowrap uppercase tracking-wide"
                 >
                   Search Flights
                 </button>
+                  </a>
               </div>
             </>
           ) : (
@@ -525,12 +527,14 @@ const SearchFlightHotelsSection: React.FC = () => {
 
                   {/* Search Button */}
                   <div className="col-span-3 flex items-end">
+                    <a href="/booknow">
                     <button
                       onClick={handleSearch}
                       className="w-full px-6 py-3.5 bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold rounded-lg transition-colors uppercase tracking-wide shadow-lg shadow-orange-500/30"
                     >
                       Search Hotels
                     </button>
+                      </a>
                   </div>
                 </div>
               </div>
