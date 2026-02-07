@@ -344,7 +344,7 @@ export default function FlightBookNow() {
           </div> */}
 
           {/* Middle Column - Booking Form */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-3">
             <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100">
               <div className="p-8">
                 {/* Flight Type Selection */}

@@ -14,7 +14,7 @@ const ONGOING_FARES = [
     image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&h=400&fit=crop",
     alt: "Dubai skyline",
     departure: "Kathmandu",
-    arrival: "Dubai",
+    arrival: "London",
     expires: "Ends in 2 days"
   },
   {
@@ -27,8 +27,8 @@ const ONGOING_FARES = [
     duration: "1h 50m",
     image: "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800&h=400&fit=crop",
     alt: "Delhi architecture",
-    departure: "Lumbini",
-    arrival: "Delhi",
+    departure: "London",
+    arrival: "Kathmandu",
     expires: "Ends tomorrow"
   },
   {
@@ -41,8 +41,8 @@ const ONGOING_FARES = [
     duration: "4h 45m",
     image: "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800&h=400&fit=crop",
     alt: "Kuala Lumpur",
-    departure: "Nepalgunj",
-    arrival: "Kuala Lumpur",
+    departure: "Kathmandu",
+    arrival: "London",
     expires: "Ends in 4 days"
   }
 ];
