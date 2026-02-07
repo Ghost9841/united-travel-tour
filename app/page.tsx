@@ -11,7 +11,7 @@ import TopThinNavbar from "@/components/landingpage/TopThinNavbar";
 import TripPlanners from "@/components/landingpage/TripPlanners";
 import Navbar from "@/components/NavBar";
 import CircularGallery from "./(outpages)/aboutus/CircularGallery";
-import { destinationImages } from "./(outpages)/aboutus/InfiniteGallery";
+import { destinationImages } from "./(outpages)/aboutus/images";
 
 
 export default function Home() {

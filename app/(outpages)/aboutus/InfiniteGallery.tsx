@@ -1,17 +1,12 @@
+'use client';
 import React, { useRef, useEffect } from 'react';
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { destinationImages } from './images';
 
 interface InfiniteGalleryProps {
   images: string[];
 }
-  export const destinationImages = [
-    'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=600&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=600&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1534008897995-27a23e859048?w=600&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1518684079-3c830dcef090?w=600&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&h=400&fit=crop',
-  ];
+
 const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({ images }) => {
   const galleryRef = useRef<HTMLDivElement>(null);
   const infiniteMenuRef = useRef<HTMLDivElement>(null);
