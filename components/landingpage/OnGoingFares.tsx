@@ -6,7 +6,7 @@ const ONGOING_FARES = [
   {
     id: 1,
     title: "Kathmandu to London",
-    description: "Experience luxury shopping and desert adventures.",
+    description: "Qatar Airways",
     originalPrice: "£450",
     discountedPrice: "£400",
     discount: "5% OFF",
@@ -20,7 +20,7 @@ const ONGOING_FARES = [
   {
     id: 3,
     title: "London to Kathmandu (Two Way)",
-    description: "Immerse yourself in India's rich cultural heritage.",
+    description: "Turkish Airlines",
     originalPrice: "£800",
     discountedPrice: "£700",
     discount: "5% OFF",
@@ -34,7 +34,7 @@ const ONGOING_FARES = [
   {
     id: 5,
     title: "Kathmandu to London",
-    description: "Modern skyscrapers and cultural landmarks.",
+    description: "Emirates Airways",
     originalPrice: "£520",
     discountedPrice: "£360",
     discount: "33% OFF",
