@@ -220,14 +220,14 @@ export default function CompactFaresBanner() {
 
           {/* Price & Route Info */}
           <div className="flex flex-wrap items-center gap-4 sm:gap-6 mb-4">
-            <div className="flex items-baseline gap-2">
+            {/* <div className="flex items-baseline gap-2">
               <span className="text-2xl sm:text-3xl font-bold text-white">
                 {currentFare.discountedPrice}
               </span>
               <span className="text-sm text-gray-400 line-through">
                 {currentFare.originalPrice}
               </span>
-            </div>
+            </div> */}
 
             <div className="hidden sm:flex items-center gap-4 text-sm">
               <div className="flex items-center gap-2 text-gray-300">
