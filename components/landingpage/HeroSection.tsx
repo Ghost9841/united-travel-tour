@@ -11,17 +11,17 @@ const HERO_IMAGES = [
     },
     {
         id: 2,
-        src: '/2026/herosection/passport_1.jpeg',
+        src: '/2026/herosection/airplane.jpeg',
         alt: 'Beach Paradise',
     },
     {
         id: 3,
-        src: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1920&h=1080&fit=crop',
+        src: '/2026/herosection/airplane_2.jpeg',
         alt: 'City Skyline',
     },
     {
         id: 4,
-        src: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1920&h=1080&fit=crop',
+        src: '/2026/herosection/airplan_3.jpeg',
         alt: 'Tropical Island',
     },
     {
