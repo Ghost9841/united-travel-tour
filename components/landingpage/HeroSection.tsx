@@ -21,7 +21,7 @@ const HERO_IMAGES = [
     },
     {
         id: 4,
-        src: '/2026/herosection/airplan_3.jpeg',
+        src: '/2026/herosection/airplane_3.jpeg',
         alt: 'Tropical Island',
     },
     {
