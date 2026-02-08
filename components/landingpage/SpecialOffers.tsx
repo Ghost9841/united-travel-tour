@@ -35,11 +35,11 @@ const specialOffers = [
   },
   {
     id: 4,
-    title: "Paris City of Love",
-    description: "A romantic escape to Paris including luxury accommodation, breakfast, and city exploration.",
+    title: "Fly Anywhere",
+    description: "Planning to fly anywhere, with any airline? Contact United Travel and Tours Limited for fast, friendly help and great fares. We specialise in routes to India, Nepal, Pakistan, Bhutan, and Bangladesh, and we can also arrange worldwide tickets, baggage, and seat requests. Share your departure city, destination, travel dates, and passenger details, and we will check multiple airlines to find the best option for your budget. Clear advice, honest pricing, and reliable support before and after you book. Call us today on 020 3725 3460 or message us to get started. WhatsApp us anytime for a quick quote and availability.",
     location: "Paris, France",
-    price: 1200,
-    discountedPrice: 950,
+    price: 0,
+    discountedPrice: 0,
     image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&h=600&fit=crop",
     rating: 5
   },
