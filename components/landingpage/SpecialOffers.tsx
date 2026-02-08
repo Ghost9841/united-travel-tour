@@ -15,11 +15,11 @@ const specialOffers = [
   },
   {
     id: 2,
-    title: "Historic Athens Experience",
-    description: "Discover ancient wonders of Greece with a premium hotel stay, meals included, and cultural sightseeing.",
-    location: "Athens, Greece",
-    price: 1000,
-    discountedPrice: 800,
+    title: "London ⇄ Kathmandu",
+    description: "Fly London ⇄ Kathmandu with Qatar Airways at promo fares from £900 (subject to availability). Enjoy a generous 40KG baggage allowance and smooth connections, great service, and comfortable flights. Limited seats available, so book early to secure the best deal. Call 020 3725 3460 today for dates, fare rules, and instant booking support. Terms apply.",
+    location: "London, Kathmandu",
+    price: 400,
+    discountedPrice: 370,
     image: "/2026/populardestination/ktmtolondon_2.jpeg",
     rating: 5
   },
@@ -121,7 +121,7 @@ export default function SpecialOffers() {
               <img
                 src={offer.image}
                 alt={offer.title}
-                className="w-full h-full object-contain"
+                className="w-full h-full object-cover"
               />
               {/* Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
