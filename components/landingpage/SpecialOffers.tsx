@@ -9,7 +9,7 @@ const specialOffers = [
     location: "Lisbon, Portugal",
     price: 700,
     discountedPrice: 500,
-    image: "/2026/populardestination/ktmtolongon.jpeg",
+    image: "/2026/populardestination/ktmtolondon.jpeg",
     rating: 5
   },
   {
