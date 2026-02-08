@@ -16,7 +16,7 @@ import { destinationImages } from "./(outpages)/aboutus/images";
 
 export default function Home() {
   return (
-      <div className="bg-gradient-to-b from-blue-500 via-orange-400 to-purple-300">
+      <div className="bg-gradient-to-b from-blue-200 via-orange-200 to-purple-200">
       <TopThinNavbar/>
       <Navbar/>
       <HeroCarousel/>
