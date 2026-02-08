@@ -18,7 +18,7 @@ const specialOffers = [
     location: "Athens, Greece",
     price: 1000,
     discountedPrice: 800,
-    image: "https://images.unsplash.com/photo-1555993539-1732b0258235?w=800&h=600&fit=crop",
+    image: "/2026/populardestination/ktmtolongon_2.jpeg",
     rating: 5
   },
   {

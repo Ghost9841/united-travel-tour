@@ -31,18 +31,19 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ClickSpark
-         sparkColor='#fff'
-  sparkSize={10}
-  sparkRadius={15}
-  sparkCount={8}
-  duration={400}
-/>
-        {children}
-        <Script
-          id="tawk-to"
-          strategy="afterInteractive"
+          sparkColor='#36454F'
+          sparkSize={10}
+          sparkRadius={15}
+          sparkCount={8}
+          duration={400}
         >
-          {`
+
+          {children}
+          <Script
+            id="tawk-to"
+            strategy="afterInteractive"
+          >
+            {`
             var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
             (function(){
               var s1=document.createElement("script"),
@@ -54,7 +55,8 @@ export default function RootLayout({
               s0.parentNode.insertBefore(s1,s0);
             })();
           `}
-        </Script>
+          </Script>
+        </ClickSpark>
       </body>
     </html>
   );
