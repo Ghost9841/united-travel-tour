@@ -121,7 +121,7 @@ export default function SpecialOffers() {
               <img
                 src={offer.image}
                 alt={offer.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
               {/* Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
