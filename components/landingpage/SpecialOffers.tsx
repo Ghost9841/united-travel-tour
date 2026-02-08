@@ -25,12 +25,12 @@ const specialOffers = [
   },
   {
     id: 3,
-    title: "Classic Rome Holiday",
-    description: "Enjoy the timeless beauty of Rome with a 5-star hotel, breakfast, and guided historical tours.",
+    title: "Extra Add Luggage",
+    description: "Need extra baggage for your flight? United Travels can help you add checked baggage fast and hassle-free, following airline rules. Avoid last-minute airport charges by arranging it in advance. Contact us with your booking reference and passenger name, and we’ll confirm the cost and options. Call 020 3725 3460 today.",
     location: "Rome, Italy",
-    price: 900,
-    discountedPrice: 750,
-    image: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800&h=600&fit=crop",
+    price: 0,
+    discountedPrice: 0,
+    image: "/2026/populardestination/luggage.jpeg",
     rating: 5
   },
   {
