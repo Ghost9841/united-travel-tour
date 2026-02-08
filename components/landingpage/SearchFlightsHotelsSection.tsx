@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import { Calendar, MapPin, Users, Plane, Hotel, ArrowLeftRight } from 'lucide-react';
 
@@ -5,7 +6,7 @@ type TabType = 'flights' | 'hotels';
 type TripType = 'return' | 'oneWay' | 'multicity';
 
 const SearchFlightHotelsSection: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<TabType>('hotels');
+  const [activeTab, setActiveTab] = useState<TabType>('flights');
   
   // Flight states
   const [tripType, setTripType] = useState<TripType>('return');
@@ -50,7 +51,7 @@ const SearchFlightHotelsSection: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-5xl">
+    <div className="w-full max-w-7xl">
       <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden">
         {/* Tabs */}
         <div className="flex border-b border-gray-200">
@@ -142,7 +143,7 @@ const SearchFlightHotelsSection: React.FC = () => {
               </div>
 
               {/* Flight Search Form - Row 1 */}
-              <div className="grid grid-cols-4 gap-4 mb-4">
+              <div className="grid grid-cols-5 gap-4 mb-4">
                 {/* Leaving From */}
                 <div className="col-span-1">
                   <label className="block text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
@@ -161,7 +162,7 @@ const SearchFlightHotelsSection: React.FC = () => {
                 </div>
 
                 {/* Swap Button */}
-                <div className="flex items-end justify-center pb-3">
+                <section className="flex items-end justify-center pb-3">
                   <button
                     onClick={swapLocations}
                     className="p-2 rounded-full hover:bg-gray-100 transition-colors"
@@ -169,7 +170,7 @@ const SearchFlightHotelsSection: React.FC = () => {
                   >
                     <ArrowLeftRight className="w-5 h-5 text-orange-500" />
                   </button>
-                </div>
+                </section>
 
                 {/* Arrive To */}
                 <div className="col-span-1">
@@ -325,12 +326,14 @@ const SearchFlightHotelsSection: React.FC = () => {
                 </div>
 
                 {/* Search Button */}
+                <a href="/booknow">
                 <button
                   onClick={handleSearch}
                   className="px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold rounded-lg transition-colors whitespace-nowrap uppercase tracking-wide"
                 >
                   Search Flights
                 </button>
+                  </a>
               </div>
             </>
           ) : (
@@ -524,12 +527,14 @@ const SearchFlightHotelsSection: React.FC = () => {
 
                   {/* Search Button */}
                   <div className="col-span-3 flex items-end">
+                    <a href="/booknow">
                     <button
                       onClick={handleSearch}
                       className="w-full px-6 py-3.5 bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold rounded-lg transition-colors uppercase tracking-wide shadow-lg shadow-orange-500/30"
                     >
                       Search Hotels
                     </button>
+                      </a>
                   </div>
                 </div>
               </div>

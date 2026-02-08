@@ -6,7 +6,7 @@ const ONGOING_FARES = [
   {
     id: 1,
     title: "Kathmandu to London",
-    description: "Experience luxury shopping and desert adventures.",
+    description: "Qatar Airways",
     originalPrice: "£450",
     discountedPrice: "£400",
     discount: "5% OFF",
@@ -14,35 +14,35 @@ const ONGOING_FARES = [
     image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&h=400&fit=crop",
     alt: "Dubai skyline",
     departure: "Kathmandu",
-    arrival: "Dubai",
+    arrival: "London",
     expires: "Ends in 2 days"
   },
   {
     id: 3,
     title: "London to Kathmandu (Two Way)",
-    description: "Immerse yourself in India's rich cultural heritage.",
+    description: "Turkish Airlines",
     originalPrice: "£800",
     discountedPrice: "£700",
     discount: "5% OFF",
     duration: "1h 50m",
-    image: "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800&h=400&fit=crop",
+    image: "/2026/ongoingfares/kathmandu.jpeg",
     alt: "Delhi architecture",
-    departure: "Lumbini",
-    arrival: "Delhi",
+    departure: "London",
+    arrival: "Kathmandu",
     expires: "Ends tomorrow"
   },
   {
     id: 5,
     title: "Kathmandu to London",
-    description: "Modern skyscrapers and cultural landmarks.",
+    description: "Emirates Airways",
     originalPrice: "£520",
     discountedPrice: "£360",
     discount: "33% OFF",
     duration: "4h 45m",
     image: "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800&h=400&fit=crop",
     alt: "Kuala Lumpur",
-    departure: "Nepalgunj",
-    arrival: "Kuala Lumpur",
+    departure: "Kathmandu",
+    arrival: "London",
     expires: "Ends in 4 days"
   }
 ];
@@ -220,24 +220,24 @@ export default function CompactFaresBanner() {
 
           {/* Price & Route Info */}
           <div className="flex flex-wrap items-center gap-4 sm:gap-6 mb-4">
-            <div className="flex items-baseline gap-2">
+            {/* <div className="flex items-baseline gap-2">
               <span className="text-2xl sm:text-3xl font-bold text-white">
                 {currentFare.discountedPrice}
               </span>
               <span className="text-sm text-gray-400 line-through">
                 {currentFare.originalPrice}
               </span>
-            </div>
+            </div> */}
 
             <div className="hidden sm:flex items-center gap-4 text-sm">
               <div className="flex items-center gap-2 text-gray-300">
                 <Plane className="w-4 h-4" />
                 <span className="text-white font-medium">{currentFare.departure} → {currentFare.arrival}</span>
               </div>
-              <div className="flex items-center gap-2 text-gray-300">
+              {/* <div className="flex items-center gap-2 text-gray-300">
                 <Clock className="w-4 h-4" />
                 <span className="text-white font-medium">{currentFare.duration}</span>
-              </div>
+              </div> */}
             </div>
           </div>
 

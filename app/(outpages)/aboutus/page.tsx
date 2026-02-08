@@ -7,17 +7,11 @@ import GallerySection from './GallerySelection';
 import ValuesSection from './ValuesSelection';
 import InfiniteGallery from './InfiniteGallery';
 import ManualScrollGallery from './ManualScrollGallery';
+import { infiniteImages } from './images';
 
 
 export default function AboutUsPage() {
-  const infiniteImages = [
-      "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=300&h=200&fit=crop",
-      "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=300&h=200&fit=crop",
-      "https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=300&h=200&fit=crop",
-      "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=300&h=200&fit=crop",
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=300&h=200&fit=crop",
-      "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=300&h=200&fit=crop"
-    ];
+  
   return (
     <div className="min-h-screen bg-gray-50 overflow-hidden">
       <HeroSection />

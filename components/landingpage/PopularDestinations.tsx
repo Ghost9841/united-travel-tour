@@ -7,8 +7,8 @@ const DESTINATIONS = [
     id: 1,
     name: "Pasupati Nath",
     location: "Kathmandu, Nepal",
-    description: "A powerful historical landmark reflecting Berlin's rich past, culture, and architectural legacy.",
-    src: "https://images.unsplash.com/photo-1524422926292-d321c3ff46f2?w=1200&h=800&fit=crop",
+    description: `Pashupatinath Temple is one of the most sacred Hindu temples in the world, dedicated to Lord Shiva in his form as Pashupati, meaning "Lord of all beings" or "Protector of animals."`,
+    src: "/2026/pasupati_nath.jpeg",
     alt: "Berlin Cathedral"
   },
   {
@@ -23,16 +23,16 @@ const DESTINATIONS = [
     id: 3,
     name: "Rara Lake",
     location: "Mugu & Jumla, Nepal",
-    description: "One of Venice's oldest bridges, connecting history, romance, and vibrant canal life.",
-    src: "https://images.unsplash.com/photo-1514921295671-29d763e5ded7?w=1200&h=800&fit=crop",
+    description: "Rara Lake, also known as Mahendra Lake, is the largest fresh water lake in the Nepalese Himalayas.",
+    src: "/2026/rara_lake.jpeg",
     alt: "Rialto Bridge Venice"
   },
   {
     id: 4,
     name: "Phewa Lake",
     location: "Pokhara Valley",
-    description: "A breathtaking basilica perched above Paris, offering panoramic city views and timeless beauty.",
-    src: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1200&h=800&fit=crop",
+    description: "Phewa Lake is the third largest lake in Nepal and the largest in Gandaki Province after the Phoksundo lake in comparison to Nepal's water bodies.",
+    src: "/2026/phewa_lake.jpeg",
     alt: "Sacré-Cœur Paris"
   },
   {

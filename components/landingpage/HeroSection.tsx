@@ -2,29 +2,26 @@
 
 import { useState, useEffect } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import Navbar from '../NavBar'
-import TopThinNavbar from './TopThinNavbar'
-import SearchFlightHotelsSection from './SearchFlightsHotelsSection'
 
 const HERO_IMAGES = [
     {
         id: 1,
-        src: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop',
+        src: '/2026/herosection/passport.jpeg',
         alt: 'Alpine Village',
     },
     {
         id: 2,
-        src: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1920&h=1080&fit=crop',
+        src: '/2026/herosection/airplane.jpeg',
         alt: 'Beach Paradise',
     },
     {
         id: 3,
-        src: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1920&h=1080&fit=crop',
+        src: '/2026/herosection/airplane_2.jpeg',
         alt: 'City Skyline',
     },
     {
         id: 4,
-        src: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1920&h=1080&fit=crop',
+        src: '/2026/herosection/airplane_3.jpeg',
         alt: 'Tropical Island',
     },
     {
@@ -107,7 +104,43 @@ export default function HeroCarousel() {
                         The best travel for your journey begins now
                     </p>
                 </div>
-                <SearchFlightHotelsSection/>
+                {/* Combined Navigation - Dots and Arrows */}
+                <div className="flex flex-col items-center gap-6">
+                    {/*  Vertical nav – centred on the right edge  */}
+                    <div className="absolute right-6 top-1/2 -translate-y-1/2 z-30 flex flex-col items-center gap-6">
+                        {/* Dots */}
+                        <div className="flex flex-col gap-4">
+                            {HERO_IMAGES.map((_, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => goToSlide(idx)}
+                                    className={`rounded-full transition-all duration-300 ${idx === currentSlide ? 'bg-white w-3 h-8' : 'bg-white/50 hover:bg-white/80 w-3 h-3'
+                                        }`}
+                                    aria-label={`Go to slide ${idx + 1}`}
+                                />
+                            ))}
+                        </div>
+
+                        {/* Chevrons */}
+                        <div className="flex flex-col gap-2">
+                            <button
+                                onClick={prevSlide}
+                                className="p-2 rounded-full bg-white/20 hover:bg-white/40 text-white transition"
+                                aria-label="Previous slide"
+                            >
+                                <ChevronUp className="w-6 h-6" />
+                            </button>
+                            <button
+                                onClick={nextSlide}
+                                className="p-2 rounded-full bg-white/20 hover:bg-white/40 text-white transition"
+                                aria-label="Next slide"
+                            >
+                                <ChevronDown className="w-6 h-6" />
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </section>
     )
