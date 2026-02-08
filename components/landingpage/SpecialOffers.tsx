@@ -123,7 +123,7 @@ export default function SpecialOffers() {
               <img
                 src={offer.image}
                 alt={offer.title}
-                className="w-full h-full object-contain hover:scale-110 transition-transform duration-500"
+                className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
               />
             </div>
 
