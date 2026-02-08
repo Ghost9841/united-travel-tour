@@ -8,7 +8,7 @@ const DESTINATIONS = [
     name: "Pasupati Nath",
     location: "Kathmandu, Nepal",
     description: `Pashupatinath Temple is one of the most sacred Hindu temples in the world, dedicated to Lord Shiva in his form as Pashupati, meaning "Lord of all beings" or "Protector of animals."`,
-    src: "/2026/populardestination/ktmtolongon.jpeg",
+    src: "/2026/pasupati_nath.jpeg",
     alt: "Berlin Cathedral"
   },
   {

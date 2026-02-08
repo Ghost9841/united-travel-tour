@@ -26,8 +26,8 @@ export default function Home() {
                 </div>
                 </div>
       <OnGoingFaresCarousel/>
-      <PopularDestinations/>
       <SpecialOffers/>
+      <PopularDestinations/>
       <CircularGallery images={destinationImages}/>
       <Blogs/>
       <TripPlanners/>

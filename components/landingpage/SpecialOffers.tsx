@@ -9,7 +9,7 @@ const specialOffers = [
     location: "Lisbon, Portugal",
     price: 700,
     discountedPrice: 500,
-    image: "https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=800&h=600&fit=crop",
+    image: "/2026/populardestination/ktmtolongon.jpeg",
     rating: 5
   },
   {
