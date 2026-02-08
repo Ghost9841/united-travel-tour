@@ -5,18 +5,18 @@ import { useState, useEffect } from 'react';
 const specialOffers = [
   {
     id: 1,
-    title: "Romantic Lisbon Getaway",
-    description: "Explore the charming streets of Lisbon with a luxury stay, daily breakfast, and guided city tours.",
-    location: "Lisbon, Portugal",
-    price: 700,
-    discountedPrice: 500,
+    title: "London ⇄ Kathmandu ⇄ London (Two Way)",
+    description: "Fly London ⇄ Kathmandu ⇄ London with Qatar Airways from £900 (subject to availability). Includes 40KG baggage. Limited seats, so book early. Call 020 3725 3460 for dates, fare rules, and quick booking support. Terms apply.",
+    location: "London, Kathmandu",
+    price: 1000,
+    discountedPrice: 900,
     image: "/2026/populardestination/ktmtolondon.jpeg",
     rating: 5
   },
   {
     id: 2,
     title: "London ⇄ Kathmandu",
-    description: "Fly London ⇄ Kathmandu with Qatar Airways at promo fares from £900 (subject to availability). Enjoy a generous 40KG baggage allowance and smooth connections, great service, and comfortable flights. Limited seats available, so book early to secure the best deal. Call 020 3725 3460 today for dates, fare rules, and instant booking support. Terms apply.",
+    description: "Fly London ⇄ Kathmandu with Qatar Airways at promo fares from £370 (subject to availability). Enjoy a generous 40KG baggage allowance and smooth connections, great service, and comfortable flights. Limited seats available, so book early to secure the best deal. Call 020 3725 3460 today for dates, fare rules, and instant booking support. Terms apply.",
     location: "London, Kathmandu",
     price: 400,
     discountedPrice: 370,
