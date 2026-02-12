@@ -5,7 +5,7 @@ import Image from "next/image"
 
 export default function NotFound() {
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10 bg-muted">
+    <div className="flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10 bg-dark">
       <div className="flex w-full max-w-md flex-col items-center gap-6 text-center">
         <div className="flex flex-col items-center gap-4">
           <div className="rounded-full bg-primary/10 p-4">
