@@ -4,6 +4,7 @@ import "./globals.css";
 import Script from "next/script";
 import ClickSpark from "@/components/ClickSpark";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -59,6 +60,7 @@ export default function RootLayout({
               `}
             </Script>
           </ClickSpark>
+          <Toaster/>
         </body>
       </html>
     </ClerkProvider>
