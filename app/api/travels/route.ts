@@ -8,27 +8,34 @@ const filePath = path.join(process.cwd(), '@/app/data/travels.json');
 
 // Helper: Read travels from file
 function getTravels(): Travel[] {
-  const fileData = fs.readFileSync(filePath, 'utf-8');
-  const parsed = JSON.parse(fileData);
-  return parsed.travels;
+  try {
+    const fileData = fs.readFileSync(filePath, 'utf-8');
+    const parsed = JSON.parse(fileData);
+    return parsed.travels || [];
+  } catch (error) {
+    console.error('Error reading travels file:', error);
+    return [];
+  }
 }
 
 // Helper: Write travels to file
 function saveTravels(travels: Travel[]) {
-  const data = { travels };
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+  try {
+    const data = { travels };
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
+  } catch (error) {
+    console.error('Error writing travels file:', error);
+    throw error;
+  }
 }
 
 // GET - fetch all travels (reads fresh from file)
 export async function GET() {
   try {
     const travels = getTravels();
-    
-    return NextResponse.json({
-      success: true,
-      data: travels
-    });
+    return NextResponse.json({ success: true, data: travels });
   } catch (error) {
+    console.error('GET error:', error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch travels" },
       { status: 500 }
@@ -40,7 +47,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    
+
     // Validation
     if (!body.title || !body.location || !body.price) {
       return NextResponse.json(
@@ -51,7 +58,7 @@ export async function POST(request: Request) {
 
     // Get current travels
     const travels = getTravels();
-    
+
     // Create new travel
     const newTravel: Travel = {
       id: Date.now(),
@@ -62,7 +69,7 @@ export async function POST(request: Request) {
       originalPrice: Number(body.originalPrice) || Number(body.price),
       duration: body.duration || "N/A",
       rating: body.rating || 0,
-      reviews: 0,
+      reviews: body.reviews || 0,
       image: body.image || "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&h=600&fit=crop",
       category: body.category || "Uncategorized",
       groupSize: body.groupSize || "1-10 people"
@@ -72,12 +79,14 @@ export async function POST(request: Request) {
     travels.push(newTravel);
     saveTravels(travels);
 
-    return NextResponse.json({
-      success: true,
-      data: newTravel,
-      message: "Travel package created successfully"
-    }, { status: 201 });
-
+    return NextResponse.json(
+      { 
+        success: true, 
+        data: newTravel, 
+        message: "Travel package created successfully" 
+      }, 
+      { status: 201 }
+    );
   } catch (error) {
     console.error("POST error:", error);
     return NextResponse.json(
