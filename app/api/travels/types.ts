@@ -12,5 +12,10 @@ export type Travel = {
     category: string;
     groupSize : string;
 }
-
+export type ApiResponse = {
+    success: boolean;
+    data?: Travel;
+    message?: string;
+    error?: string;
+}
 export default Travel;
