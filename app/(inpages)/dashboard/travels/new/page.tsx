@@ -14,6 +14,7 @@ import {
   Users,
   Tag,
   Image as ImageIcon,
+  CirclePoundSterling,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -232,9 +233,9 @@ export default function NewTravelPage() {
                 <div className="grid gap-4 md:grid-cols-2">
                   {/* Price */}
                   <div className="space-y-2">
-                    <Label htmlFor="price">Price (USD) *</Label>
+                    <Label htmlFor="price">Price (GBP) *</Label>
                     <div className="relative">
-                      <DollarSign className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                      <CirclePoundSterling className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="price"
                         name="price"
