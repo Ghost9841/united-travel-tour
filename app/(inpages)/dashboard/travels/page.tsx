@@ -32,7 +32,8 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
-import Travel, { ApiResponse } from '@/app/api/travels/types';
+import { ApiResponse } from '@/app/api/travels/types';
+import { Travel } from "@prisma/client";
 
 // Stat Card Component
 function StatCard({

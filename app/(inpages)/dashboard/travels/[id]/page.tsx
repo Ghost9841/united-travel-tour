@@ -49,7 +49,7 @@ import {
 import  {toast} from "sonner"
 import { Skeleton } from "@/components/ui/skeleton";
 
-import Travel, { ApiResponse } from '@/app/api/travels/types';
+import { ApiResponse } from '@/app/api/travels/types';
 
 // Reuse the same categories, durations, group sizes from the new page
 const CATEGORIES = [
@@ -164,6 +164,7 @@ export default function EditTravelPage() {
   const handleSelectChange = (name: string, value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
 
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();

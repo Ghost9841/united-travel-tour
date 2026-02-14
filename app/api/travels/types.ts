@@ -1,4 +1,4 @@
-export type Travel = {
+export interface Travel {
   id: number;
   title: string;
   location: string;
@@ -11,15 +11,12 @@ export type Travel = {
   image: string;
   category: string;
   groupSize: string;
-};
-
-export type ApiResponse = {
+  createdAt: string;
+  updatedAt: Date;
+}
+export type ApiResponse<T = any> = {
   success: boolean;
-  data?: {
-    travels: Travel[];  // Always { travels: [...] } structure
-  };
+  data?: T;
   message?: string;
   error?: string;
 };
-
-export default Travel;
