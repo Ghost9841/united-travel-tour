@@ -1,4 +1,4 @@
-import usersData from '@/app/data/users.json';
+import usersData from '@/data/users.json';
 
 const users = usersData.users;
 export async function GET() {
