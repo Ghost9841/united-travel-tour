@@ -18,8 +18,8 @@ export default function TravelsPage() {
       setLoading(true)
       console.log("GET response:", data); // Debug log
       
-      if (data.success && data.data?.travels) {
-        setTravelPackages(data.data?.travels);
+      if (data.success){
+        setTravelPackages(data.data);
       }
     } catch (error){
       console.error("Failed to fetch data",error);
