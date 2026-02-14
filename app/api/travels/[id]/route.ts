@@ -6,12 +6,13 @@ const filePath = path.join(process.cwd(), "data", "travels.json");
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const file = await fs.readFile(filePath, "utf-8");
     const travels = JSON.parse(file);
-    const travel = travels.find((t: any) => t.id === Number(params.id));
+    const travel = travels.find((t: any) => t.id === Number(id));
 
     if (!travel) {
       return NextResponse.json({
@@ -36,14 +37,15 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     const file = await fs.readFile(filePath, "utf-8");
     const travels = JSON.parse(file);
     
-    const index = travels.findIndex((t: any) => t.id === Number(params.id));
+    const index = travels.findIndex((t: any) => t.id === Number(id));
     
     if (index === -1) {
       return NextResponse.json({
@@ -57,7 +59,7 @@ export async function PUT(
       ...travels[index],
       ...body,
       price: Number(body.price),
-      originalPrice: travels[index].originalPrice, // Preserve original price or recalculate
+      originalPrice: travels[index].originalPrice, // Preserve original price
     };
 
     await fs.writeFile(filePath, JSON.stringify(travels, null, 2));
@@ -79,13 +81,14 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const file = await fs.readFile(filePath, "utf-8");
     const travels = JSON.parse(file);
     
-    const filteredTravels = travels.filter((t: any) => t.id !== Number(params.id));
+    const filteredTravels = travels.filter((t: any) => t.id !== Number(id));
     
     if (filteredTravels.length === travels.length) {
       return NextResponse.json({
