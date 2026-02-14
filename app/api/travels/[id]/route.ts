@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import Travel from '../types';
 
-const filePath = path.join(process.cwd(), '@/app/data/travels.json');
+const filePath = path.join(process.cwd(), 'src/app/data/travels.json');
 
 function getTravels(): Travel[] {
   const fileData = fs.readFileSync(filePath, 'utf-8');
@@ -17,11 +17,12 @@ function saveTravels(travels: Travel[]) {
 // GET single travel
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }  // ← Changed to Promise
 ) {
   try {
+    const { id } = await params;  // ← Await the params
     const travels = getTravels();
-    const travel = travels.find(t => t.id === Number(params.id));
+    const travel = travels.find(t => t.id === Number(id));
     
     if (!travel) {
       return NextResponse.json(
@@ -42,12 +43,13 @@ export async function GET(
 // PUT update travel
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }  // ← Changed to Promise
 ) {
   try {
+    const { id } = await params;  // ← Await the params
     const body = await request.json();
     const travels = getTravels();
-    const index = travels.findIndex(t => t.id === Number(params.id));
+    const index = travels.findIndex(t => t.id === Number(id));
     
     if (index === -1) {
       return NextResponse.json(
@@ -56,11 +58,10 @@ export async function PUT(
       );
     }
 
-    // Update fields
     travels[index] = {
       ...travels[index],
       ...body,
-      id: travels[index].id, // Prevent ID change
+      id: travels[index].id,
       price: Number(body.price) || travels[index].price,
       originalPrice: Number(body.originalPrice) || travels[index].originalPrice,
     };
@@ -83,11 +84,12 @@ export async function PUT(
 // DELETE travel
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }  // ← Changed to Promise
 ) {
   try {
+    const { id } = await params;  // ← Await the params
     const travels = getTravels();
-    const filtered = travels.filter(t => t.id !== Number(params.id));
+    const filtered = travels.filter(t => t.id !== Number(id));
     
     if (filtered.length === travels.length) {
       return NextResponse.json(
