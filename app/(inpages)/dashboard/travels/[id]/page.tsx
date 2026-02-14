@@ -165,41 +165,48 @@ export default function EditTravelPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSaving(true);
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setLoading(true);
 
-    try {
-      const res = await fetch(`/api/travels/${travelId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          price: Number(formData.price),
-        }),
+  try {
+    // Log the data being sent
+    const submitData = {
+      ...formData,
+      price: Number(formData.price),
+    };
+    console.log("Submitting data:", submitData);
+
+    const res = await fetch("/api/travels", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(submitData),
+    });
+
+    console.log("Response status:", res.status);
+    
+    const data = await res.json();
+    console.log("Response data:", data);
+
+    if (data.success) {
+      toast("Success!", {
+        description: "Travel package created successfully.",
       });
-
-      const data = await res.json();
-
-      if (data.success) {
-        toast("Success!",{
-          description: "Travel package updated successfully.",
-        });
-        router.push("/dashboard/travels");
-      } else {
-        toast( "Error",{
-          description: data.error || "Failed to update travel package.",
-        });
-      }
-    } catch (error) {
-      console.error("Failed to update", error);
-      toast("Error",{
-        description: "Something went wrong. Please try again.",
+      router.push("/dashboard/travels");
+    } else {
+      toast("Error", {
+        description: data.error || "Failed to create travel package.",
       });
-    } finally {
-      setSaving(false);
     }
-  };
+  } catch (error) {
+    console.error("Failed to create", error);
+    toast("Error", {
+      description: "Something went wrong. Please try again.",
+    });
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleDelete = async () => {
     setDeleting(true);
