@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
 import ClickSpark from "@/components/ClickSpark";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,24 +27,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ClickSpark
-          sparkColor='#36454F'
-          sparkSize={10}
-          sparkRadius={15}
-          sparkCount={8}
-          duration={400}
+    <ClerkProvider>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-
-          {children}
-          <Script
-            id="tawk-to"
-            strategy="afterInteractive"
+          <ClickSpark
+            sparkColor='#36454F'
+            sparkSize={10}
+            sparkRadius={15}
+            sparkCount={8}
+            duration={400}
           >
-            {`
+
+            {children}
+            <Script
+              id="tawk-to"
+              strategy="afterInteractive"
+            >
+              {`
             var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
             (function(){
               var s1=document.createElement("script"),
@@ -53,11 +55,12 @@ export default function RootLayout({
               s1.charset='UTF-8';
               s1.setAttribute('crossorigin','*');
               s0.parentNode.insertBefore(s1,s0);
-            })();
-          `}
-          </Script>
-        </ClickSpark>
-      </body>
-    </html>
+              })();
+              `}
+            </Script>
+          </ClickSpark>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

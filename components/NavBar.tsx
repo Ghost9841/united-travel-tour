@@ -13,7 +13,14 @@ import { Menu } from 'lucide-react';
 import CustomLink from './manual-ui/CustomLink';
 import Link from 'next/link';
 import clsx from 'clsx';
-import { useIsMobile } from '@/hooks/use-mobile'; // adjust path as needed
+import { useIsMobile } from '@/hooks/use-mobile';
+import { 
+  UserButton, 
+  SignInButton, 
+  SignedIn, 
+  SignedOut,
+  useUser 
+} from '@clerk/nextjs';
 
 const navItems = [
   { href: '/', title: 'Home' },
@@ -28,6 +35,7 @@ export default function Navbar() {
   const [isSticky, setIsSticky] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const isMobile = useIsMobile();
+  const { user } = useUser();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,12 +77,35 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Desktop CTA Buttons */}
+        {/* Desktop CTA Buttons - Clerk Integrated */}
         <div className="hidden md:flex items-center gap-6">
-          <CustomLink href="/login" title="Login" className="text-white" />
-          <Button size="lg" className="rounded-full text-base">
-            <Link href="/booknow">Book Tour</Link>
-          </Button>
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button className="text-white hover:text-white/80 font-medium">
+                Login
+              </button>
+            </SignInButton>
+            <Button size="lg" className="rounded-full text-base">
+              <Link href="/booknow">Book Tour</Link>
+            </Button>
+          </SignedOut>
+          
+          <SignedIn>
+            <div className="flex items-center gap-4">
+              <Button size="lg" className="rounded-full text-base">
+                <Link href="/booknow">Book Tour</Link>
+              </Button>
+              <UserButton 
+                afterSignOutUrl="/"
+                appearance={{
+                  elements: {
+                    avatarBox: "w-10 h-10",
+                    userButtonPopoverCard: "mt-2"
+                  }
+                }}
+              />
+            </div>
+          </SignedIn>
         </div>
 
         {/* Mobile Hamburger Menu */}
@@ -101,22 +132,49 @@ export default function Navbar() {
                   ))}
                 </div>
 
-                {/* Mobile CTA Section */}
+                {/* Mobile CTA Section - Clerk Integrated */}
                 <div className="flex flex-col gap-4 mt-4">
-                  <CustomLink
-                    href="/login"
-                    title="Login"
-                    className="text-white text-lg"
-                  />
-                  <Button
-                    size="lg"
-                    className="rounded-full text-base w-full"
-                    asChild
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <Link href="/booknow">Book Tour</Link>
-                  </Button>
-                </div>              </div>
+                  <SignedOut>
+                    <SignInButton mode="modal">
+                      <button className="text-white text-lg text-left py-2 border-b border-white/10">
+                        Login
+                      </button>
+                    </SignInButton>
+                    <Button
+                      size="lg"
+                      className="rounded-full text-base w-full"
+                      asChild
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <Link href="/booknow">Book Tour</Link>
+                    </Button>
+                  </SignedOut>
+                  
+                  <SignedIn>
+                    <div className="flex items-center justify-between py-2 border-b border-white/10">
+                      <span className="text-white text-lg">
+                        {user?.firstName || 'Account'}
+                      </span>
+                      <UserButton 
+                        afterSignOutUrl="/"
+                        appearance={{
+                          elements: {
+                            avatarBox: "w-8 h-8"
+                          }
+                        }}
+                      />
+                    </div>
+                    <Button
+                      size="lg"
+                      className="rounded-full text-base w-full"
+                      asChild
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <Link href="/booknow">Book Tour</Link>
+                    </Button>
+                  </SignedIn>
+                </div>
+              </div>
             </SheetContent>
           </Sheet>
         </div>
