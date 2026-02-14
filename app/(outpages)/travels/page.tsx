@@ -1,211 +1,187 @@
 'use client';
-
 import Travel, { ApiResponse } from '@/app/api/travels/types';
-import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import { MapPin, Star, Clock, Users } from 'lucide-react';
+import { useEffect,useState } from 'react';
 
-const TravelsAdminPage = () => {
-  const [travels, setTravels] = useState<Travel[]>([]);
+
+export default function TravelsPage() {
+  const [travelPackages,setTravelPackages] = useState<Travel[]>([]);
   const [loading, setLoading] = useState(true);
+  
 
-  useEffect(() => {
-    fetchTravels();
-  }, []);
-
-  const fetchTravels = async () => {
-    try {
-      setLoading(true);
+   useEffect(()=> {
+    const fetchTravels = async () => {
+      try {
       const res = await fetch("/api/travels");
       const data: ApiResponse = await res.json();
-      
+      setLoading(true)
       console.log("GET response:", data); // Debug log
       
       if (data.success && data.data?.travels) {
-        setTravels(data.data.travels);
+        setTravelPackages(data.data?.travels);
       }
-    } catch (error) {
-      console.error("Failed to fetch", error);
+    } catch (error){
+      console.error("Failed to fetch data",error);
     } finally {
       setLoading(false);
     }
-  };
-
-  const createTravel = async (newTravelData: Partial<Travel>) => {
-    try {
-      const res = await fetch("/api/travels", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newTravelData),
-      });
-      const data: ApiResponse = await res.json();
-      
-      console.log("POST response:", data); // Debug log
-      
-      if (data.success && data.data?.travels?.[0]) {
-        setTravels((prevTravels: Travel[]) => [...prevTravels, data.data!.travels[0]]);
-        return { success: true };
-      }
-      return { success: false };
-    } catch (error) {
-      console.error("Failed to create", error);
-      return { success: false };
-    }
-  };
-
-  const deleteTravel = async (id: number) => {
-    if (!confirm("Delete this travel?")) return;
-
-    try {
-      const res = await fetch(`/api/travels/${id}`, { method: "DELETE" });
-      const data = await res.json();
-      if (data.success) {
-        setTravels(prev => prev.filter(t => t.id !== id));
-      }
-    } catch (error) {
-      console.error("Failed to delete", error);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    
-    const result = await createTravel({
-      title: formData.get("title") as string,
-      location: formData.get("location") as string,
-      price: Number(formData.get("price")),
-      description: formData.get("description") as string,
-      duration: formData.get("duration") as string,
-      category: formData.get("category") as string,
-      groupSize: formData.get("groupSize") as string,
-      image: formData.get("image") as string,
-    });
-    
-    if (result?.success) {
-      e.currentTarget.reset();
-    }
-  };
-
-  if (loading) return <main style={{ padding: '2rem' }}><h1>Loading...</h1></main>;
-
+  }
+  fetchTravels();
+  },[]);
   return (
-    <main style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
-      <h1 style={{ marginBottom: '2rem' }}>Admin Travels</h1>
-
-      <form 
-        onSubmit={handleSubmit} 
-        style={{ 
-          marginBottom: '2rem', 
-          padding: '1.5rem', 
-          border: '1px solid #ddd', 
-          borderRadius: '8px',
-          background: '#f9f9f9'
-        }}
-      >
-        <h2 style={{ marginTop: 0 }}>Create New Travel</h2>
-        
-        <div style={{ marginBottom: '1rem' }}>
-          <input 
-            name="title" 
-            placeholder="Title" 
-            required 
-            style={{ width: '100%', padding: '0.5rem', marginBottom: '0.5rem' }}
-          />
-          <input 
-            name="location" 
-            placeholder="Location" 
-            required 
-            style={{ width: '100%', padding: '0.5rem', marginBottom: '0.5rem' }}
-          />
-          <input 
-            name="price" 
-            type="number" 
-            placeholder="Price" 
-            required 
-            style={{ width: '100%', padding: '0.5rem', marginBottom: '0.5rem' }}
-          />
-          <input 
-            name="duration" 
-            placeholder="Duration (e.g., 5 Days / 4 Nights)" 
-            style={{ width: '100%', padding: '0.5rem', marginBottom: '0.5rem' }}
-          />
-          <input 
-            name="category" 
-            placeholder="Category (e.g., City Tour)" 
-            style={{ width: '100%', padding: '0.5rem', marginBottom: '0.5rem' }}
-          />
-          <input 
-            name="groupSize" 
-            placeholder="Group Size (e.g., 2-8 people)" 
-            style={{ width: '100%', padding: '0.5rem', marginBottom: '0.5rem' }}
-          />
-          <input 
-            name="image" 
-            placeholder="Image URL" 
-            style={{ width: '100%', padding: '0.5rem', marginBottom: '0.5rem' }}
-          />
-          <textarea 
-            name="description" 
-            placeholder="Description" 
-            rows={3}
-            style={{ width: '100%', padding: '0.5rem' }}
-          />
+    <div className="min-h-screen bg-gray-50">
+      {/* Header Section */}
+      <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white py-20">
+        <div className="max-w-8xl mx-auto px-6">
+          <h1 className="text-5xl font-bold mb-4 mt-10">Discover Amazing Travel Packages</h1>
+          <p className="text-xl text-orange-100">Handpicked destinations with expertly curated itineraries for unforgettable experiences</p>
         </div>
-        
-        <button 
-          type="submit"
-          style={{
-            padding: '0.75rem 1.5rem',
-            background: '#0070f3',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer'
-          }}
-        >
-          Create Travel
-        </button>
-      </form>
+      </div>
 
-      <h2>Existing Travels ({travels.length})</h2>
-      
-      {travels.length === 0 ? (
-        <p style={{ color: '#666' }}>No travels found. Create one above!</p>
-      ) : (
-        travels.map(travel => (
-          <div 
-            key={travel.id} 
-            style={{ 
-              border: '1px solid #ccc', 
-              padding: '1.5rem', 
-              marginBottom: '1rem',
-              borderRadius: '8px',
-              background: 'white'
-            }}
-          >
-            <h3 style={{ marginTop: 0 }}>{travel.title}</h3>
-            <p><strong>Location:</strong> {travel.location}</p>
-            <p><strong>Price:</strong> ${travel.price} <span style={{ textDecoration: 'line-through', color: '#999' }}>${travel.originalPrice}</span></p>
-            <p><strong>Duration:</strong> {travel.duration}</p>
-            <p><strong>Category:</strong> {travel.category}</p>
-            <p style={{ color: '#666', fontSize: '0.9rem' }}>{travel.description}</p>
-            
-            <div style={{ marginTop: '1rem' }}>
-              <Link href={`/dashboard/travels/${travel.id}`}>
-                <button style={{ marginRight: '0.5rem' }}>Edit</button>
-              </Link>
-              <button 
-                onClick={() => deleteTravel(travel.id)} 
-                style={{ color: 'red' }}
-              >
-                Delete
-              </button>
-            </div>
+      {/* Main Content */}
+      <div className="max-w-8xl mx-auto px-6 py-12">
+        {/* Stats Bar */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+          <div className="bg-white rounded-xl p-6 shadow-md text-center">
+            <p className="text-4xl font-bold text-orange-500 mb-2">50+</p>
+            <p className="text-gray-600">Destinations</p>
           </div>
-        ))
-      )}
-    </main>
-  );
-};
+          <div className="bg-white rounded-xl p-6 shadow-md text-center">
+            <p className="text-4xl font-bold text-orange-500 mb-2">10k+</p>
+            <p className="text-gray-600">Happy Travelers</p>
+          </div>
+          <div className="bg-white rounded-xl p-6 shadow-md text-center">
+            <p className="text-4xl font-bold text-orange-500 mb-2">4.8</p>
+            <p className="text-gray-600">Average Rating</p>
+          </div>
+          <div className="bg-white rounded-xl p-6 shadow-md text-center">
+            <p className="text-4xl font-bold text-orange-500 mb-2">100%</p>
+            <p className="text-gray-600">Satisfaction</p>
+          </div>
+        </div>
 
-export default TravelsAdminPage;
+        {/* Packages Grid */}
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">All Travel Packages</h2>
+          <p className="text-gray-600 mb-8">Browse through our carefully selected travel experiences</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {travelPackages.map((pkg) => (
+            <a
+              key={pkg.id}
+              href={`/travels/${pkg.id}`}
+              className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300"
+            >
+              {/* Image */}
+              <div className="relative h-64 overflow-hidden">
+                <img
+                  src={pkg.image}
+                  alt={pkg.title}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                
+                {/* Category Badge */}
+                <div className="absolute top-4 left-4">
+                  <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                    {pkg.category}
+                  </span>
+                </div>
+
+                {/* Discount Badge */}
+                {pkg.originalPrice && (
+                  <div className="absolute top-4 right-4">
+                    <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                      Save £{pkg.originalPrice - pkg.price}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Content */}
+              <div className="p-6">
+                {/* Location & Rating */}
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-1 text-gray-600">
+                    <MapPin className="w-4 h-4 text-orange-500" />
+                    <span className="text-sm font-medium">{pkg.location}</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-1">
+                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                    <span className="font-semibold text-gray-900">{pkg.rating}</span>
+                    <span className="text-sm text-gray-500">({pkg.reviews})</span>
+                  </div>
+                </div>
+
+                {/* Title */}
+                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-orange-500 transition-colors">
+                  {pkg.title}
+                </h3>
+
+                {/* Description */}
+                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                  {pkg.description}
+                </p>
+
+                {/* Details */}
+                <div className="flex items-center gap-4 mb-4 text-sm text-gray-600">
+                  <div className="flex items-center gap-1">
+                    <Clock className="w-4 h-4" />
+                    <span>{pkg.duration}</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Users className="w-4 h-4" />
+                    <span>{pkg.groupSize}</span>
+                  </div>
+                </div>
+
+                {/* Price & Button */}
+                <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+                  {/* <div>
+                    <p className="text-sm text-gray-500">From</p>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-2xl font-bold text-orange-500">£{pkg.price}</span>
+                      {pkg.originalPrice && (
+                        <span className="text-sm text-gray-400 line-through">£{pkg.originalPrice}</span>
+                      )}
+                    </div>
+                  </div> */}
+                  
+                   <a href="/booknow">
+                    <button className="px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors">
+                      BOOK NOW
+                    </button>
+                  </a>
+                  <button className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-lg font-medium transition-colors">
+                    View Details
+                  </button>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+
+        {/* Load More Button */}
+        <div className="text-center mt-12">
+          <button className="bg-gray-200 hover:bg-gray-300 text-gray-900 px-8 py-3 rounded-lg font-semibold transition-colors">
+            Load More Packages
+          </button>
+        </div>
+      </div>
+
+      {/* CTA Section */}
+      <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white py-16 mt-16">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <h2 className="text-4xl font-bold mb-4">Can't Find What You're Looking For?</h2>
+          <p className="text-xl text-orange-100 mb-8">
+            Let us create a custom travel package tailored specifically to your preferences
+          </p>
+          <button className="bg-white text-orange-500 hover:bg-orange-50 px-8 py-4 rounded-lg font-bold text-lg transition-colors">
+            Request Custom Package
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
