@@ -12,6 +12,7 @@ import TripPlanners from "@/components/landingpage/TripPlanners";
 import Navbar from "@/components/NavBar";
 import CircularGallery from "./(outpages)/aboutus/CircularGallery";
 import { destinationImages } from "./(outpages)/aboutus/images";
+import FAQSection from "@/components/landingpage/FAQs";
 
 
 export default function Home() {
@@ -32,6 +33,7 @@ export default function Home() {
       <Blogs/>
       <TripPlanners/>
       <DestinationGallery/>
+      <FAQSection/>
       <Newsletter/>
       <Footer/>
     </div>  
