@@ -3,7 +3,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import Travel from "./types";
 
-const filePath = path.join(process.cwd(), "@/app/data/travels/travels.json");
+const filePath = path.join(process.cwd(), "@/data/travels/travels.json");
 
 // GET all travels
 export async function GET() {
