@@ -1,97 +1,40 @@
-import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
-import Travel from './types';
+import { NextResponse } from "next/server";
+import { promises as fs } from "fs";
+import path from "path";
+import Travel from "./types";
 
-// Path to JSON file
-const filePath = path.join(process.cwd(), '@/app/data/travels.json');
+const filePath = path.join(process.cwd(), "data/travels/travels.json");
 
-// Helper: Read travels from file
-function getTravels(): Travel[] {
-  try {
-    const fileData = fs.readFileSync(filePath, 'utf-8');
-    const parsed = JSON.parse(fileData);
-    return parsed.travels || [];
-  } catch (error) {
-    console.error('Error reading travels file:', error);
-    return [];
-  }
-}
-
-// Helper: Write travels to file
-function saveTravels(travels: Travel[]) {
-  try {
-    const data = { travels };
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
-  } catch (error) {
-    console.error('Error writing travels file:', error);
-    throw error;
-  }
-}
-
-// GET - fetch all travels (reads fresh from file)
+// GET all travels
 export async function GET() {
   try {
-    const travels = getTravels();
-    return NextResponse.json({ success: true, data: travels });
+    const file = await fs.readFile(filePath, "utf-8");
+    const travels: Travel[] = JSON.parse(file);
+    return NextResponse.json(travels);
   } catch (error) {
-    console.error('GET error:', error);
-    return NextResponse.json(
-      { success: false, error: "Failed to fetch travels" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to fetch travels" }, { status: 500 });
   }
 }
 
-// POST - create new travel (writes to file)
-export async function POST(request: Request) {
+// POST new travel
+export async function POST(req: Request) {
   try {
-    const body = await request.json();
+    const body = await req.json();
 
-    // Validation
-    if (!body.title || !body.location || !body.price) {
-      return NextResponse.json(
-        { success: false, error: "Missing required fields: title, location, price" },
-        { status: 400 }
-      );
-    }
+    const file = await fs.readFile(filePath, "utf-8");
+    const travels: Travel[] = JSON.parse(file);
 
-    // Get current travels
-    const travels = getTravels();
-
-    // Create new travel
     const newTravel: Travel = {
       id: Date.now(),
-      title: body.title,
-      location: body.location,
-      description: body.description || "",
-      price: Number(body.price),
-      originalPrice: Number(body.originalPrice) || Number(body.price),
-      duration: body.duration || "N/A",
-      rating: body.rating || 0,
-      reviews: body.reviews || 0,
-      image: body.image || "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&h=600&fit=crop",
-      category: body.category || "Uncategorized",
-      groupSize: body.groupSize || "1-10 people"
+      ...body,
     };
 
-    // Add and save
     travels.push(newTravel);
-    saveTravels(travels);
 
-    return NextResponse.json(
-      { 
-        success: true, 
-        data: newTravel, 
-        message: "Travel package created successfully" 
-      }, 
-      { status: 201 }
-    );
+    await fs.writeFile(filePath, JSON.stringify(travels, null, 2));
+
+    return NextResponse.json(newTravel, { status: 201 });
   } catch (error) {
-    console.error("POST error:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to create travel package" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to create travel" }, { status: 500 });
   }
 }
