@@ -1,0 +1,54 @@
+{
+  "specialOffers": [
+    {
+      "id": 1,
+      "title": "London ⇄ Kathmandu ⇄ London (Two Way)",
+      "description": "Fly London ⇄ Kathmandu ⇄ London with Qatar Airways from £900 (subject to availability). Includes 40KG baggage. Limited seats, so book early. Call 020 3725 3460 for details. Terms apply.",
+      "location": "London, Kathmandu",
+      "price": 1000,
+      "discountedPrice": 900,
+      "image": "/2026/populardestination/ktmtolondon.jpeg",
+      "rating": 5
+    },
+    {
+      "id": 2,
+      "title": "London ⇄ Kathmandu",
+      "description": "Fly London ⇄ Kathmandu with Qatar Airways at promo fares from £370 (subject to availability). Includes 40KG baggage allowance.",
+      "location": "London, Kathmandu",
+      "price": 400,
+      "discountedPrice": 370,
+      "image": "/2026/populardestination/ktmtolondon_2.jpeg",
+      "rating": 5
+    },
+    {
+      "id": 3,
+      "title": "Extra Add Luggage",
+      "description": "Add checked baggage quickly and hassle-free. Avoid airport charges by booking in advance.",
+      "location": "",
+      "price": 0,
+      "discountedPrice": 0,
+      "image": "/2026/populardestination/luggage.jpeg",
+      "rating": 5
+    },
+    {
+      "id": 4,
+      "title": "Fly Anywhere",
+      "description": "Worldwide ticket booking with honest pricing and reliable support before and after booking.",
+      "location": "London",
+      "price": 0,
+      "discountedPrice": 0,
+      "image": "/2026/populardestination/udyoplane.jpeg",
+      "rating": 5
+    },
+    {
+      "id": 5,
+      "title": "Venice Canal Escape",
+      "description": "Experience Venice's iconic canals with a premium stay and gondola ride included.",
+      "location": "Venice, Italy",
+      "price": 1100,
+      "discountedPrice": 880,
+      "image": "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=800&h=600&fit=crop",
+      "rating": 5
+    }
+  ]
+}

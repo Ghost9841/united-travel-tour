@@ -1,0 +1,44 @@
+{
+  "populardestinations": [
+    {
+      "id": 1,
+      "name": "Pasupati Nath",
+      "location": "Kathmandu, Nepal",
+      "description": "Pashupatinath Temple is one of the most sacred Hindu temples in the world, dedicated to Lord Shiva in his form as Pashupati, meaning 'Lord of all beings' or 'Protector of animals.'",
+      "src": "/2026/pasupati_nath.jpeg",
+      "alt": "Berlin Cathedral"
+    },
+    {
+      "id": 2,
+      "name": "Millennium Bridge",
+      "location": "London, United Kingdom",
+      "description": "A modern pedestrian bridge offering stunning views of the Thames and London's iconic skyline.",
+      "src": "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1200&h=800&fit=crop",
+      "alt": "Millennium Bridge London"
+    },
+    {
+      "id": 3,
+      "name": "Rara Lake",
+      "location": "Mugu & Jumla, Nepal",
+      "description": "Rara Lake, also known as Mahendra Lake, is the largest fresh water lake in the Nepalese Himalayas.",
+      "src": "/2026/rara_lake.jpeg",
+      "alt": "Rialto Bridge Venice"
+    },
+    {
+      "id": 4,
+      "name": "Phewa Lake",
+      "location": "Pokhara Valley",
+      "description": "Phewa Lake is the third largest lake in Nepal and the largest in Gandaki Province after the Phoksundo lake in comparison to Nepal's water bodies.",
+      "src": "/2026/phewa_lake.jpeg",
+      "alt": "Sacré-Cœur Paris"
+    },
+    {
+      "id": 5,
+      "name": "Patan Durbar Square",
+      "location": "Patan, Nepal",
+      "description": "An ancient Roman amphitheater symbolizing the grandeur, history, and drama of the Roman Empire.",
+      "src": "https://images.unsplash.com/photo-1552832860-cfde47f1dda5?w=1200&h=800&fit=crop",
+      "alt": "Colosseum Rome"
+    }
+  ]
+}

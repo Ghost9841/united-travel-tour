@@ -1,0 +1,52 @@
+{
+  "explore": [
+    {
+      "id": 1,
+      "title": "Romantic Lisbon Getaway",
+      "description": "Explore the charming streets of Lisbon with a luxury stay, daily breakfast, and guided city tours.",
+      "location": "Lisbon, Portugal",
+      "price": 700,
+      "discountedPrice": 500,
+      "image": "https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=800&h=600&fit=crop",
+      "rating": 5,
+      "category": "City Tour",
+      "duration": "5 days"
+    },
+    {
+      "id": 2,
+      "title": "Historic Athens Experience",
+      "description": "Discover ancient wonders of Greece with a premium hotel stay, meals included, and cultural sightseeing.",
+      "location": "Athens, Greece",
+      "price": 1000,
+      "discountedPrice": 800,
+      "image": "https://images.unsplash.com/photo-1555993539-1732b0258235?w=800&h=600&fit=crop",
+      "rating": 5,
+      "category": "Historical",
+      "duration": "6 days"
+    },
+    {
+      "id": 3,
+      "title": "Classic Rome Holiday",
+      "description": "Enjoy the timeless beauty of Rome with a 5-star hotel, breakfast, and guided historical tours.",
+      "location": "Rome, Italy",
+      "price": 900,
+      "discountedPrice": 750,
+      "image": "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800&h=600&fit=crop",
+      "rating": 5,
+      "category": "Historical",
+      "duration": "7 days"
+    },
+    {
+      "id": 4,
+      "title": "Paris City of Love",
+      "description": "A romantic escape to Paris including luxury accommodation, breakfast, and city exploration.",
+      "location": "Paris, France",
+      "price": 1200,
+      "discountedPrice": 950,
+      "image": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&h=600&fit=crop",
+      "rating": 5,
+      "category": "Romantic",
+      "duration": "5 days"
+    }
+  ]
+}

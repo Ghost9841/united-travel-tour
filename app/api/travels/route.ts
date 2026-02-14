@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import travelsData from "@/app/data/travels.json"
+import travelsData from "@/app/data/travels.json";
 import Travel from './types';
 
 

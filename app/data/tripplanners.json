@@ -1,0 +1,28 @@
+{
+  "tripPlanners": [
+    {
+      "place": "Paris City Tour",
+      "pricePerDay": 95,
+      "rating": 5,
+      "stars": [1, 1, 1, 1, 1],
+      "duration": "7 Days tour",
+      "image": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "place": "Rome Historical Walk",
+      "pricePerDay": 85,
+      "rating": 4.5,
+      "stars": [1, 1, 1, 1, 0.5],
+      "duration": "5 Days tour",
+      "image": "https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "place": "Athens Ancient Wonders",
+      "pricePerDay": 80,
+      "rating": 4.8,
+      "stars": [1, 1, 1, 1, 0.5],
+      "duration": "6 Days tour",
+      "image": "https://images.unsplash.com/photo-1555993539-1732b0258235?auto=format&fit=crop&w=800&q=80"
+    }
+  ]
+}
