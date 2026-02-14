@@ -1,89 +1,109 @@
-"use client";
+'use client';
+import Travel, { ApiResponse } from '@/app/api/travels/types';
+import Link from 'next/link';
+import React, { useEffect, useState } from 'react'
 
-import Travel from "@/app/api/travels/types";
-import { useEffect, useState } from "react";
-
-export default function TravelsPage() {
+const TravelsAdminPage = () => {
   const [travels, setTravels] = useState<Travel[]>([]);
-  const [form, setForm] = useState({
-    title: "",
-    location: "",
-    description: "",
-    price: 0,
-    originalPrice: 0,
-    duration: "",
-    rating: 0,
-    reviews: 0,
-    image: "",
-    category: "",
-    groupSize: "",
-  });
-
-  // Fetch travels
-  const fetchTravels = async () => {
-    const res = await fetch("/api/travels");
-    const data = await res.json();
-    setTravels(data);
-  };
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchTravels();
   }, []);
 
-  // Handle input change
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({
-      ...form,
-      [e.target.name]:
-        e.target.type === "number"
-          ? Number(e.target.value)
-          : e.target.value,
-    });
+  const fetchTravels = async () => {
+  try {
+    setLoading(true);
+    const res = await fetch("/api/travels");
+    const data: ApiResponse = await res.json();
+    
+    // Fix: Check if data.data exists and has travels array
+    if (data.success && data.data?.travels) {
+      setTravels(data.data.travels);
+    }
+  } catch (error) {
+    console.error("Failed to fetch", error);
+  } finally {
+    setLoading(false);
+  }
+};
+  const createTravel = async (newTravelData: Partial<Travel>) => {
+    try {
+      const res = await fetch("/api/travels", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newTravelData),
+      });
+      const data: ApiResponse = await res.json();
+      if (data.success && !Array.isArray(data.data)) {
+        setTravels((prevTravels: Travel[]) => [...prevTravels, ...(data.data?.travels || [])]);
+        return { success: true };
+      }
+    } catch (error) {
+      console.error("Failed to create", error);
+      return { success: false };
+    }
   };
 
-  // Handle submit
-  const handleSubmit = async (e: React.FormEvent) => {
+  const deleteTravel = async (id: number) => {
+    if (!confirm("Delete this travel?")) return;
+
+    try {
+      const res = await fetch(`/api/travels/${id}`, { method: "DELETE" });
+      const data = await res.json();
+      if (data.success) {
+        setTravels(prev => prev.filter(t => t.id !== id));
+      }
+    } catch (error) {
+      console.error("Failed to delete", error);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    await fetch("/api/travels", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(form),
+    const formData = new FormData(e.currentTarget);
+    const result = await createTravel({
+      title: formData.get("title") as string,
+      location: formData.get("location") as string,
+      price: Number(formData.get("price")),
+      description: formData.get("description") as string,
     });
-
-    fetchTravels(); // refresh list
+    if (result?.success) {
+      e.currentTarget.reset();
+    }
   };
+
+  if (loading) return <main><h1>Loading...</h1></main>;
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Travels</h1>
+    <main>
+      <h1>Admin Travels</h1>
 
-      {/* Form */}
-      <form onSubmit={handleSubmit}>
-        {Object.keys(form).map((key) => (
-          <input
-            key={key}
-            name={key}
-            placeholder={key}
-            type={typeof form[key as keyof typeof form] === "number" ? "number" : "text"}
-            onChange={handleChange}
-          />
-        ))}
-        <button type="submit">Add Travel</button>
+      <form onSubmit={handleSubmit} style={{ marginBottom: '2rem' }}>
+        <h2>Create New Travel</h2>
+        <input name="title" placeholder="Title" required />
+        <input name="location" placeholder="Location" required />
+        <input name="price" type="number" placeholder="Price" required />
+        <textarea name="description" placeholder="Description" />
+        <button type="submit">Create</button>
       </form>
 
-      <hr />
-
-      {/* List */}
-      {travels.map((travel) => (
-        <div key={travel.id}>
+      <h2>Existing Travels</h2>
+      {travels.map(travel => (
+        <div key={travel.id} style={{ border: '1px solid #ccc', padding: '1rem', marginBottom: '1rem' }}>
           <h3>{travel.title}</h3>
           <p>{travel.location}</p>
           <p>${travel.price}</p>
+          <Link href={`/dashboard/travels/${travel.id}`}>
+            <button>Edit</button>
+          </Link>
+          <button onClick={() => deleteTravel(travel.id)} style={{ marginLeft: '0.5rem', color: 'red' }}>
+            Delete
+          </button>
         </div>
       ))}
-    </div>
-  );
+    </main>
+  )
 }
+
+export default TravelsAdminPage
