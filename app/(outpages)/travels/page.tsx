@@ -1,5 +1,5 @@
 'use client';
-import { ApiResponse } from '@/app/dashboard/travels/page';
+import { ApiResponse } from '@/app/(inpages)/dashboard/travels/page';
 import Travel from '@/app/api/travels/types';
 import { MapPin, Star, Clock, Users } from 'lucide-react';
 import { useEffect,useState } from 'react';
@@ -10,14 +10,18 @@ export default function TravelsPage() {
     const [travels, setTravels] = useState<Travel[]>([]);
   
     const [loading, setLoading] = useState(true);
-   useEffect(()=> {
+  useEffect(()=> {
     const fetchTravels = async () => {
       try {
-      const res = await fetch("api/travels");
+      const res = await fetch("/api/travels");
       const data: ApiResponse = await res.json();
       setLoading(true)
       if(data.success){
-        setTravels(data.data);
+        if (Array.isArray(data.data)) {
+          setTravels(data.data);
+        } else if (data.data) {
+          setTravels([data.data]);
+        }
       }
     } catch (error){
       console.error("Failed to fetch data",error);
