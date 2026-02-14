@@ -1,5 +1,5 @@
 'use client';
-import { ApiResponse } from '@/app/(inpages)/dashboard/travels/page';
+import { ApiResponse } from '@/app/dashboard/travels/page';
 import Travel from '@/app/api/travels/types';
 import { MapPin, Star, Clock, Users } from 'lucide-react';
 import { useEffect,useState } from 'react';
