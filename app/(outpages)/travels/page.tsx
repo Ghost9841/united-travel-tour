@@ -1,135 +1,28 @@
+'use client';
 import { MapPin, Star, Clock, Users } from 'lucide-react';
+import { useEffect,useState } from 'react';
 
-const travelPackages = [
-  {
-    id: 1,
-    title: "Romantic Lisbon Getaway",
-    location: "Lisbon, Portugal",
-    description: "Explore the charming streets of Lisbon with a luxury stay, daily breakfast, and guided city tours.",
-    price: 500,
-    originalPrice: 700,
-    duration: "5 Days / 4 Nights",
-    rating: 4.8,
-    reviews: 1245,
-    image: "https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=800&h=600&fit=crop",
-    category: "City Tour",
-    groupSize: "2-8 people"
-  },
-  {
-    id: 2,
-    title: "Historic Athens Experience",
-    location: "Athens, Greece",
-    description: "Discover ancient wonders of Greece with a premium hotel stay, meals included, and cultural sightseeing.",
-    price: 800,
-    originalPrice: 1000,
-    duration: "6 Days / 5 Nights",
-    rating: 4.9,
-    reviews: 982,
-    image: "https://images.unsplash.com/photo-1555993539-1732b0258235?w=800&h=600&fit=crop",
-    category: "Historical",
-    groupSize: "4-12 people"
-  },
-  {
-    id: 3,
-    title: "Classic Rome Holiday",
-    location: "Rome, Italy",
-    description: "Enjoy the timeless beauty of Rome with a 5-star hotel, breakfast, and guided historical tours.",
-    price: 750,
-    originalPrice: 900,
-    duration: "7 Days / 6 Nights",
-    rating: 4.7,
-    reviews: 1567,
-    image: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800&h=600&fit=crop",
-    category: "Historical",
-    groupSize: "2-10 people"
-  },
-  {
-    id: 4,
-    title: "Paris City of Love",
-    location: "Paris, France",
-    description: "A romantic escape to Paris including luxury accommodation, breakfast, and city exploration.",
-    price: 950,
-    originalPrice: 1200,
-    duration: "5 Days / 4 Nights",
-    rating: 5.0,
-    reviews: 2103,
-    image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&h=600&fit=crop",
-    category: "Romantic",
-    groupSize: "2-6 people"
-  },
-  {
-    id: 5,
-    title: "Venice Canal Escape",
-    location: "Venice, Italy",
-    description: "Experience Venice's iconic canals with a premium stay, gondola ride, and breakfast included.",
-    price: 880,
-    originalPrice: 1100,
-    duration: "4 Days / 3 Nights",
-    rating: 4.8,
-    reviews: 876,
-    image: "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=800&h=600&fit=crop",
-    category: "Romantic",
-    groupSize: "2-8 people"
-  },
-  {
-    id: 6,
-    title: "Barcelona City Highlights",
-    location: "Barcelona, Spain",
-    description: "Discover Gaudí's masterpieces and vibrant culture with guided tours and premium accommodation.",
-    price: 780,
-    originalPrice: 950,
-    duration: "6 Days / 5 Nights",
-    rating: 4.6,
-    reviews: 1432,
-    image: "https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800&h=600&fit=crop",
-    category: "City Tour",
-    groupSize: "4-15 people"
-  },
-  {
-    id: 7,
-    title: "Amsterdam Canal Adventure",
-    location: "Amsterdam, Netherlands",
-    description: "Explore the charming canals, historic houses, and vibrant culture of Amsterdam.",
-    price: 680,
-    originalPrice: 850,
-    duration: "5 Days / 4 Nights",
-    rating: 4.7,
-    reviews: 945,
-    image: "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=800&h=600&fit=crop",
-    category: "City Tour",
-    groupSize: "2-10 people"
-  },
-  {
-    id: 8,
-    title: "Santorini Sunset Paradise",
-    location: "Santorini, Greece",
-    description: "Experience breathtaking sunsets and white-washed buildings in the most romantic Greek island.",
-    price: 1050,
-    originalPrice: 1300,
-    duration: "5 Days / 4 Nights",
-    rating: 5.0,
-    reviews: 1876,
-    image: "https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=800&h=600&fit=crop",
-    category: "Romantic",
-    groupSize: "2-6 people"
-  },
-  {
-    id: 9,
-    title: "Prague Medieval Tour",
-    location: "Prague, Czech Republic",
-    description: "Walk through centuries of history in Prague's stunning old town with castle tours.",
-    price: 580,
-    originalPrice: 750,
-    duration: "6 Days / 5 Nights",
-    rating: 4.6,
-    reviews: 723,
-    image: "https://images.unsplash.com/photo-1541849546-216549ae216d?w=800&h=600&fit=crop",
-    category: "Historical",
-    groupSize: "4-12 people"
-  }
-];
 
 export default function TravelsPage() {
+  const [travelPackages,setTravelPackages] = useState<Travel[]>([]);
+
+   useEffect(()=> {
+    const fetchTravels = async () => {
+      try {
+      const res = await fetch("api/travels");
+      const data: ApiResponse = await res.json();
+      setLoading(true)
+      if(data.success){
+        setTravels(data.data);
+      }
+    } catch (error){
+      console.error("Failed to fetch data",error);
+    } finally {
+      setLoading(false);
+    }
+  }
+  fetchTravels();
+  },[]);
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header Section */}
