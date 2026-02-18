@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Image from 'next/image';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -71,8 +72,7 @@ export function Details() {
             className="relative h-96 md:h-full rounded-2xl overflow-hidden bg-gradient-to-br from-primary to-accent opacity-30 flex items-center justify-center"
           >
             <div className="text-center">
-              <div className="text-8xl mb-4">🌍</div>
-              <p className="text-lg font-semibold text-foreground">Global Network</p>
+             <Image src="/cargo_detail.avif" alt="Cargo" width={256} height={64} />
             </div>
           </div>
 

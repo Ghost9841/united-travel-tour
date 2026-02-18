@@ -15,7 +15,7 @@ export default function CargoPage() {
   return (
     <main className="w-full">
       <Hero />
-      <ScrollGallery />
+      {/* <ScrollGallery /> */}
       <Details />
       <CTA />
       <FAQ/>
