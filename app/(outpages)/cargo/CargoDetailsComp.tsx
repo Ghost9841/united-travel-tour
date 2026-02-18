@@ -69,10 +69,11 @@ export function Details() {
           {/* Image Section */}
           <div
             ref={imageRef}
-            className="relative h-96 md:h-full rounded-2xl overflow-hidden bg-gradient-to-br from-primary to-accent opacity-30 flex items-center justify-center"
+            className="relative h-96 md:h-full rounded-2xl overflow-hidden bg-gradient-to-br from-primary to-accent flex items-center justify-center"
           >
             <div className="text-center">
-             <Image src="/cargo_detail.avif" alt="Cargo" width={256} height={384} />
+             <Image src="/cargo_detail.avif" alt="Cargo" width={256} height={384}
+             className="h-full w-full object-cover" />
             </div>
           </div>
 
