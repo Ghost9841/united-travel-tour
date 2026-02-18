@@ -1,5 +1,6 @@
 import { CTA } from "./CargoCTAComp";
 import { Details } from "./CargoDetailsComp";
+import { FAQ } from "./CargoFAQComp";
 import { Hero } from "./CargoHeroComp";
 import { ScrollGallery } from "./ScrollGallery";
 
@@ -17,7 +18,7 @@ export default function CargoPage() {
       <ScrollGallery />
       <Details />
       <CTA />
-
+      <FAQ/>
     </main>
   );
 }
