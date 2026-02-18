@@ -29,6 +29,7 @@ const navItems = [
   { href: '/travels', title: 'Travels' },
   { href: '/hotels', title: 'Hotels' },
   { href: '/blogs', title: 'Blogs' },
+  { href: '/cargo', title: 'Cargo' },
 ];
 
 export default function Navbar() {

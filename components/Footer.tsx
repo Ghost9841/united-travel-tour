@@ -13,8 +13,7 @@ export default function Footer() {
   const infoItems = [
     { href: '/destinations', title: 'Destinations' },
     { href: '/Supports', title: 'Supports' },
-    { href: '/policy', title: 'Terms & Conditions' },
-    { href: '/policy', title: 'Privacy' },
+    { href: '/policy', title: 'Policy' },
   ];
 
   return (
