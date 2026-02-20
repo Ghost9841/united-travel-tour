@@ -19,7 +19,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "United Travel & Tours - A Travel Agency",
   description: "A Travel Agency for All The United Travel & Tours",
-  icons: "/unitetravellogo300x300px.svg"
+  icons: {
+    icon: [
+      { url: '/unitedtravellogo300x300pxfull-01.svg', type: 'image/svg+xml' },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -60,7 +64,7 @@ export default function RootLayout({
               `}
             </Script>
           </ClickSpark>
-          <Toaster/>
+          <Toaster position="top-right" richColors/>
         </body>
       </html>
     </ClerkProvider>
