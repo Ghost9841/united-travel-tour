@@ -54,10 +54,10 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-blue-200 via-orange-200 to-purple-200">
       {/* Header Section */}
-      <div className="bg-primary/10 py-16">
-        <h1 className="text-4xl md:text-5xl font-bold text-center text-gray-800">
+      <div className="bg-primary/10 py-16 mt-16">
+        <h1 className="text-4xl md:text-5xl font-bold text-center text-gray-800 mt-10">
           Contact Us
         </h1>
         <p className="text-center text-gray-600 mt-4 max-w-2xl mx-auto px-4">

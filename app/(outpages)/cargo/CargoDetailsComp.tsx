@@ -109,8 +109,10 @@ export function Details() {
               </ul>
             </div>
 
-            <button className="px-8 py-3 bg-primary text-white rounded-lg font-semibold hover:opacity-90 transition-opacity">
+            <button  className="px-8 py-3 bg-primary text-white rounded-lg font-semibold hover:opacity-90 transition-opacity">
+             <a href="/contactus">
               Get a Quote Today
+             </a>
             </button>
           </div>
         </div>

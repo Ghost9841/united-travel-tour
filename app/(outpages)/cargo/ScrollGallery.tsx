@@ -84,7 +84,9 @@ export function ScrollGallery() {
                 </p>
               </div>
               <button className="px-6 py-2 bg-primary text-white rounded-lg font-semibold hover:opacity-90 transition-opacity w-full">
+               <a href="/contactus">
                 Inquire
+               </a>
               </button>
             </div>
           ))}
