@@ -54,7 +54,7 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-200 via-orange-200 to-purple-200">
+    <div className="min-h-screen bg-gradient-to-b from-blue-400 via-orange-400 to-purple-400">
       {/* Header Section */}
       <div className="bg-primary/10 py-16 ">
         <h1 className="text-4xl md:text-5xl font-bold text-center text-gray-800 mt-16">
@@ -165,7 +165,7 @@ const ContactPage = () => {
                     <h3 className="font-medium text-gray-800 mb-1">Phone / WhatsApp</h3>
                     <CustomLink
                       href="https://wa.me/447366234404"
-                      title="+44 7366 234 404"
+                      title="+44 20 3725 3460 / +44 7366 234 404"
                       className="text-gray-600 hover:text-primary transition"
                       target="_blank"
                     />
