@@ -23,7 +23,7 @@ const HeroSection = () => {
       <div className="absolute top-40 right-20 w-6 h-6 bg-yellow-300/30 rounded-full animate-pulse"></div>
       <div className="absolute bottom-20 left-1/4 w-10 h-10 bg-blue-400/20 rounded-full animate-bounce"></div>
 
-      <div className="relative z-10 h-full flex items-center justify-center">
+      <div className="relative z-10 h-full flex items-center justify-center mt-16">
         <div className="text-center px-6 max-w-4xl">
           <div className="inline-flex items-center bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium mb-4 animate-pulse">
             <Star className="w-4 h-4 mr-2" /> 

@@ -84,7 +84,7 @@ export default function Navbar() {
             {/* Contact Icon Button */}
             <Link href="/contactus">
               <Button variant="ghost" size="icon" aria-label="Contact us">
-                <Phone className="h-5 w-5" />
+                <Phone className="h-5 w-5 text-white hover:text-black" />
               </Button>
             </Link>
             <SignInButton mode="modal">
