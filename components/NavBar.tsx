@@ -100,6 +100,11 @@ export default function Navbar() {
 
           <SignedIn>
             <div className="flex items-center gap-4">
+              <Link href="/contactus">
+              <Button variant="ghost" size="icon" aria-label="Contact us">
+                <Phone className="h-5 w-5 text-white hover:text-black" />
+              </Button>
+            </Link>
               <Button size="lg" className="rounded-full text-base">
                 <Link href="/booknow">Book Tour</Link>
               </Button>
@@ -143,6 +148,11 @@ export default function Navbar() {
                 {/* Mobile CTA Section - Clerk Integrated */}
                 <div className="flex flex-col gap-4 mt-4">
                   <SignedOut>
+                    <Link href="/contactus">
+              <Button variant="ghost" size="icon" aria-label="Contact us">
+                Contact Us
+              </Button>
+            </Link>
                     <SignInButton mode="modal">
                       <button className="text-white text-lg text-left py-2 border-b border-white/10">
                         Login
@@ -172,6 +182,7 @@ export default function Navbar() {
                         }}
                       />
                     </div>
+                    
                     <Button
                       size="lg"
                       className="rounded-full text-base w-full"
@@ -180,6 +191,11 @@ export default function Navbar() {
                     >
                       <Link href="/booknow">Book Tour</Link>
                     </Button>
+                    <Link href="/contactus">
+              <Button variant="ghost" size="icon" aria-label="Contact us">
+                Contact Us
+              </Button>
+            </Link>
                   </SignedIn>
                 </div>
               </div>
