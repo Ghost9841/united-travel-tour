@@ -72,10 +72,14 @@ export function Hero() {
             </p>
             <div ref={ctaRef} className="flex flex-col sm:flex-row gap-4 justify-center">
               <button className="px-8 py-4 bg-primary text-white rounded-lg font-semibold hover:opacity-90 transition-opacity">
+                <a href="/contactus">
                 Get a Quote
+                </a>
               </button>
               <button className="px-8 py-4 border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-primary transition-all">
+                                <a href="/contactus">
                 Contact Us
+                </a>
               </button>
             </div>
           </div>

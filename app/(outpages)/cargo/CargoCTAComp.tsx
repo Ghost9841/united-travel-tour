@@ -51,10 +51,14 @@ export function CTA() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button className="px-8 py-4 bg-white text-primary rounded-lg font-semibold hover:shadow-lg transition-shadow">
+                 <a href="/contactus">
                   Get a Quote
+                 </a>
                 </button>
                 <button className="px-8 py-4 border-2 border-white text-white rounded-lg font-semibold hover:bg-white/10 transition-all">
-                  Call 020 3725 3460
+                 <a href="wa.me/447366234404">
+                   Call 020 3725 3460
+                  </a>
                 </button>
               </div>
 
