@@ -149,9 +149,9 @@ export default function Navbar() {
                 <div className="flex flex-col gap-4 mt-4">
                   <SignedOut>
                     <Link href="/contactus">
-              <Button variant="ghost" size="icon" aria-label="Contact us">
-                Contact Us
-              </Button>
+                    <Button className="text-white" size="icon" aria-label="Contact us">
+                      Contact Us
+                    </Button>
             </Link>
                     <SignInButton mode="modal">
                       <button className="text-white text-lg text-left py-2 border-b border-white/10">
@@ -192,7 +192,7 @@ export default function Navbar() {
                       <Link href="/booknow">Book Tour</Link>
                     </Button>
                     <Link href="/contactus">
-              <Button variant="ghost" size="icon" aria-label="Contact us">
+              <Button size="icon" aria-label="Contact us">
                 Contact Us
               </Button>
             </Link>
