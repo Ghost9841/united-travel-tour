@@ -12,10 +12,10 @@ export default function TicketRefund() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen ">
       {/* Hero */}
-      <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white py-20 mt-16">
-        <div className="max-w-5xl mx-auto px-6 text-center">
+      <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white py-20 ">
+        <div className="max-w-5xl mx-auto px-6 text-center mt-24">
           <h1 className="text-5xl font-bold mb-4">Legal Information</h1>
           <p className="text-xl text-orange-100">Transparent policies to help you travel with confidence</p>
         </div>
