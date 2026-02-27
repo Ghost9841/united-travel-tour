@@ -4,6 +4,7 @@ import "./globals.css";
 import Script from "next/script";
 import ClickSpark from "@/components/ClickSpark";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,7 +19,16 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "United Travel & Tours - A Travel Agency",
   description: "A Travel Agency for All The United Travel & Tours",
-  icons: "/unitetravellogo300x300px.svg"
+  icons: {
+    icon: [
+      {
+        rel: 'icon',
+        type: 'image/svg+xml',
+        sizes: 'any', // SVGs are scalable
+        url: '/unitedtravellogo300x300pxfull-01.svg',
+      },
+    ],
+  },  
 };
 
 export default function RootLayout({
@@ -59,6 +69,7 @@ export default function RootLayout({
               `}
             </Script>
           </ClickSpark>
+          <Toaster position="top-right" richColors/>
         </body>
       </html>
     </ClerkProvider>

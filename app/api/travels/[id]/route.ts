@@ -1,57 +1,39 @@
-import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
-import Travel from '../types';
+import prisma from "@/app/lib/prisma";
+import { NextResponse } from "next/server";
 
-const filePath = path.join(process.cwd(), '@/app/data/travels.json');
-
-function getTravels(): Travel[] {
-  try {
-    const fileData = fs.readFileSync(filePath, 'utf-8');
-    return JSON.parse(fileData).travels || [];
-  } catch (error) {
-    console.error('Error reading travels file:', error);
-    return [];
-  }
-}
-
-function saveTravels(travels: Travel[]) {
-  try {
-    fs.writeFileSync(filePath, JSON.stringify({ travels }, null, 2), 'utf-8');
-  } catch (error) {
-    console.error('Error writing travels file:', error);
-    throw error;
-  }
-}
-
-// GET single travel
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
-    const travels = getTravels();
-    const travel = travels.find(t => t.id === Number(id));
     
+    const travel = await prisma.travel.findUnique({
+      where: { id: Number(id) }
+    });
+
     if (!travel) {
-      return NextResponse.json(
-        { success: false, error: "Travel not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({
+        success: false,
+        error: "Travel not found",
+      }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true, data: travel });
+    return NextResponse.json({
+      success: true,
+      data: {
+        travel: travel,
+      },
+    });
   } catch (error) {
-    console.error('GET error:', error);
-    return NextResponse.json(
-      { success: false, error: "Failed to fetch travel" },
-      { status: 500 }
-    );
+    console.error("GET error:", error);
+    return NextResponse.json({
+      success: false,
+      error: "Failed to fetch travel",
+    }, { status: 500 });
   }
 }
 
-// PUT update travel
 export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -59,71 +41,68 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const travels = getTravels();
-    const index = travels.findIndex(t => t.id === Number(id));
-    
-    if (index === -1) {
-      return NextResponse.json(
-        { success: false, error: "Travel not found" },
-        { status: 404 }
-      );
-    }
 
-    // Update the travel while preserving the ID
-    travels[index] = {
-      ...travels[index],
-      ...body,
-      id: travels[index].id, // Ensure ID doesn't change
-      price: Number(body.price) || travels[index].price,
-      originalPrice: Number(body.originalPrice) || travels[index].originalPrice,
-      rating: Number(body.rating) || travels[index].rating,
-      reviews: Number(body.reviews) || travels[index].reviews,
-    };
-
-    saveTravels(travels);
+    const updatedTravel = await prisma.travel.update({
+      where: { id: Number(id) },
+      data: {
+        title: body.title,
+        location: body.location,
+        description: body.description,
+        price: Number(body.price),
+        duration: body.duration,
+        category: body.category,
+        groupSize: body.groupSize,
+        image: body.image,
+      },
+    });
 
     return NextResponse.json({
       success: true,
-      data: travels[index],
-      message: "Travel package updated successfully"
+      data: {
+        travel: updatedTravel,
+      },
     });
   } catch (error) {
-    console.error('PUT error:', error);
-    return NextResponse.json(
-      { success: false, error: "Failed to update travel package" },
-      { status: 500 }
-    );
+    console.error("PUT error:", error);
+    
+    let errorMessage = "Failed to update travel";
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    
+    return NextResponse.json({
+      success: false,
+      error: errorMessage,
+    }, { status: 500 });
   }
 }
 
-// DELETE travel
 export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
-    const travels = getTravels();
-    const filtered = travels.filter(t => t.id !== Number(id));
-    
-    if (filtered.length === travels.length) {
-      return NextResponse.json(
-        { success: false, error: "Travel not found" },
-        { status: 404 }
-      );
-    }
 
-    saveTravels(filtered);
+    await prisma.travel.delete({
+      where: { id: Number(id) }
+    });
 
     return NextResponse.json({
       success: true,
-      message: "Travel package deleted successfully"
+      message: "Travel deleted successfully",
     });
   } catch (error) {
-    console.error('DELETE error:', error);
-    return NextResponse.json(
-      { success: false, error: "Failed to delete travel package" },
-      { status: 500 }
-    );
+    console.error("DELETE error:", error);
+    
+    let errorMessage = "Failed to delete travel";
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    
+    return NextResponse.json({
+      success: false,
+      error: errorMessage,
+    }, { status: 500 });
   }
 }

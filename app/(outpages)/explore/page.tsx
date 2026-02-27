@@ -159,66 +159,6 @@ const destinations = [
     category: "City Tour",
     duration: "5 days"
   },
-  {
-    id: 14,
-    title: "London Royal Tour",
-    description: "Experience royal London with palace tours, West End shows, and iconic landmarks.",
-    location: "London, United Kingdom",
-    price: 1100,
-    discountedPrice: 900,
-    image: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800&h=600&fit=crop",
-    rating: 5,
-    category: "Historical",
-    duration: "6 days"
-  },
-  {
-    id: 15,
-    title: "Edinburgh Castle & Highlands",
-    description: "Explore Edinburgh's medieval fortress and venture into the breathtaking Scottish Highlands.",
-    location: "Edinburgh, Scotland",
-    price: 950,
-    discountedPrice: 780,
-    image: "https://images.unsplash.com/photo-1555297332-5004c0f2ce48?w=800&h=600&fit=crop",
-    rating: 4.5,
-    category: "Historical",
-    duration: "7 days"
-  },
-  {
-    id: 16,
-    title: "Amalfi Coast Paradise",
-    description: "Discover the stunning coastal towns of Positano, Amalfi, and Ravello with Mediterranean cuisine.",
-    location: "Amalfi Coast, Italy",
-    price: 1250,
-    discountedPrice: 1000,
-    image: "https://images.unsplash.com/photo-1534113414509-0bd4d66f1c4f?w=800&h=600&fit=crop",
-    rating: 5,
-    category: "Romantic",
-    duration: "6 days"
-  },
-  {
-    id: 17,
-    title: "Berlin History & Culture",
-    description: "Walk through history from the Berlin Wall to modern art galleries and vibrant nightlife.",
-    location: "Berlin, Germany",
-    price: 800,
-    discountedPrice: 640,
-    image: "https://images.unsplash.com/photo-1524422926292-d321c3ff46f2?w=800&h=600&fit=crop",
-    rating: 4.5,
-    category: "Historical",
-    duration: "5 days"
-  },
-  {
-    id: 18,
-    title: "Croatian Island Hopping",
-    description: "Sail through the Adriatic, exploring Dubrovnik, Split, and the stunning Dalmatian islands.",
-    location: "Dubrovnik, Croatia",
-    price: 1100,
-    discountedPrice: 880,
-    image: "https://images.unsplash.com/photo-1555990538-e8d787d1b6db?w=800&h=600&fit=crop",
-    rating: 5,
-    category: "Adventure",
-    duration: "8 days"
-  }
 ];
 
 export default function ExplorePage() {

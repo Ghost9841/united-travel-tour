@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   ArrowLeft,
   Save,
+  Upload,
   X,
   MapPin,
   DollarSign,
@@ -13,7 +14,7 @@ import {
   Users,
   Tag,
   Image as ImageIcon,
-  Trash2,
+  CirclePoundSterling,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -35,23 +36,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import  {toast} from "sonner"
-import { Skeleton } from "@/components/ui/skeleton";
-
-import { ApiResponse } from '@/app/api/travels/types';
-
-// Reuse the same categories, durations, group sizes from the new page
+import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner"
+// Predefined categories
 const CATEGORIES = [
   "City Tour",
   "Adventure",
@@ -65,6 +52,7 @@ const CATEGORIES = [
   "Luxury",
 ];
 
+// Predefined durations
 const DURATIONS = [
   "2 Days / 1 Night",
   "3 Days / 2 Nights",
@@ -77,6 +65,7 @@ const DURATIONS = [
   "14 Days / 13 Nights",
 ];
 
+// Predefined group sizes
 const GROUP_SIZES = [
   "1-2 people",
   "2-4 people",
@@ -89,12 +78,9 @@ const GROUP_SIZES = [
   "10-20 people",
 ];
 
-export default function EditTravelPage() {
+export default function NewTravelPage() {
   const router = useRouter();
-  const params = useParams();
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [deleting, setDeleting] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string>("");
   const [formData, setFormData] = useState({
     title: "",
@@ -107,55 +93,13 @@ export default function EditTravelPage() {
     image: "",
   });
 
-  const travelId = params.id;
-
-  useEffect(() => {
-    if (travelId) {
-      fetchTravel();
-    }
-  }, [travelId]);
-
-  const fetchTravel = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(`/api/travels/${travelId}`);
-      const data = await res.json();
-
-      if (data.success && data.data) {
-        const travel = data.data.travel || data.data;
-        setFormData({
-          title: travel.title || "",
-          location: travel.location || "",
-          description: travel.description || "",
-          price: travel.price?.toString() || "",
-          duration: travel.duration || "",
-          category: travel.category || "",
-          groupSize: travel.groupSize || "",
-          image: travel.image || "",
-        });
-        setImagePreview(travel.image || "");
-      } else {
-        toast("Error",{
-          description: "Travel package not found",
-        });
-        router.push("/dashboard/travels");
-      }
-    } catch (error) {
-      console.error("Failed to fetch travel", error);
-      toast("Error",{
-        description: "Failed to load travel package",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
+    // Update image preview when image URL changes
     if (name === "image" && value) {
       setImagePreview(value);
     }
@@ -165,146 +109,59 @@ export default function EditTravelPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setLoading(true);
-
-  try {
-    // Log the data being sent
-    const submitData = {
-      ...formData,
-      price: Number(formData.price),
-    };
-    console.log("Submitting data:", submitData);
-
-    const res = await fetch("/api/travels", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(submitData),
-    });
-
-    console.log("Response status:", res.status);
-    
-    const data = await res.json();
-    console.log("Response data:", data);
-
-    if (data.success) {
-      toast("Success!", {
-        description: "Travel package created successfully.",
-      });
-      router.push("/dashboard/travels");
-    } else {
-      toast("Error", {
-        description: data.error || "Failed to create travel package.",
-      });
-    }
-  } catch (error) {
-    console.error("Failed to create", error);
-    toast("Error", {
-      description: "Something went wrong. Please try again.",
-    });
-  } finally {
-    setLoading(false);
-  }
-};
-
-  const handleDelete = async () => {
-    setDeleting(true);
     try {
-      const res = await fetch(`/api/travels/${travelId}`, {
-        method: "DELETE",
+      const res = await fetch("/api/travels", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          price: Number(formData.price),
+        }),
       });
+
       const data = await res.json();
 
       if (data.success) {
         toast("Success!",{
-          description: "Travel package deleted successfully.",
-        });
+          description: "Travel package created successfully.",
+      });
         router.push("/dashboard/travels");
       } else {
         toast("Error",{
-          description: data.error || "Failed to delete travel package.",
+          description: data.error || "Failed to create travel package.",
+          
         });
       }
     } catch (error) {
-      console.error("Failed to delete", error);
-      toast("Error",{
-        description: "Something went wrong. Please try again.",
+      console.error("Failed to create", error);
+      toast( "Error",
+        {description: "Something went wrong. Please try again.",
       });
     } finally {
-      setDeleting(false);
+      setLoading(false);
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background">
-        <div className="max-w-4xl mx-auto p-6">
-          <div className="flex items-center gap-4 mb-6">
-            <Skeleton className="h-10 w-10" />
-            <div>
-              <Skeleton className="h-8 w-64 mb-2" />
-              <Skeleton className="h-4 w-48" />
-            </div>
-          </div>
-          <div className="space-y-6">
-            <Skeleton className="h-64 w-full" />
-            <Skeleton className="h-64 w-full" />
-            <Skeleton className="h-64 w-full" />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-4xl mx-auto p-6">
+      <div className="max-w-7xl mx-auto p-6">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" asChild>
-              <Link href="/dashboard/travels">
-                <ArrowLeft className="h-4 w-4" />
-              </Link>
-            </Button>
-            <div>
-              <h1 className="text-3xl font-bold">Edit Travel Package</h1>
-              <p className="text-sm text-muted-foreground">
-                Update the details of your travel experience
-              </p>
-            </div>
+        <div className="flex items-center gap-4 mb-6">
+          <Button variant="ghost" size="icon" asChild>
+            <Link href="/dashboard/travels">
+              <ArrowLeft className="h-4 w-4" />
+            </Link>
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold">Create New Travel Package</h1>
+            <p className="text-sm text-muted-foreground">
+              Fill in the details below to add a new travel experience
+            </p>
           </div>
-
-          {/* Delete Button */}
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive">
-                <Trash2 className="h-4 w-4 mr-2" />
-                Delete
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete the
-                  travel package &quot;{formData.title}&quot;.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={handleDelete}
-                  disabled={deleting}
-                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                >
-                  {deleting ? "Deleting..." : "Delete"}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -314,10 +171,11 @@ const handleSubmit = async (e: React.FormEvent) => {
               <CardHeader>
                 <CardTitle>Basic Information</CardTitle>
                 <CardDescription>
-                  Update the essential details about the travel package
+                  Provide the essential details about the travel package
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
+                {/* Title */}
                 <div className="space-y-2">
                   <Label htmlFor="title">Package Title *</Label>
                   <Input
@@ -330,6 +188,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   />
                 </div>
 
+                {/* Location */}
                 <div className="space-y-2">
                   <Label htmlFor="location">Location *</Label>
                   <div className="relative">
@@ -346,6 +205,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   </div>
                 </div>
 
+                {/* Description */}
                 <div className="space-y-2">
                   <Label htmlFor="description">Description *</Label>
                   <Textarea
@@ -366,15 +226,16 @@ const handleSubmit = async (e: React.FormEvent) => {
               <CardHeader>
                 <CardTitle>Pricing & Details</CardTitle>
                 <CardDescription>
-                  Update the price and other important details
+                  Set the price and other important details
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid gap-4 md:grid-cols-2">
+                  {/* Price */}
                   <div className="space-y-2">
-                    <Label htmlFor="price">Price (USD) *</Label>
+                    <Label htmlFor="price">Price (GBP) *</Label>
                     <div className="relative">
-                      <DollarSign className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                      <CirclePoundSterling className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="price"
                         name="price"
@@ -390,13 +251,14 @@ const handleSubmit = async (e: React.FormEvent) => {
                     </div>
                   </div>
 
+                  {/* Duration */}
                   <div className="space-y-2">
                     <Label htmlFor="duration">Duration *</Label>
                     <div className="relative">
                       <Clock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                       <Select
                         value={formData.duration}
-                        onValueChange={(value) => handleSelectChange("duration", value)}
+                        onValueChange={(value: string) => handleSelectChange("duration", value)}
                         required
                       >
                         <SelectTrigger className="pl-9">
@@ -413,13 +275,14 @@ const handleSubmit = async (e: React.FormEvent) => {
                     </div>
                   </div>
 
+                  {/* Category */}
                   <div className="space-y-2">
                     <Label htmlFor="category">Category *</Label>
                     <div className="relative">
                       <Tag className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                       <Select
                         value={formData.category}
-                        onValueChange={(value) => handleSelectChange("category", value)}
+                        onValueChange={(value: string) => handleSelectChange("category", value)}
                         required
                       >
                         <SelectTrigger className="pl-9">
@@ -436,13 +299,14 @@ const handleSubmit = async (e: React.FormEvent) => {
                     </div>
                   </div>
 
+                  {/* Group Size */}
                   <div className="space-y-2">
                     <Label htmlFor="groupSize">Group Size *</Label>
                     <div className="relative">
                       <Users className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                       <Select
                         value={formData.groupSize}
-                        onValueChange={(value) => handleSelectChange("groupSize", value)}
+                        onValueChange={(value: string) => handleSelectChange("groupSize", value)}
                         required
                       >
                         <SelectTrigger className="pl-9">
@@ -467,10 +331,11 @@ const handleSubmit = async (e: React.FormEvent) => {
               <CardHeader>
                 <CardTitle>Package Image</CardTitle>
                 <CardDescription>
-                  Update the image for your travel package
+                  Add a captivating image for your travel package
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
+                {/* Image URL Input */}
                 <div className="space-y-2">
                   <Label htmlFor="image">Image URL</Label>
                   <div className="relative">
@@ -484,8 +349,12 @@ const handleSubmit = async (e: React.FormEvent) => {
                       onChange={handleInputChange}
                     />
                   </div>
+                  <p className="text-xs text-muted-foreground">
+                    Leave empty to use a default image
+                  </p>
                 </div>
 
+                {/* Image Preview */}
                 {imagePreview && (
                   <div className="relative mt-4 rounded-lg overflow-hidden border">
                     <img
@@ -520,13 +389,13 @@ const handleSubmit = async (e: React.FormEvent) => {
               >
                 <Link href="/dashboard/travels">Cancel</Link>
               </Button>
-              <Button type="submit" disabled={saving}>
-                {saving ? (
-                  <>Saving...</>
+              <Button type="submit" disabled={loading}>
+                {loading ? (
+                  <>Creating...</>
                 ) : (
                   <>
                     <Save className="h-4 w-4 mr-2" />
-                    Save Changes
+                    Create Package
                   </>
                 )}
               </Button>

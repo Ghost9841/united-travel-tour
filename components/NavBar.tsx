@@ -9,17 +9,17 @@ import {
   SheetTrigger,
   SheetTitle,
 } from '@/components/ui/sheet';
-import { Menu } from 'lucide-react';
+import { Menu, Phone } from 'lucide-react';
 import CustomLink from './manual-ui/CustomLink';
 import Link from 'next/link';
 import clsx from 'clsx';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { 
-  UserButton, 
-  SignInButton, 
-  SignedIn, 
+import {
+  UserButton,
+  SignInButton,
+  SignedIn,
   SignedOut,
-  useUser 
+  useUser
 } from '@clerk/nextjs';
 
 const navItems = [
@@ -29,6 +29,7 @@ const navItems = [
   { href: '/travels', title: 'Travels' },
   { href: '/hotels', title: 'Hotels' },
   { href: '/blogs', title: 'Blogs' },
+  { href: '/cargo', title: 'Cargo' },
 ];
 
 export default function Navbar() {
@@ -80,6 +81,12 @@ export default function Navbar() {
         {/* Desktop CTA Buttons - Clerk Integrated */}
         <div className="hidden md:flex items-center gap-6">
           <SignedOut>
+            {/* Contact Icon Button */}
+            <Link href="/contactus">
+              <Button variant="ghost" size="icon" aria-label="Contact us">
+                <Phone className="h-5 w-5 text-white hover:text-black" />
+              </Button>
+            </Link>
             <SignInButton mode="modal">
               <button className="text-white hover:text-white/80 font-medium">
                 Login
@@ -88,14 +95,20 @@ export default function Navbar() {
             <Button size="lg" className="rounded-full text-base">
               <Link href="/booknow">Book Tour</Link>
             </Button>
+
           </SignedOut>
-          
+
           <SignedIn>
             <div className="flex items-center gap-4">
+              <Link href="/contactus">
+              <Button variant="ghost" size="icon" aria-label="Contact us">
+                <Phone className="h-5 w-5 text-white hover:text-black" />
+              </Button>
+            </Link>
               <Button size="lg" className="rounded-full text-base">
                 <Link href="/booknow">Book Tour</Link>
               </Button>
-              <UserButton 
+              <UserButton
                 afterSignOutUrl="/"
                 appearance={{
                   elements: {
@@ -135,6 +148,11 @@ export default function Navbar() {
                 {/* Mobile CTA Section - Clerk Integrated */}
                 <div className="flex flex-col gap-4 mt-4">
                   <SignedOut>
+                    <Link href="/contactus">
+                    <Button className="text-white" size="icon" aria-label="Contact us">
+                      Contact Us
+                    </Button>
+            </Link>
                     <SignInButton mode="modal">
                       <button className="text-white text-lg text-left py-2 border-b border-white/10">
                         Login
@@ -149,13 +167,13 @@ export default function Navbar() {
                       <Link href="/booknow">Book Tour</Link>
                     </Button>
                   </SignedOut>
-                  
+
                   <SignedIn>
                     <div className="flex items-center justify-between py-2 border-b border-white/10">
                       <span className="text-white text-lg">
                         {user?.firstName || 'Account'}
                       </span>
-                      <UserButton 
+                      <UserButton
                         afterSignOutUrl="/"
                         appearance={{
                           elements: {
@@ -164,6 +182,7 @@ export default function Navbar() {
                         }}
                       />
                     </div>
+                    
                     <Button
                       size="lg"
                       className="rounded-full text-base w-full"
@@ -172,6 +191,11 @@ export default function Navbar() {
                     >
                       <Link href="/booknow">Book Tour</Link>
                     </Button>
+                    <Link href="/contactus">
+              <Button size="icon" aria-label="Contact us">
+                Contact Us
+              </Button>
+            </Link>
                   </SignedIn>
                 </div>
               </div>
