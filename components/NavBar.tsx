@@ -30,6 +30,8 @@ const navItems = [
   { href: '/hotels', title: 'Hotels' },
   { href: '/blogs', title: 'Blogs' },
   { href: '/cargo', title: 'Cargo' },
+  { href: '/contactus', title: 'Contact Us' },
+
 ];
 
 export default function Navbar() {
@@ -100,11 +102,11 @@ export default function Navbar() {
 
           <SignedIn>
             <div className="flex items-center gap-4">
-              <Link href="/contactus">
+              {/* <Link href="/contactus">
               <Button variant="ghost" size="icon" aria-label="Contact us">
                 <Phone className="h-5 w-5 text-white hover:text-black" />
               </Button>
-            </Link>
+            </Link> */}
               <Button size="lg" className="rounded-full text-base">
                 <Link href="/booknow">Book Tour</Link>
               </Button>
@@ -148,11 +150,11 @@ export default function Navbar() {
                 {/* Mobile CTA Section - Clerk Integrated */}
                 <div className="flex flex-col gap-4 mt-4">
                   <SignedOut>
-                    <Link href="/contactus">
+                    {/* <Link href="/contactus">
                     <Button className="text-white" size="icon" aria-label="Contact us">
                       Contact Us
                     </Button>
-            </Link>
+            </Link> */}
                     <SignInButton mode="modal">
                       <button className="text-white text-lg text-left py-2 border-b border-white/10">
                         Login
