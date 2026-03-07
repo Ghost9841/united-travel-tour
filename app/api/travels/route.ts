@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
 import { Travel } from "@prisma/client";
+import { ApiResponse } from "./types";
+import prisma from "@/app/lib/prisma";
 
 
 const filePath = path.join(process.cwd(), "@/data/travels/travels.json");
