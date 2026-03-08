@@ -1,18 +1,5 @@
-export type Blog ={
-    id : number ;
-    title : string;
-    excerpt : string;
-    content: string;
-    image: string;
-    author : string ;
-    date : string ;
-    readTime : string ;
-    category : string ;
-    status: 'published' | 'draft';
-    views: number;
-    likes: number;
-    createdAt: string;
-    updatedAt: string;
-}
+import { Blog as PrismaBlog } from "@prisma/client";
 
-export default Blog ;
+export type Blog = PrismaBlog;
+
+export default Blog;

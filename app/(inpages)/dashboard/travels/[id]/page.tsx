@@ -49,7 +49,6 @@ import {
 import  {toast} from "sonner"
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { ApiResponse } from '@/app/api/travels/types';
 
 // Reuse the same categories, durations, group sizes from the new page
 const CATEGORIES = [

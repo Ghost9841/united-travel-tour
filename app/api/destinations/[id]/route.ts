@@ -12,7 +12,7 @@ export async function GET(
   try {
     const { id } = await params;
     const destinationId = Number(id);
-    if (isNaN(id)) {
+    if (isNaN(destinationId)) {
       return NextResponse.json(
         { success: false, data: undefined, error: 'Invalid destination ID' },
         { status: 400 }

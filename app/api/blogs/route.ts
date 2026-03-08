@@ -33,7 +33,7 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse<Blog>
     // Validation
     if (!body.title?.trim() || !body.excerpt?.trim() || !body.content?.trim()) {
       return NextResponse.json(
-        { success: false, data: null, error: 'Missing required fields' },
+        { success: false, data: undefined, error: 'Missing required fields' },
         { status: 400 }
       );
     }
@@ -61,7 +61,7 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse<Blog>
   } catch (error) {
     console.error('Error creating blog:', error);
     return NextResponse.json(
-      { success: false, data: null, error: 'Failed to create blog' },
+      { success: false, data: undefined, error: 'Failed to create blog' },
       { status: 500 }
     );
   }

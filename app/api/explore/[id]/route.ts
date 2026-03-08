@@ -16,7 +16,7 @@ export async function GET(
   try {
     const { id } = await params;
     const exploreId = parseInt(id);
-    if (isNaN(id)) {
+    if (isNaN(exploreId)) {
       return NextResponse.json({
         success: false,
         error: "Invalid ID",

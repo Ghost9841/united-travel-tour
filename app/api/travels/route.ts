@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
-import { ApiResponse } from "./types";
+import { ApiResponse } from "@/app/api/types"
 import { Travel } from "@prisma/client";
 
 export async function GET(): Promise<NextResponse<ApiResponse<Travel[]>>> {

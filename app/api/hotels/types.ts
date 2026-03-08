@@ -1,16 +1,5 @@
-export type Hotel = {
-  id: number;
-  name: string;
-  location: string;
-  description: string;
-  pricePerNight: number;
-  originalPrice: number;
-  rating: number;
-  reviews: number;
-  image: string;
-  amenities: string[];
-  roomType: string;
-  capacity: string;
-};
+import { Hotel as PrismaHotel } from "@prisma/client";
+
+export type Hotel = PrismaHotel;
 
 export default Hotel;

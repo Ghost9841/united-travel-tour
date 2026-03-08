@@ -15,7 +15,7 @@ export async function GET(
   try {
     const { id } = await params;
     const blogId = Number(id);
-    if (isNaN(id)) {
+    if (isNaN(blogId)) {
       return NextResponse.json(
         { success: false, data: undefined, error: 'Invalid blog ID' },
         { status: 400 }
