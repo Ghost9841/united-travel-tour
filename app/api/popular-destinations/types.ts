@@ -1,10 +1,5 @@
-export type PopularDestination = {
-  id: number;
-  name: string;
-  location: string;
-  description: string;
-  src: string;
-  alt: string;
-};
+import { Destination } from "@prisma/client";
+
+export type PopularDestination = Destination;
 
 export default PopularDestination;

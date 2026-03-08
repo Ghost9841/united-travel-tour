@@ -1,10 +1,5 @@
-export type TripPlanner = {
-  place: string;
-  pricePerDay: number;
-  rating: number;
-  stars: number[];
-  duration: string;
-  image: string;
-};
+import { Travel } from "@prisma/client";
+
+export type TripPlanner = Travel;
 
 export default TripPlanner;

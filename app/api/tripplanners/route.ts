@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import tripPlannersData from "@/app/data/tripplanners.json";
+import { prisma } from "@/app/lib/prisma";
 import TripPlanner from "./types";
 
 export async function GET() {
-  const tripPlanners: TripPlanner[] = tripPlannersData.tripPlanners;
+  const tripPlanners: TripPlanner[] = await prisma.travel.findMany();
 
   return NextResponse.json({
     success: true,

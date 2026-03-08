@@ -1,12 +1,5 @@
-export type SpecialOffer = {
-  id: number;
-  title: string;
-  description: string;
-  location: string;
-  price: number;
-  discountedPrice: number;
-  image: string;
-  rating: number;
-};
+import { ExplorePage } from "@prisma/client";
+
+export type SpecialOffer = ExplorePage;
 
 export default SpecialOffer;

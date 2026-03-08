@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import destinationsData from "@/app/data/populardestinations.json";
+import { prisma } from "@/app/lib/prisma";
 import PopularDestination from "./types";
 
 export async function GET() {
-  const populardestinations: PopularDestination[] = destinationsData.populardestinations;
+  const populardestinations: PopularDestination[] = await prisma.destination.findMany();
 
   return NextResponse.json({
     success: true,

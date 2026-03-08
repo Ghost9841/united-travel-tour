@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
-import specailOffersData from "@/app/data/specialoffers.json";
-import SpecialOffer from "./types"
+import { prisma } from "@/app/lib/prisma";
+import SpecialOffer from "./types";
 
 export async function GET() {
-  const specialOffers : SpecialOffer[] = specailOffersData.specialOffers;
+  const specialOffers: SpecialOffer[] = await prisma.explorePage.findMany();
+
   return NextResponse.json({
-    success : true,
-    data : specialOffers
-  })
+    success: true,
+    data: specialOffers
+  });
 }
