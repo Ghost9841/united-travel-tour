@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 
 interface ExploreItem {
-  id: string;
+  id: number;
   title: string;
   description: string;
   location: string;
@@ -17,11 +17,12 @@ interface ExploreItem {
   image: string;
   rating: number;
   category: string;
-  duration: string;
-  status: 'active' | 'draft';
+  duration?: string;
+  status?: 'active' | 'draft';
   views?: number;
   likes?: number;
   createdAt: string;
+  updatedAt: string;
 }
 
 const CATEGORIES = ['City Tour', 'Historical', 'Romantic', 'Adventure'];
@@ -32,22 +33,6 @@ const CATEGORY_COLORS: Record<string, string> = {
   'Romantic':   'bg-pink-100 text-pink-700',
   'Adventure':  'bg-green-100 text-green-700',
 };
-
-const MOCK: ExploreItem[] = [
-  { id: '1',  title: 'Romantic Lisbon Getaway',      description: 'Explore the charming streets of Lisbon with a luxury stay, daily breakfast, and guided city tours.',                           location: 'Lisbon, Portugal',         price: 700,  discountedPrice: 500,  image: 'https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=800&h=600&fit=crop',  rating: 5,   category: 'City Tour',  duration: '5 days', status: 'active', views: 4200,  likes: 980,  createdAt: new Date(Date.now() - 86400000 * 80).toISOString() },
-  { id: '2',  title: 'Historic Athens Experience',   description: 'Discover ancient wonders of Greece with a premium hotel stay, meals included, and cultural sightseeing.',                      location: 'Athens, Greece',           price: 1000, discountedPrice: 800,  image: 'https://images.unsplash.com/photo-1555993539-1732b0258235?w=800&h=600&fit=crop',  rating: 5,   category: 'Historical', duration: '6 days', status: 'active', views: 6100,  likes: 1420, createdAt: new Date(Date.now() - 86400000 * 70).toISOString() },
-  { id: '3',  title: 'Classic Rome Holiday',         description: 'Enjoy the timeless beauty of Rome with a 5-star hotel, breakfast, and guided historical tours.',                              location: 'Rome, Italy',              price: 900,  discountedPrice: 750,  image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800&h=600&fit=crop',  rating: 5,   category: 'Historical', duration: '7 days', status: 'active', views: 7800,  likes: 2100, createdAt: new Date(Date.now() - 86400000 * 60).toISOString() },
-  { id: '4',  title: 'Paris City of Love',           description: 'A romantic escape to Paris including luxury accommodation, breakfast, and city exploration.',                                  location: 'Paris, France',            price: 1200, discountedPrice: 950,  image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&h=600&fit=crop', rating: 5,   category: 'Romantic',   duration: '5 days', status: 'active', views: 11200, likes: 3400, createdAt: new Date(Date.now() - 86400000 * 50).toISOString() },
-  { id: '5',  title: 'Venice Canal Escape',          description: "Experience Venice's iconic canals with a premium stay, gondola ride, and breakfast included.",                                location: 'Venice, Italy',            price: 1100, discountedPrice: 880,  image: 'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=800&h=600&fit=crop', rating: 5,   category: 'Romantic',   duration: '4 days', status: 'active', views: 8900,  likes: 2650, createdAt: new Date(Date.now() - 86400000 * 45).toISOString() },
-  { id: '6',  title: 'Barcelona City Highlights',    description: "Discover Gaudí's masterpieces and vibrant culture with guided tours and premium accommodation.",                              location: 'Barcelona, Spain',         price: 950,  discountedPrice: 780,  image: 'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800&h=600&fit=crop', rating: 4.5, category: 'City Tour',  duration: '6 days', status: 'active', views: 5400,  likes: 1580, createdAt: new Date(Date.now() - 86400000 * 40).toISOString() },
-  { id: '7',  title: 'Amsterdam Canal Adventure',    description: 'Explore the charming canals, historic houses, and vibrant culture of Amsterdam with guided tours.',                           location: 'Amsterdam, Netherlands',   price: 850,  discountedPrice: 680,  image: 'https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=800&h=600&fit=crop', rating: 4.5, category: 'City Tour',  duration: '5 days', status: 'active', views: 4800,  likes: 1230, createdAt: new Date(Date.now() - 86400000 * 35).toISOString() },
-  { id: '8',  title: 'Santorini Sunset Paradise',    description: 'Experience breathtaking sunsets, white-washed buildings, and crystal blue waters in Santorini.',                             location: 'Santorini, Greece',        price: 1300, discountedPrice: 1050, image: 'https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=800&h=600&fit=crop', rating: 5,   category: 'Romantic',   duration: '5 days', status: 'active', views: 9400,  likes: 2870, createdAt: new Date(Date.now() - 86400000 * 30).toISOString() },
-  { id: '9',  title: 'Prague Medieval Tour',         description: "Walk through centuries of history in Prague's stunning old town with castle tours and local cuisine.",                       location: 'Prague, Czech Republic',   price: 750,  discountedPrice: 580,  image: 'https://images.unsplash.com/photo-1541849546-216549ae216d?w=800&h=600&fit=crop', rating: 4.5, category: 'Historical', duration: '6 days', status: 'active', views: 3900,  likes: 1040, createdAt: new Date(Date.now() - 86400000 * 25).toISOString() },
-  { id: '10', title: 'Swiss Alps Adventure',         description: 'Experience the majestic Swiss Alps with mountain excursions, scenic trains, and luxury alpine resorts.',                     location: 'Interlaken, Switzerland',  price: 1400, discountedPrice: 1150, image: 'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=800&h=600&fit=crop', rating: 5,   category: 'Adventure',  duration: '7 days', status: 'active', views: 7200,  likes: 2180, createdAt: new Date(Date.now() - 86400000 * 20).toISOString() },
-  { id: '11', title: 'Vienna Imperial Experience',   description: "Discover Vienna's imperial palaces, classical music heritage, and world-famous coffee culture.",                             location: 'Vienna, Austria',          price: 900,  discountedPrice: 720,  image: 'https://images.unsplash.com/photo-1516550893923-42d28e5677af?w=800&h=600&fit=crop', rating: 4.5, category: 'Historical', duration: '5 days', status: 'active', views: 4100,  likes: 1090, createdAt: new Date(Date.now() - 86400000 * 15).toISOString() },
-  { id: '12', title: 'Dublin Irish Heritage',        description: 'Immerse yourself in Irish culture with pub tours, historical sites, and the scenic Cliffs of Moher.',                       location: 'Dublin, Ireland',          price: 800,  discountedPrice: 650,  image: 'https://images.unsplash.com/photo-1549918864-48ac978761a4?w=800&h=600&fit=crop', rating: 4,   category: 'City Tour',  duration: '6 days', status: 'draft',  views: 2600,  likes: 680,  createdAt: new Date(Date.now() - 86400000 * 10).toISOString() },
-  { id: '13', title: 'Budapest Thermal Spa',         description: "Relax in historic thermal baths and explore Budapest's stunning architecture along the Danube.",                             location: 'Budapest, Hungary',        price: 700,  discountedPrice: 550,  image: 'https://images.unsplash.com/photo-1541963463532-d68292c34b19?w=800&h=600&fit=crop', rating: 4.5, category: 'City Tour',  duration: '5 days', status: 'draft',  views: 3100,  likes: 790,  createdAt: new Date(Date.now() - 86400000 * 5).toISOString()  },
-];
 
 function formatRelativeTime(date: Date) {
   const d = Math.floor((Date.now() - date.getTime()) / 86400000);
@@ -176,14 +161,50 @@ export default function ExploreAdminPage() {
   const [filterCategory, setFilterCategory] = useState('');
 
   useEffect(() => {
-    // Replace with: const res = await fetch('/api/explore'); const data = await res.json(); setItems(data);
-    setTimeout(() => { setItems(MOCK); setLoading(false); }, 600);
+    const fetchExploreData = async () => {
+      try {
+        const res = await fetch('/api/explore');
+        const data = await res.json();
+        if (data.success) {
+          // Transform API data to match component expectations
+          const transformedData = data.data.map((item: any) => ({
+            ...item,
+            duration: item.duration || "5 Days / 4 Nights", // Default duration
+            status: item.status || 'active', // Default status
+            views: item.views || Math.floor(Math.random() * 10000), // Mock views for now
+            likes: item.likes || Math.floor(Math.random() * 3000), // Mock likes for now
+          }));
+          setItems(transformedData);
+        } else {
+          console.error('Failed to fetch explore data:', data.error);
+        }
+      } catch (error) {
+        console.error('Error fetching explore data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchExploreData();
   }, []);
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: number) => {
     if (!confirm('Delete this explore item?')) return;
-    // Replace with: await fetch(`/api/explore/${id}`, { method: 'DELETE' });
-    setItems(prev => prev.filter(i => i.id !== id));
+
+    try {
+      const res = await fetch(`/api/explore?id=${id}`, { method: 'DELETE' });
+      const data = await res.json();
+
+      if (data.success) {
+        setItems(prev => prev.filter(i => i.id !== id));
+      } else {
+        console.error('Failed to delete explore item:', data.error);
+        alert('Failed to delete item: ' + data.error);
+      }
+    } catch (error) {
+      console.error('Error deleting explore item:', error);
+      alert('Error deleting item');
+    }
   };
 
   const active = items.filter(i => i.status === 'active').length;

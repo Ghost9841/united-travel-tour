@@ -50,18 +50,18 @@ import Image from "next/image"
 
 // Main navigation items
 const mainItems = [
-  { title: "Home", url: "/", icon: Home },
-  { title: "Blogs", url: "/blogs", icon: FileText },
-  { title: "Packages", url: "/packages", icon: Package },
-  { title: "Hotels", url: "/hotels", icon: Hotel },
-  { title: "Travels", url: "/travels", icon: Plane },
+  { title: "Dashboard", url: "/dashboard", icon: Home },
+  { title: "Blogs", url: "/dashboard/blogs", icon: FileText },
+  { title: "Packages", url: "/dashboard/packages", icon: Package },
+  { title: "Hotels", url: "/dashboard/hotels", icon: Hotel },
+  { title: "Travels", url: "/dashboard/travels", icon: Plane },
 ]
 
 // Bottom navigation items
 const bottomItems = [
-  { title: "Settings", url: "/settings", icon: Settings },
-  { title: "Profile", url: "/profile", icon: User },
-  { title: "Help", url: "/help", icon: HelpCircle },
+  { title: "Settings", url: "/dashboard/settings", icon: Settings },
+  { title: "Profile", url: "/dashboard/profile", icon: User },
+  { title: "Help", url: "/dashboard/help", icon: HelpCircle },
 ]
 
 function BottomNav({ items }: { items: typeof bottomItems }) {

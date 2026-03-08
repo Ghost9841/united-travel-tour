@@ -84,11 +84,11 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-6">
           <SignedOut>
             {/* Contact Icon Button */}
-            <Link href="/contactus">
+           {/*  <Link href="/contactus">
               <Button variant="ghost" size="icon" aria-label="Contact us">
                 <Phone className="h-5 w-5 text-white hover:text-black" />
               </Button>
-            </Link>
+            </Link> */}
             <SignInButton mode="modal">
               <button className="text-white hover:text-white/80 font-medium">
                 Login
