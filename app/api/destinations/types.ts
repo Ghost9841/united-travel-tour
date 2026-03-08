@@ -11,6 +11,12 @@ export type Destination = {
   duration: string;
   groupSize: string;
   category: string;
+  status: 'active' | 'draft';
+  featured: boolean;
+  views: number;
+  likes: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export default Destination;

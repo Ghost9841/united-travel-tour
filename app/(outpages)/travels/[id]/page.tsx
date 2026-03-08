@@ -1,79 +1,87 @@
 'use client';
 import { MapPin, Star, Check, X, Clock, Shield, Users, Smartphone } from 'lucide-react';
 import { useParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
 
-// This would typically come from an API or database
-const travelPackages = {
-  '1': {
-    id: 1,
-    name: "Romantic Lisbon Getaway",
-    location: "Lisbon, Portugal",
-    rating: 4.8,
-    reviews: 1245,
-    price: 500,
-    originalPrice: 700,
-    duration: "5 Days / 4 Nights",
-    mainImage: "https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=1200&h=800&fit=crop",
-    galleryImages: [
-      "https://images.unsplash.com/photo-1525207934214-58e69a8f8a0b?w=300&h=200&fit=crop",
-      "https://images.unsplash.com/photo-1588702547919-26089e690ecc?w=300&h=200&fit=crop",
-      "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=300&h=200&fit=crop",
-      "https://images.unsplash.com/photo-1548707309-dcebeab9ea9b?w=300&h=200&fit=crop"
-    ],
-    description: "Embark on an unforgettable journey through the charming streets of Lisbon, where historic architecture meets modern Portuguese culture. This carefully curated 5-day experience offers the perfect blend of guided tours, leisure time, and authentic local experiences.\n\nDiscover the enchanting neighborhoods of Alfama and Bairro Alto, ride the iconic yellow trams, and indulge in world-class Portuguese cuisine. Visit stunning landmarks including the Belém Tower, Jerónimos Monastery, and São Jorge Castle while learning about Portugal's rich maritime history.\n\nYour luxury accommodation includes daily breakfast, and our expert local guides will ensure you experience the best of Lisbon's culture, from traditional Fado music performances to scenic viewpoints offering breathtaking panoramic views of the city."
-  },
-  '2': {
-    id: 2,
-    name: "Historic Athens Experience",
-    location: "Athens, Greece",
-    rating: 4.9,
-    reviews: 982,
-    price: 800,
-    originalPrice: 1000,
-    duration: "6 Days / 5 Nights",
-    mainImage: "https://images.unsplash.com/photo-1555993539-1732b0258235?w=1200&h=800&fit=crop",
-    galleryImages: [
-      "https://images.unsplash.com/photo-1603565816030-6b389eeb23cb?w=300&h=200&fit=crop",
-      "https://images.unsplash.com/photo-1576020799627-aeac74d58064?w=300&h=200&fit=crop",
-      "https://images.unsplash.com/photo-1601581875309-fafbf2d3ed3a?w=300&h=200&fit=crop",
-      "https://images.unsplash.com/photo-1603565816030-6b389eeb23cb?w=300&h=200&fit=crop"
-    ],
-    description: "Step back in time and explore the birthplace of Western civilization. This comprehensive 6-day tour takes you through Athens' most iconic landmarks and hidden gems.\n\nVisit the magnificent Acropolis, Parthenon, and Ancient Agora while learning about Greek mythology and history. Wander through the charming Plaka neighborhood and enjoy authentic Greek cuisine in traditional tavernas.\n\nYour journey includes premium accommodation, expert guides, and all entrance fees to major archaeological sites. Experience the perfect blend of ancient history and modern Greek culture."
-  },
-  '3': {
-    id: 3,
-    name: "Classic Rome Holiday",
-    location: "Rome, Italy",
-    rating: 4.7,
-    reviews: 1567,
-    price: 750,
-    originalPrice: 900,
-    duration: "7 Days / 6 Nights",
-    mainImage: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=1200&h=800&fit=crop",
-    galleryImages: [
-      "https://images.unsplash.com/photo-1531572753322-ad063cecc140?w=300&h=200&fit=crop",
-      "https://images.unsplash.com/photo-1529260830199-42c24126f198?w=300&h=200&fit=crop",
-      "https://images.unsplash.com/photo-1525874684015-58379d421a52?w=300&h=200&fit=crop",
-      "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=300&h=200&fit=crop"
-    ],
-    description: "Experience the eternal city in all its glory. This week-long Roman holiday combines iconic landmarks with authentic Italian experiences.\n\nExplore the Colosseum, Roman Forum, Vatican City, and Sistine Chapel with expert guides. Stroll through charming neighborhoods like Trastevere, and enjoy cooking classes featuring traditional Italian cuisine.\n\nStay in a luxurious 5-star hotel in the heart of Rome, with daily breakfast and guided tours of the city's most celebrated monuments and hidden treasures."
-  }
-};
+interface Travel {
+  id: string;
+  name: string;
+  location: string;
+  rating: number;
+  reviews: number;
+  price: number;
+  originalPrice: number;
+  duration: string;
+  mainImage: string;
+  galleryImages: string[];
+  description: string;
+  status: string;
+  featured: boolean;
+  views: number;
+  likes: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+}
 
 export default function TravelDetailPage() {
   const params = useParams();
   const id = params?.id as string;
-  
-  // Get the destination data based on ID
-  const destination = travelPackages[id as keyof typeof travelPackages];
+  const [travel, setTravel] = useState<Travel | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // If destination not found, show error
-  if (!destination) {
+  useEffect(() => {
+    const fetchTravel = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`/api/travels/${id}`);
+        const data: ApiResponse<Travel> = await response.json();
+
+        if (data.success && data.data) {
+          // Only show active travels on the public page
+          if (data.data.status === 'active') {
+            setTravel(data.data);
+          } else {
+            setError('Travel package not found');
+          }
+        } else {
+          setError(data.error || 'Travel package not found');
+        }
+      } catch (err) {
+        setError('Failed to load travel package');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchTravel();
+    }
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-orange-500 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-white border-t-orange-300 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white font-semibold">Loading travel package...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !travel) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Destination Not Found</h1>
-          <p className="text-gray-600 mb-6">The travel package you're looking for doesn't exist.</p>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Travel Package Not Found</h1>
+          <p className="text-gray-600 mb-6">{error || 'The travel package you\'re looking for doesn\'t exist.'}</p>
           <a href="/travels" className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
             Back to All Packages
           </a>
@@ -92,17 +100,17 @@ export default function TravelDetailPage() {
           <span className="mx-2">/</span>
           <a href="/travels" className="hover:text-orange-500">Travels</a>
           <span className="mx-2">/</span>
-          <span className="text-gray-900">{destination.name}</span>
+          <span className="text-gray-900">{travel.name}</span>
         </div>
 
         {/* Title */}
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">{destination.name}</h1>
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">{travel.name}</h1>
         
         {/* Location and Rating */}
         <div className="flex items-center gap-6 mb-8">
           <div className="flex items-center gap-2 text-gray-600">
             <MapPin className="w-5 h-5 text-orange-500" />
-            <span className="font-medium">{destination.location}</span>
+            <span className="font-medium">{travel.location}</span>
           </div>
           
           <div className="h-6 w-px bg-gray-300" />
@@ -113,15 +121,15 @@ export default function TravelDetailPage() {
                 <Star
                   key={i}
                   className={`w-5 h-5 ${
-                    i < Math.floor(destination.rating)
+                    i < Math.floor(travel.rating)
                       ? 'fill-yellow-400 text-yellow-400'
                       : 'text-gray-300'
                   }`}
                 />
               ))}
             </div>
-            <span className="font-semibold text-gray-900">{destination.rating}</span>
-            <span className="text-gray-500">({destination.reviews} reviews)</span>
+            <span className="font-semibold text-gray-900">{travel.rating}</span>
+            <span className="text-gray-500">({travel.reviews} reviews)</span>
           </div>
         </div>
 
@@ -132,15 +140,15 @@ export default function TravelDetailPage() {
             {/* Main Image */}
             <div className="mb-4">
               <img
-                src={destination.mainImage}
-                alt={destination.name}
+                src={travel.mainImage}
+                alt={travel.name}
                 className="w-full h-96 object-cover rounded-2xl"
               />
             </div>
 
             {/* Gallery Images */}
             <div className="grid grid-cols-4 gap-4 mb-8">
-              {destination.galleryImages.map((img, idx) => (
+              {travel.galleryImages.map((img, idx) => (
                 <img
                   key={idx}
                   src={img}
@@ -190,11 +198,11 @@ export default function TravelDetailPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3">
+                    <div className="flex items-start gap-3">
                     <Clock className="w-5 h-5 text-orange-500 mt-1 flex-shrink-0" />
                     <div>
                       <h4 className="font-semibold text-gray-900 mb-1">Duration</h4>
-                      <p className="text-sm text-gray-600">{destination.duration}</p>
+                      <p className="text-sm text-gray-600">{travel.duration}</p>
                     </div>
                   </div>
                 </div>
@@ -216,7 +224,7 @@ export default function TravelDetailPage() {
             <div className="bg-white rounded-2xl p-8 shadow-md mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Description</h2>
               <div className="space-y-4 text-gray-700 leading-relaxed">
-                {destination.description.split('\n\n').map((paragraph, idx) => (
+                {travel.description.split('\n\n').map((paragraph, idx) => (
                   <p key={idx}>{paragraph}</p>
                 ))}
               </div>
@@ -351,16 +359,16 @@ export default function TravelDetailPage() {
           {/* Right Section - Booking Card (1/4 width) */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-2xl p-6 shadow-lg sticky top-32">
-              {/* <div className="mb-6">
+              <div className="mb-6">
                 <p className="text-gray-500 text-sm mb-2">From</p>
                 <div className="flex items-baseline gap-2 mb-1">
-                  <span className="text-4xl font-bold text-orange-500">£{destination.price}</span>
+                  <span className="text-4xl font-bold text-orange-500">£{travel.price}</span>
                   <span className="text-gray-500">/ person</span>
                 </div>
-                {destination.originalPrice && (
-                  <p className="text-gray-400 line-through text-sm">£{destination.originalPrice}</p>
+                {travel.originalPrice && (
+                  <p className="text-gray-400 line-through text-sm">£{travel.originalPrice}</p>
                 )}
-              </div> */}
+              </div>
 
               <a href="/booknow">
                 <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 rounded-lg transition-colors mb-4">

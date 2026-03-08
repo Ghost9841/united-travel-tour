@@ -1,76 +1,88 @@
 'use client';
 import { MapPin, Star, Check, X, Clock, Shield, Users, Smartphone, Plane, Hotel } from 'lucide-react';
 import { useParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
 
-const destinations = {
-  '1': {
-    id: 1,
-    name: "Lisbon, Portugal",
-    country: "Portugal",
-    rating: 4.8,
-    reviews: 2543,
-    price: 899,
-    originalPrice: 1199,
-    duration: "5 Days / 4 Nights",
-    mainImage: "https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=1200&h=800&fit=crop",
-    galleryImages: [
-      "https://images.unsplash.com/photo-1525207934214-58e69a8f8a0b?w=300&h=200&fit=crop",
-      "https://images.unsplash.com/photo-1588702547919-26089e690ecc?w=300&h=200&fit=crop",
-      "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=300&h=200&fit=crop",
-      "https://images.unsplash.com/photo-1548707309-dcebeab9ea9b?w=300&h=200&fit=crop"
-    ],
-    description: "Experience the magic of Lisbon, Portugal's sun-kissed capital perched on seven hills overlooking the Atlantic Ocean. This carefully designed 5-day journey takes you through the city's most enchanting neighborhoods, from the medieval streets of Alfama to the trendy cafes of Bairro Alto.\n\nDiscover iconic landmarks like the Belém Tower and Jerónimos Monastery, ride historic trams through winding streets, and enjoy breathtaking viewpoints. Savor authentic Portuguese cuisine, from fresh seafood to the famous pastéis de nata, while experiencing the soulful sounds of Fado music in traditional taverns.\n\nOur expert local guides will reveal hidden gems and share fascinating stories about Lisbon's maritime heritage, making this an unforgettable cultural immersion in one of Europe's most charming capitals."
-  },
-  '2': {
-    id: 2,
-    name: "Athens, Greece",
-    country: "Greece",
-    rating: 4.9,
-    reviews: 1876,
-    price: 1099,
-    originalPrice: 1399,
-    duration: "6 Days / 5 Nights",
-    mainImage: "https://images.unsplash.com/photo-1555993539-1732b0258235?w=1200&h=800&fit=crop",
-    galleryImages: [
-      "https://images.unsplash.com/photo-1603565816030-6b389eeb23cb?w=300&h=200&fit=crop",
-      "https://images.unsplash.com/photo-1576020799627-aeac74d58064?w=300&h=200&fit=crop",
-      "https://images.unsplash.com/photo-1601581875309-fafbf2d3ed3a?w=300&h=200&fit=crop",
-      "https://images.unsplash.com/photo-1603565816030-6b389eeb23cb?w=300&h=200&fit=crop"
-    ],
-    description: "Journey to Athens, the cradle of Western civilization, where ancient history meets vibrant modern culture. This comprehensive 6-day exploration takes you through 2,500 years of history, from the magnificent Acropolis to the bustling Plaka neighborhood.\n\nMarvel at the Parthenon, explore the Ancient Agora where Socrates once walked, and discover world-class museums housing priceless antiquities. Wander through charming neighborhoods filled with tavernas serving authentic Greek cuisine, and experience the warm hospitality that Greece is famous for.\n\nWith expert archaeological guides and carefully planned itineraries, you'll gain deep insights into Greek mythology, philosophy, and the democratic ideals that shaped our world."
-  },
-  '3': {
-    id: 3,
-    name: "Rome, Italy",
-    country: "Italy",
-    rating: 4.7,
-    reviews: 3210,
-    price: 1199,
-    originalPrice: 1499,
-    duration: "7 Days / 6 Nights",
-    mainImage: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=1200&h=800&fit=crop",
-    galleryImages: [
-      "https://images.unsplash.com/photo-1531572753322-ad063cecc140?w=300&h=200&fit=crop",
-      "https://images.unsplash.com/photo-1529260830199-42c24126f198?w=300&h=200&fit=crop",
-      "https://images.unsplash.com/photo-1525874684015-58379d421a52?w=300&h=200&fit=crop",
-      "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=300&h=200&fit=crop"
-    ],
-    description: "Experience the grandeur of Rome, the Eternal City, where every street corner reveals layers of history spanning three millennia. This immersive 7-day journey takes you from the glory of ancient Rome to the splendor of the Renaissance and Baroque periods.\n\nExplore the Colosseum, Roman Forum, and Palatine Hill with expert guides who bring history to life. Visit the Vatican Museums and Sistine Chapel, toss a coin in the Trevi Fountain, and discover the artworks of Michelangelo and Bernini. Enjoy authentic Roman cuisine in traditional trattorias and experience the dolce vita lifestyle.\n\nStay in a luxury hotel near major attractions, with all entrance fees and guided tours included for a seamless, enriching experience in the heart of Italy."
-  }
+type Destination = {
+  id: number;
+  name: string;
+  country: string;
+  description: string;
+  image: string;
+  price: number;
+  originalPrice: number;
+  rating: number;
+  reviews: number;
+  duration: string;
+  groupSize: string;
+  category: string;
+  status: 'active' | 'draft';
+  featured: boolean;
+  views: number;
+  likes: number;
+  createdAt: string;
+  updatedAt: string;
 };
+
+interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+}
 
 export default function DestinationDetailPage() {
   const params = useParams();
   const id = params?.id as string;
-  
-  const destination = destinations[id as keyof typeof destinations];
+  const [destination, setDestination] = useState<Destination | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  if (!destination) {
+  useEffect(() => {
+    const fetchDestination = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`/api/destinations/${id}`);
+        const data: ApiResponse<Destination> = await response.json();
+
+        if (data.success && data.data) {
+          // Only show active destinations on the public page
+          if (data.data.status === 'active') {
+            setDestination(data.data);
+          } else {
+            setError('Destination not found');
+          }
+        } else {
+          setError(data.error || 'Destination not found');
+        }
+      } catch (err) {
+        setError('Failed to load destination');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchDestination();
+    }
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-orange-500 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-white border-t-orange-300 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white font-semibold">Loading destination details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !destination) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Destination Not Found</h1>
-          <p className="text-gray-600 mb-6">The destination you're looking for doesn't exist.</p>
+          <p className="text-gray-600 mb-6">{error || 'The destination you\'re looking for doesn\'t exist.'}</p>
           <a href="/destinations" className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
             Back to All Destinations
           </a>
@@ -128,19 +140,19 @@ export default function DestinationDetailPage() {
             {/* Main Image */}
             <div className="mb-4">
               <img
-                src={destination.mainImage}
+                src={destination.image}
                 alt={destination.name}
                 className="w-full h-96 object-cover rounded-2xl"
               />
             </div>
 
-            {/* Gallery Images */}
+            {/* Gallery Images - Using variations of the main image */}
             <div className="grid grid-cols-4 gap-4 mb-8">
-              {destination.galleryImages.map((img, idx) => (
+              {[1, 2, 3, 4].map((idx) => (
                 <img
                   key={idx}
-                  src={img}
-                  alt={`Gallery ${idx + 1}`}
+                  src={destination.image}
+                  alt={`Gallery ${idx}`}
                   className="w-full h-32 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
                 />
               ))}
