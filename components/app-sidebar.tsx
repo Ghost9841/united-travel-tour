@@ -9,6 +9,7 @@ import {
   Settings,
   User,
   HelpCircle,
+  MapPinHouse,
 } from "lucide-react"
 
 import {
@@ -55,6 +56,7 @@ const mainItems = [
   { title: "Travels", url: "/dashboard/travels", icon: Plane },
   { title: "Hotels", url: "/dashboard/hotels", icon: Hotel },
   { title: "Blogs", url: "/dashboard/blogs", icon: FileText },
+  { title: "Destination", url: "/dashboard/destinations", icon: MapPinHouse },
 ]
 
 // Bottom navigation items
