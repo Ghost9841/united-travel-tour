@@ -85,3 +85,28 @@ model Hotel {
 
   @@map("hotels")
 }
+
+model Destination {
+  id            Int      @id @default(autoincrement())
+  name          String
+  country       String
+  description   String   @db.Text
+  image         String
+  price         Float
+  originalPrice Float
+  rating        Float    @default(4.0)
+  reviews       Int      @default(0)
+  duration      String
+  groupSize     String   @map("group_size")
+  category      String
+  status        String   @default("active") // 'active' or 'draft'
+  featured      Boolean  @default(false)
+  views         Int      @default(0)
+  likes         Int      @default(0)
+
+  // Timestamps
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@map("destinations")
+}

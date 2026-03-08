@@ -33,14 +33,16 @@ export default function DestinationFormPage() {
     name: '',
     country: '',
     description: '',
-    imageUrl: '',
+    image: '',
     category: 'Beach',
     rating: 4.5,
     price: '',
+    originalPrice: '',
     duration: '3-5 days',
-    bestSeason: 'Summer',
+    groupSize: '2-4',
     status: 'active' as 'active' | 'draft',
     featured: false,
+    reviews: 0,
   });
 
   useEffect(() => {
@@ -50,21 +52,23 @@ export default function DestinationFormPage() {
         const res = await fetch(`/api/destinations/${id}`);
         const data = await res.json();
         if (data.success && data.data) {
-          const d = data.data.destination ?? data.data;
+          const d = data.data;
           setForm({
             name: d.name ?? '',
             country: d.country ?? '',
             description: d.description ?? '',
-            imageUrl: d.imageUrl ?? '',
+            image: d.image ?? '',
             category: d.category ?? 'Beach',
             rating: d.rating ?? 4.5,
             price: d.price?.toString() ?? '',
+            originalPrice: d.originalPrice?.toString() ?? '',
             duration: d.duration ?? '3-5 days',
-            bestSeason: d.bestSeason ?? 'Summer',
+            groupSize: d.groupSize ?? '2-4',
             status: d.status ?? 'active',
             featured: d.featured ?? false,
+            reviews: d.reviews ?? 0,
           });
-          setImagePreview(d.imageUrl ?? '');
+          setImagePreview(d.image ?? '');
         } else {
           toast('Error', { description: 'Destination not found' });
           router.push('/dashboard/destinations');
@@ -83,7 +87,12 @@ export default function DestinationFormPage() {
     e.preventDefault();
     setSaving(true);
     try {
-      const body = { ...form, price: Number(form.price) };
+      const body = {
+        ...form,
+        price: Number(form.price),
+        originalPrice: Number(form.originalPrice) || 0,
+        reviews: Number(form.reviews) || 0,
+      };
       const res = await fetch(
         creating ? '/api/destinations' : `/api/destinations/${id}`,
         {
@@ -235,6 +244,15 @@ export default function DestinationFormPage() {
                 </div>
               </div>
               <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Original Price (USD)</label>
+                <div className="relative">
+                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input type="number" min="0" value={form.originalPrice} onChange={e => set('originalPrice', e.target.value)}
+                    placeholder="1500"
+                    className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm" />
+                </div>
+              </div>
+              <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">Duration *</label>
                 <div className="relative">
                   <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -245,13 +263,12 @@ export default function DestinationFormPage() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Best Season *</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Group Size</label>
                 <div className="relative">
                   <Users className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <select value={form.bestSeason} onChange={e => set('bestSeason', e.target.value)}
-                    className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm bg-white">
-                    {SEASONS.map(s => <option key={s}>{s}</option>)}
-                  </select>
+                  <input value={form.groupSize} onChange={e => set('groupSize', e.target.value)}
+                    placeholder="e.g., 2-4"
+                    className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm" />
                 </div>
               </div>
             </div>
@@ -274,8 +291,8 @@ export default function DestinationFormPage() {
             <p className="text-sm text-gray-500 mb-5">Add an image URL for this destination</p>
             <div className="relative">
               <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input value={form.imageUrl}
-                onChange={e => { set('imageUrl', e.target.value); setImagePreview(e.target.value); }}
+              <input value={form.image}
+                onChange={e => { set('image', e.target.value); setImagePreview(e.target.value); }}
                 placeholder="https://example.com/image.jpg"
                 className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm" />
             </div>
@@ -283,7 +300,7 @@ export default function DestinationFormPage() {
               <div className="relative mt-4 rounded-xl overflow-hidden border border-gray-100">
                 <img src={imagePreview} alt="preview" className="w-full h-48 object-cover"
                   onError={() => setImagePreview('')} />
-                <button type="button" onClick={() => { setImagePreview(''); set('imageUrl', ''); }}
+                <button type="button" onClick={() => { setImagePreview(''); set('image', ''); }}
                   className="absolute top-2 right-2 p-1.5 bg-white rounded-lg shadow hover:bg-red-50">
                   <X className="w-3.5 h-3.5 text-red-500" />
                 </button>

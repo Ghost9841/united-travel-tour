@@ -9,21 +9,30 @@ import {
 } from 'lucide-react';
 
 interface Destination {
-  id: string;
+  id: number;
   name: string;
   country: string;
   description: string;
-  imageUrl?: string;
+  image: string;
   category: string;
   rating: number;
   price: number;
+  originalPrice: number;
+  reviews: number;
   duration: string;
-  bestSeason: string;
+  groupSize: string;
   status: 'active' | 'draft';
-  views?: number;
-  likes?: number;
-  featured?: boolean;
+  views: number;
+  likes: number;
+  featured: boolean;
   createdAt: string;
+  updatedAt?: string;
+}
+
+interface ApiResponse<T> {
+  success: boolean;
+  data: T;
+  error?: string;
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -37,56 +46,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   Island: 'bg-teal-100 text-teal-700',
 };
 
-const MOCK: Destination[] = [
-  {
-    id: '1', name: 'Santorini', country: 'Greece',
-    description: 'Iconic white-washed buildings perched on volcanic cliffs above the stunning Aegean Sea.',
-    imageUrl: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=600&auto=format&fit=crop',
-    category: 'Island', rating: 4.9, price: 2400, duration: '5-7 days', bestSeason: 'Summer',
-    status: 'active', views: 12400, likes: 3820, featured: true,
-    createdAt: new Date(Date.now() - 86400000 * 90).toISOString(),
-  },
-  {
-    id: '2', name: 'Machu Picchu', country: 'Peru',
-    description: 'Ancient Incan citadel set high in the Andes Mountains, shrouded in mist and mystery.',
-    imageUrl: 'https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=600&auto=format&fit=crop',
-    category: 'Cultural', rating: 4.8, price: 1800, duration: '3-5 days', bestSeason: 'Spring',
-    status: 'active', views: 9800, likes: 2910, featured: true,
-    createdAt: new Date(Date.now() - 86400000 * 60).toISOString(),
-  },
-  {
-    id: '3', name: 'Bali', country: 'Indonesia',
-    description: 'Lush tropical paradise with terraced rice fields, ancient temples and world-class surf.',
-    imageUrl: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&auto=format&fit=crop',
-    category: 'Beach', rating: 4.7, price: 1200, duration: '1-2 weeks', bestSeason: 'Summer',
-    status: 'active', views: 18200, likes: 5640, featured: false,
-    createdAt: new Date(Date.now() - 86400000 * 45).toISOString(),
-  },
-  {
-    id: '4', name: 'Patagonia', country: 'Argentina',
-    description: 'Remote wilderness at the southern tip of South America — dramatic peaks and glaciers.',
-    imageUrl: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=600&auto=format&fit=crop',
-    category: 'Adventure', rating: 4.9, price: 3200, duration: '1-2 weeks', bestSeason: 'Summer',
-    status: 'draft', views: 4200, likes: 1390, featured: false,
-    createdAt: new Date(Date.now() - 86400000 * 15).toISOString(),
-  },
-  {
-    id: '5', name: 'Kyoto', country: 'Japan',
-    description: "Japan's cultural heart — thousands of Buddhist temples, geisha districts and bamboo groves.",
-    imageUrl: 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&auto=format&fit=crop',
-    category: 'Cultural', rating: 4.8, price: 2100, duration: '5-7 days', bestSeason: 'Spring',
-    status: 'active', views: 15600, likes: 4720, featured: true,
-    createdAt: new Date(Date.now() - 86400000 * 30).toISOString(),
-  },
-  {
-    id: '6', name: 'Sahara Desert', country: 'Morocco',
-    description: 'Endless golden dunes stretching to the horizon, with camel treks and starlit camps.',
-    imageUrl: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=600&auto=format&fit=crop',
-    category: 'Desert', rating: 4.6, price: 1500, duration: '3-5 days', bestSeason: 'Autumn',
-    status: 'active', views: 7300, likes: 2180, featured: false,
-    createdAt: new Date(Date.now() - 86400000 * 20).toISOString(),
-  },
-];
+
 
 function formatRelativeTime(date: Date): string {
   const d = Math.floor((Date.now() - date.getTime()) / 86400000);
@@ -120,8 +80,8 @@ function DestinationCard({ dest, onDelete }: { dest: Destination; onDelete: () =
   return (
     <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 group">
       <div className="relative h-52 overflow-hidden">
-        {dest.imageUrl ? (
-          <img src={dest.imageUrl} alt={dest.name}
+        {dest.image ? (
+          <img src={dest.image} alt={dest.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-orange-100 to-amber-100 flex items-center justify-center">
@@ -223,14 +183,40 @@ export default function DestinationsPage() {
   const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'draft'>('all');
 
   useEffect(() => {
-    // Replace with: const res = await fetch('/api/destinations'); const data = await res.json(); setDestinations(data);
-    setTimeout(() => { setDestinations(MOCK); setLoading(false); }, 600);
+    const fetchDestinations = async () => {
+      try {
+        const res = await fetch('/api/destinations');
+        const data: ApiResponse<Destination[]> = await res.json();
+        if (data.success) {
+          setDestinations(data.data);
+        } else {
+          console.error('Failed to fetch destinations:', data.error);
+        }
+      } catch (error) {
+        console.error('Error fetching destinations:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDestinations();
   }, []);
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: number) => {
     if (!confirm('Delete this destination?')) return;
-    // Replace with: await fetch(`/api/destinations/${id}`, { method: 'DELETE' });
-    setDestinations(prev => prev.filter(d => d.id !== id));
+    try {
+      const res = await fetch(`/api/destinations/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        setDestinations(prev => prev.filter(d => d.id !== id));
+      } else {
+        console.error('Failed to delete destination:', data.error);
+        alert('Failed to delete destination: ' + data.error);
+      }
+    } catch (error) {
+      console.error('Error deleting destination:', error);
+      alert('Error deleting destination');
+    }
   };
 
   const active = destinations.filter(d => d.status === 'active').length;
