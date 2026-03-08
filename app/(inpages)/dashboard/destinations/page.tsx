@@ -142,7 +142,6 @@ function DestinationCard({ dest, onDelete }: { dest: Destination; onDelete: () =
           <span className="w-px h-3 bg-gray-200" />
           <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{dest.duration}</span>
           <span className="w-px h-3 bg-gray-200" />
-          <span className="flex items-center gap-1"><Users className="w-3.5 h-3.5" />{dest.bestSeason}</span>
         </div>
         <div className="flex items-center justify-between pt-3 border-t border-gray-100 text-sm text-gray-400">
           <div className="flex items-center gap-3">
