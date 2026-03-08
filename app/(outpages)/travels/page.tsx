@@ -1,5 +1,5 @@
 'use client';
-import{ ApiResponse } from '@/app/api/travels/types';
+import { ApiResponse } from '@/app/api/types';
 import { Travel } from '@prisma/client';
 import { MapPin, Star, Clock, Users } from 'lucide-react';
 import { useEffect,useState } from 'react';
