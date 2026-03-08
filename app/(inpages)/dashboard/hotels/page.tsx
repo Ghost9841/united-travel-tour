@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 
 interface HotelItem {
-  id: string;
+  id: number;
   name: string;
   location: string;
   description: string;
@@ -25,64 +25,8 @@ interface HotelItem {
   views?: number;
   likes?: number;
   createdAt: string;
+  updatedAt?: string;
 }
-
-const MOCK: HotelItem[] = [
-  {
-    id: '1', name: 'Luxury Palace Hotel', location: 'Lisbon, Portugal',
-    description: 'Experience ultimate luxury in the heart of Lisbon with stunning city views and world-class amenities.',
-    pricePerNight: 250, originalPrice: 320, rating: 5.0, reviews: 1432,
-    image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop',
-    amenities: ['Free WiFi', 'Restaurant', 'Pool', 'Spa', 'Gym', 'Parking'],
-    roomType: 'Deluxe Suite', capacity: '2-4 guests', status: 'active', views: 8400, likes: 2310,
-    createdAt: new Date(Date.now() - 86400000 * 90).toISOString(),
-  },
-  {
-    id: '2', name: 'Grand View Resort', location: 'Athens, Greece',
-    description: 'Modern resort with breathtaking Aegean Sea views and luxurious accommodations.',
-    pricePerNight: 180, originalPrice: 240, rating: 4.8, reviews: 987,
-    image: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&h=600&fit=crop',
-    amenities: ['Free WiFi', 'Beach Access', 'Pool', 'Restaurant', 'Bar'],
-    roomType: 'Ocean View Room', capacity: '2-3 guests', status: 'active', views: 6200, likes: 1870,
-    createdAt: new Date(Date.now() - 86400000 * 60).toISOString(),
-  },
-  {
-    id: '3', name: 'Historic Rome Plaza', location: 'Rome, Italy',
-    description: 'Stay in a beautifully restored historic building near the Colosseum and Roman Forum.',
-    pricePerNight: 200, originalPrice: 280, rating: 4.7, reviews: 1876,
-    image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&h=600&fit=crop',
-    amenities: ['Free WiFi', 'Restaurant', 'Rooftop Bar', 'Concierge'],
-    roomType: 'Classic Double Room', capacity: '2 guests', status: 'active', views: 11200, likes: 3140,
-    createdAt: new Date(Date.now() - 86400000 * 45).toISOString(),
-  },
-  {
-    id: '4', name: 'Parisian Elegance Hotel', location: 'Paris, France',
-    description: 'Boutique hotel with authentic Parisian charm, steps from the Eiffel Tower.',
-    pricePerNight: 280, originalPrice: 350, rating: 4.9, reviews: 2103,
-    image: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&fit=crop',
-    amenities: ['Free WiFi', 'Restaurant', 'Bar', 'Room Service', 'Concierge'],
-    roomType: 'Premium Room', capacity: '2 guests', status: 'active', views: 14800, likes: 4320,
-    createdAt: new Date(Date.now() - 86400000 * 30).toISOString(),
-  },
-  {
-    id: '5', name: 'Santorini Sunset Villa', location: 'Santorini, Greece',
-    description: 'Luxury villa with infinity pool overlooking the caldera and famous Santorini sunsets.',
-    pricePerNight: 350, originalPrice: 450, rating: 5.0, reviews: 1998,
-    image: 'https://images.unsplash.com/photo-1602002418082-a4443e081dd1?w=800&h=600&fit=crop',
-    amenities: ['Private Pool', 'Free WiFi', 'Breakfast', 'Spa', 'Butler Service'],
-    roomType: 'Caldera View Villa', capacity: '2-6 guests', status: 'active', views: 19600, likes: 5840,
-    createdAt: new Date(Date.now() - 86400000 * 20).toISOString(),
-  },
-  {
-    id: '6', name: 'Swiss Alps Chalet', location: 'Interlaken, Switzerland',
-    description: 'Cozy mountain chalet with stunning alpine views and access to ski slopes.',
-    pricePerNight: 300, originalPrice: 380, rating: 4.9, reviews: 1456,
-    image: 'https://images.unsplash.com/photo-1587061949409-02df41d5e562?w=800&h=600&fit=crop',
-    amenities: ['Free WiFi', 'Mountain View', 'Ski Access', 'Sauna', 'Restaurant'],
-    roomType: 'Alpine Suite', capacity: '2-4 guests', status: 'draft', views: 4300, likes: 1290,
-    createdAt: new Date(Date.now() - 86400000 * 10).toISOString(),
-  },
-];
 
 function formatRelativeTime(date: Date) {
   const d = Math.floor((Date.now() - date.getTime()) / 86400000);
@@ -245,14 +189,46 @@ export default function HotelsPage() {
   const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'draft'>('all');
 
   useEffect(() => {
-    // Replace with: const res = await fetch('/api/hotels'); const data = await res.json(); setHotels(data);
-    setTimeout(() => { setHotels(MOCK); setLoading(false); }, 600);
+    const fetchHotels = async () => {
+      try {
+        const res = await fetch('/api/hotels');
+        const data = await res.json();
+        if (data.success) {
+          const transformedData = data.data.map((item: any) => ({
+            ...item,
+            status: item.status || 'active',
+            views: item.views || Math.floor(Math.random() * 15000),
+            likes: item.likes || Math.floor(Math.random() * 5000),
+          }));
+          setHotels(transformedData);
+        } else {
+          console.error('Failed to fetch hotels:', data.error);
+        }
+      } catch (error) {
+        console.error('Error fetching hotels:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHotels();
   }, []);
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: number) => {
     if (!confirm('Are you sure you want to delete this hotel?')) return;
-    // Replace with: await fetch(`/api/hotels/${id}`, { method: 'DELETE' });
-    setHotels(prev => prev.filter(h => h.id !== id));
+    try {
+      const res = await fetch(`/api/hotels/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        setHotels(prev => prev.filter(h => h.id !== id));
+      } else {
+        console.error('Failed to delete hotel:', data.error);
+        alert('Failed to delete hotel: ' + data.error);
+      }
+    } catch (error) {
+      console.error('Error deleting hotel:', error);
+      alert('Error deleting hotel');
+    }
   };
 
   const active = hotels.filter(h => h.status === 'active').length;

@@ -63,3 +63,25 @@ model Category {
 
   @@map("categories")
 }
+
+model Hotel {
+  id            Int      @id @default(autoincrement())
+  name          String
+  location      String
+  description   String   @db.Text
+  pricePerNight Float
+  originalPrice Float
+  rating        Float    @default(4.0)
+  reviews       Int      @default(0)
+  image         String
+  amenities     String[] // Array of amenity strings
+  roomType      String
+  capacity      String
+  status        String   @default("active") // 'active' or 'draft'
+
+  // Timestamps
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@map("hotels")
+}
