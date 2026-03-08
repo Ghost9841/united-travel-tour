@@ -17,9 +17,9 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 
 
-import { ApiResponse } from '@/app/api/travels/types';
 import { Travel } from "@prisma/client";
 import { EmptyState, StatCard, TravelCard, TravelGridSkeleton } from "./CallingComp";
+import { ApiResponse } from "@/app/api/types";
 
 
 

@@ -13,14 +13,15 @@ import {
 } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
 
-// Matches frontend exactly
-const CATEGORIES = ['City Tour', 'Historical', 'Romantic', 'Adventure'];
-const DURATIONS  = ['1-3 days', '4 days', '5 days', '6 days', '7 days', '8-10 days', '2 weeks+'];
-const LOCATIONS  = [
-  'Portugal', 'Greece', 'Italy', 'France', 'Spain', 'Netherlands',
-  'Czech Republic', 'Switzerland', 'Austria', 'Ireland', 'Hungary',
-  'United Kingdom', 'Scotland', 'Germany', 'Croatia',
-];
+// Dynamic data from database
+const DURATIONS = ['1-3 days', '4 days', '5 days', '6 days', '7 days', '8-10 days', '2 weeks+'];
+
+interface Category {
+  id: number;
+  name: string;
+  color?: string;
+  description?: string;
+}
 
 const isNew = (id: string) => id === 'new';
 
@@ -34,6 +35,8 @@ export default function ExploreFormPage() {
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [imagePreview, setImagePreview] = useState('');
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [locations, setLocations] = useState<string[]>([]);
   const [form, setForm] = useState({
     title: '',
     description: '',
@@ -48,13 +51,39 @@ export default function ExploreFormPage() {
   });
 
   useEffect(() => {
-    if (creating) return;
-    (async () => {
+    const fetchData = async () => {
       try {
+        // Fetch categories and locations
+        const [categoriesRes, locationsRes] = await Promise.all([
+          fetch('/api/categories'),
+          fetch('/api/locations')
+        ]);
+
+        const categoriesData = await categoriesRes.json();
+        const locationsData = await locationsRes.json();
+
+        if (categoriesData.success) {
+          setCategories(categoriesData.data);
+          // Set default category if creating new item and no category is set
+          if (creating && categoriesData.data.length > 0 && !form.category) {
+            setForm(prev => ({ ...prev, category: categoriesData.data[0].name }));
+          }
+        }
+        if (locationsData.success) {
+          setLocations(locationsData.data);
+        }
+
+        // If creating new item, set loading to false
+        if (creating) {
+          setLoading(false);
+          return;
+        }
+
+        // Fetch existing item data
         const res = await fetch(`/api/explore/${id}`);
         const data = await res.json();
         if (data.success && data.data) {
-          const e = data.data.item ?? data.data;
+          const e = data.data;
           setForm({
             title: e.title ?? '',
             description: e.description ?? '',
@@ -72,13 +101,16 @@ export default function ExploreFormPage() {
           toast('Error', { description: 'Item not found' });
           router.push('/dashboard/explore');
         }
-      } catch {
-        toast('Error', { description: 'Failed to load item' });
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        toast('Error', { description: 'Failed to load data' });
       } finally {
         setLoading(false);
       }
-    })();
-  }, [id]);
+    };
+
+    fetchData();
+  }, [id, creating]);
 
   const set = (k: string, v: unknown) => setForm(p => ({ ...p, [k]: v }));
 
@@ -204,9 +236,11 @@ export default function ExploreFormPage() {
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">Location *</label>
                   <div className="relative">
                     <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-400" />
-                    <input value={form.location} onChange={e => set('location', e.target.value)} required
-                      placeholder="e.g., Lisbon, Portugal"
-                      className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm" />
+                    <select value={form.location} onChange={e => set('location', e.target.value)} required
+                      className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm bg-white">
+                      <option value="">Select a location</option>
+                      {locations.map(location => <option key={location} value={location}>{location}</option>)}
+                    </select>
                   </div>
                   <p className="text-xs text-gray-400 mt-1">Used by frontend location filter — match country name (e.g., Portugal)</p>
                 </div>
@@ -216,7 +250,8 @@ export default function ExploreFormPage() {
                     <Tag className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <select value={form.category} onChange={e => set('category', e.target.value)}
                       className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm bg-white">
-                      {CATEGORIES.map(c => <option key={c}>{c}</option>)}
+                      <option value="">Select a category</option>
+                      {categories.map(cat => <option key={cat.id} value={cat.name}>{cat.name}</option>)}
                     </select>
                   </div>
                 </div>

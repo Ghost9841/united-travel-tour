@@ -1,0 +1,161 @@
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/app/lib/prisma";
+import { ExplorePage } from "@prisma/client";
+
+interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+}
+
+// GET /api/explore/[id] - Get single explore item
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+): Promise<NextResponse<ApiResponse<ExplorePage>>> {
+  try {
+    const id = parseInt(params.id);
+    if (isNaN(id)) {
+      return NextResponse.json({
+        success: false,
+        error: "Invalid ID",
+      }, { status: 400 });
+    }
+
+    const explore = await prisma.explorePage.findUnique({
+      where: { id },
+    });
+
+    if (!explore) {
+      return NextResponse.json({
+        success: false,
+        error: "Item not found",
+      }, { status: 404 });
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: explore,
+    });
+  } catch (error) {
+    console.error("GET /explore/[id] error:", error);
+    return NextResponse.json({
+      success: false,
+      error: "Failed to fetch explore item",
+    }, { status: 500 });
+  }
+}
+
+// PUT /api/explore/[id] - Update explore item
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+): Promise<NextResponse<ApiResponse<ExplorePage>>> {
+  try {
+    const id = parseInt(params.id);
+    if (isNaN(id)) {
+      return NextResponse.json({
+        success: false,
+        error: "Invalid ID",
+      }, { status: 400 });
+    }
+
+    const body = await req.json();
+    console.log("Received PUT data:", body);
+
+    // Validate required fields
+    const missingFields: string[] = [];
+    if (!body.title) missingFields.push("title");
+    if (!body.location) missingFields.push("location");
+    if (!body.description) missingFields.push("description");
+    if (!body.price) missingFields.push("price");
+
+    if (missingFields.length > 0) {
+      return NextResponse.json({
+        success: false,
+        error: `Missing required fields: ${missingFields.join(", ")}`,
+      }, { status: 400 });
+    }
+
+    // Update explore item
+    const updatedExplore = await prisma.explorePage.update({
+      where: { id },
+      data: {
+        title: body.title,
+        location: body.location,
+        description: body.description,
+        price: Number(body.price),
+        discountedPrice: body.discountedPrice ? Number(body.discountedPrice) : Math.round(Number(body.price) * 0.85),
+        duration: body.duration || "5 Days / 4 Nights",
+        status: body.status || "active",
+        rating: body.rating ? Number(body.rating) : 4.0,
+        views: body.views ? Number(body.views) : 0,
+        likes: body.likes ? Number(body.likes) : 0,
+        image: body.image || "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&h=600&fit=crop",
+        category: body.category || "General",
+      },
+    });
+
+    console.log("Updated explore:", updatedExplore);
+
+    return NextResponse.json({
+      success: true,
+      data: updatedExplore,
+    });
+
+  } catch (error) {
+    console.error("PUT /explore/[id] error:", error);
+
+    if (error instanceof Error && error.message.includes("Record to update not found")) {
+      return NextResponse.json({
+        success: false,
+        error: "Item not found",
+      }, { status: 404 });
+    }
+
+    return NextResponse.json({
+      success: false,
+      error: error instanceof Error ? error.message : "Failed to update explore item",
+    }, { status: 500 });
+  }
+}
+
+// DELETE /api/explore/[id] - Delete explore item
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+): Promise<NextResponse<ApiResponse<{ deleted: boolean }>>> {
+  try {
+    const id = parseInt(params.id);
+    if (isNaN(id)) {
+      return NextResponse.json({
+        success: false,
+        error: "Invalid ID",
+      }, { status: 400 });
+    }
+
+    await prisma.explorePage.delete({
+      where: { id },
+    });
+
+    return NextResponse.json({
+      success: true,
+      data: { deleted: true },
+    });
+
+  } catch (error) {
+    console.error("DELETE /explore/[id] error:", error);
+
+    if (error instanceof Error && error.message.includes("Record to delete does not exist")) {
+      return NextResponse.json({
+        success: false,
+        error: "Item not found",
+      }, { status: 404 });
+    }
+
+    return NextResponse.json({
+      success: false,
+      error: error instanceof Error ? error.message : "Failed to delete explore item",
+    }, { status: 500 });
+  }
+}

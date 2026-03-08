@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
 import { ExplorePage } from "@prisma/client";
-import { ApiResponse } from "../travels/types";
+import { ApiResponse } from "../types";
 
 export async function GET(): Promise<NextResponse<ApiResponse<ExplorePage[]>>> {
   try {
@@ -50,7 +50,11 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse<Explo
         description: body.description,
         price: Number(body.price),
         discountedPrice: body.discountedPrice ? Number(body.discountedPrice) : Math.round(Number(body.price) * 0.85),
+        duration: body.duration || "5 Days / 4 Nights",
+        status: body.status || "active",
         rating: body.rating ? Number(body.rating) : 4.0,
+        views: body.views ? Number(body.views) : 0,
+        likes: body.likes ? Number(body.likes) : 0,
         image: body.image || "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&h=600&fit=crop",
         category: body.category || "General",
       },

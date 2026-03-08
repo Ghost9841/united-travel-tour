@@ -51,10 +51,10 @@ import Image from "next/image"
 // Main navigation items
 const mainItems = [
   { title: "Dashboard", url: "/dashboard", icon: Home },
-  { title: "Blogs", url: "/dashboard/blogs", icon: FileText },
-  { title: "Packages", url: "/dashboard/packages", icon: Package },
-  { title: "Hotels", url: "/dashboard/hotels", icon: Hotel },
+  { title: "Explore", url: "/dashboard/explore", icon: Package },
   { title: "Travels", url: "/dashboard/travels", icon: Plane },
+  { title: "Hotels", url: "/dashboard/hotels", icon: Hotel },
+  { title: "Blogs", url: "/dashboard/blogs", icon: FileText },
 ]
 
 // Bottom navigation items

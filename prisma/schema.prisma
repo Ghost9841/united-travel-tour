@@ -31,19 +31,35 @@ model Travel {
 }
 
 model ExplorePage {
-  id            Int      @id @default(autoincrement())
-  title         String
-  description   String   @db.Text
-  location      String
-  price         Float
+  id              Int      @id @default(autoincrement())
+  title           String
+  description     String   @db.Text
+  location        String
+  price           Float
   discountedPrice Float
-  image         String
-  rating        Float    @default(0)
-  category      String
+  duration        String   @default("5 Days / 4 Nights")
+  status          String   @default("active") // 'active' or 'draft'
+  rating          Float    @default(0)
+  views           Int      @default(0)
+  likes           Int      @default(0)
+  image           String
+  category        String
 
   // Timestamps
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
 
   @@map("explorepage")
+}
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  color       String?  // For UI colors
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("categories")
 }

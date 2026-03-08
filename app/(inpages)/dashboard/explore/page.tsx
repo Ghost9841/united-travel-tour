@@ -25,14 +25,18 @@ interface ExploreItem {
   updatedAt: string;
 }
 
-const CATEGORIES = ['City Tour', 'Historical', 'Romantic', 'Adventure'];
+interface Category {
+  id: number;
+  name: string;
+  color?: string;
+  description?: string;
+}
 
-const CATEGORY_COLORS: Record<string, string> = {
-  'City Tour':  'bg-violet-100 text-violet-700',
-  'Historical': 'bg-amber-100 text-amber-700',
-  'Romantic':   'bg-pink-100 text-pink-700',
-  'Adventure':  'bg-green-100 text-green-700',
-};
+
+function getCategoryColor(categoryName: string, categories: Category[]): string {
+  const category = categories.find(c => c.name === categoryName);
+  return category?.color ?? 'bg-gray-100 text-gray-600';
+}
 
 function formatRelativeTime(date: Date) {
   const d = Math.floor((Date.now() - date.getTime()) / 86400000);
@@ -61,7 +65,7 @@ function StatCard({ label, value, icon: Icon, accent }: {
   );
 }
 
-function ExploreCard({ item, onDelete }: { item: ExploreItem; onDelete: () => void }) {
+function ExploreCard({ item, onDelete, categories }: { item: ExploreItem; onDelete: () => void; categories: Category[] }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const saving = item.price - item.discountedPrice;
   const discountPct = item.price > 0 ? Math.round((saving / item.price) * 100) : 0;
@@ -115,7 +119,7 @@ function ExploreCard({ item, onDelete }: { item: ExploreItem; onDelete: () => vo
       <div className="p-5">
         <div className="flex items-start justify-between gap-2 mb-1">
           <h3 className="text-base font-bold text-gray-900 line-clamp-1 group-hover:text-orange-500 transition-colors">{item.title}</h3>
-          <span className={`shrink-0 text-xs font-medium px-2.5 py-1 rounded-full ${CATEGORY_COLORS[item.category] ?? 'bg-gray-100 text-gray-600'}`}>
+          <span className={`shrink-0 text-xs font-medium px-2.5 py-1 rounded-full ${getCategoryColor(item.category, categories)}`}>
             {item.category}
           </span>
         </div>
@@ -155,14 +159,23 @@ function ExploreCard({ item, onDelete }: { item: ExploreItem; onDelete: () => vo
 
 export default function ExploreAdminPage() {
   const [items, setItems] = useState<ExploreItem[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'draft'>('all');
   const [filterCategory, setFilterCategory] = useState('');
 
   useEffect(() => {
-    const fetchExploreData = async () => {
+    const fetchData = async () => {
       try {
+        // Fetch categories
+        const categoriesRes = await fetch('/api/categories');
+        const categoriesData = await categoriesRes.json();
+        if (categoriesData.success) {
+          setCategories(categoriesData.data);
+        }
+
+        // Fetch explore items
         const res = await fetch('/api/explore');
         const data = await res.json();
         if (data.success) {
@@ -179,13 +192,13 @@ export default function ExploreAdminPage() {
           console.error('Failed to fetch explore data:', data.error);
         }
       } catch (error) {
-        console.error('Error fetching explore data:', error);
+        console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchExploreData();
+    fetchData();
   }, []);
 
   const handleDelete = async (id: number) => {
@@ -290,11 +303,11 @@ export default function ExploreAdminPage() {
             className={`px-4 py-1.5 rounded-full text-xs font-semibold border transition-all ${
               !filterCategory ? 'bg-orange-500 text-white border-orange-500' : 'bg-white text-gray-600 border-gray-200 hover:border-orange-300 hover:text-orange-600'
             }`}>All Categories</button>
-          {CATEGORIES.map(cat => (
-            <button key={cat} onClick={() => setFilterCategory(cat === filterCategory ? '' : cat)}
+          {categories.map(cat => (
+            <button key={cat.id} onClick={() => setFilterCategory(cat.name === filterCategory ? '' : cat.name)}
               className={`px-4 py-1.5 rounded-full text-xs font-semibold border transition-all ${
-                filterCategory === cat ? 'bg-orange-500 text-white border-orange-500' : 'bg-white text-gray-600 border-gray-200 hover:border-orange-300 hover:text-orange-600'
-              }`}>{cat}</button>
+                filterCategory === cat.name ? 'bg-orange-500 text-white border-orange-500' : 'bg-white text-gray-600 border-gray-200 hover:border-orange-300 hover:text-orange-600'
+              }`}>{cat.name}</button>
           ))}
         </div>
 
@@ -319,7 +332,7 @@ export default function ExploreAdminPage() {
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filtered.map(item => (
-                <ExploreCard key={item.id} item={item} onDelete={() => handleDelete(item.id)} />
+                <ExploreCard key={item.id} item={item} onDelete={() => handleDelete(item.id)} categories={categories} />
               ))}
             </div>
             <p className="text-center text-xs text-gray-400">
