@@ -55,7 +55,7 @@ export async function PUT(
   try {
     const { id } = await params;
     const hotelId = parseInt(id);
-    if (isNaN(id)) {
+    if (isNaN(hotelId)) {
       return NextResponse.json({
         success: false,
         error: "Invalid ID",
@@ -132,7 +132,7 @@ export async function DELETE(
   try {
     const { id } = await params;
     const hotelId = parseInt(id);
-    if (isNaN(id)) {
+    if (isNaN(hotelId)) {
       return NextResponse.json({
         success: false,
         error: "Invalid ID",

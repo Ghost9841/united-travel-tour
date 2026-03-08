@@ -55,7 +55,7 @@ export async function PUT(
   try {
     const { id } = await params;
     const exploreId = parseInt(id);
-    if (isNaN(id)) {
+    if (isNaN(exploreId)) {
       return NextResponse.json({
         success: false,
         error: "Invalid ID",
@@ -125,11 +125,12 @@ export async function PUT(
 // DELETE /api/explore/[id] - Delete explore item
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse<ApiResponse<{ deleted: boolean }>>> {
   try {
-    const id = parseInt(params.id);
-    if (isNaN(id)) {
+    const { id } = await params;
+    const exploreId = parseInt(id);
+    if (isNaN(exploreId)) {
       return NextResponse.json({
         success: false,
         error: "Invalid ID",
@@ -137,7 +138,7 @@ export async function DELETE(
     }
 
     await prisma.explorePage.delete({
-      where: { id },
+      where: { id: exploreId },
     });
 
     return NextResponse.json({

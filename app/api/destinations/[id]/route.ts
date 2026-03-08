@@ -50,7 +50,7 @@ export async function PUT(
   try {
     const { id } = await params;
     const destinationId = Number(id);
-    if (isNaN(id)) {
+    if (isNaN(destinationId)) {
       return NextResponse.json(
         { success: false, data: undefined, error: 'Invalid destination ID' },
         { status: 400 }
@@ -114,7 +114,7 @@ export async function DELETE(
   try {
     const { id } = await params;
     const destinationId = Number(id);
-    if (isNaN(id)) {
+    if (isNaN(destinationId)) {
       return NextResponse.json(
         { success: false, data: null, error: 'Invalid destination ID' },
         { status: 400 }
