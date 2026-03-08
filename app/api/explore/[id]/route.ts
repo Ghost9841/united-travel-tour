@@ -11,10 +11,11 @@ interface ApiResponse<T> {
 // GET /api/explore/[id] - Get single explore item
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse<ApiResponse<ExplorePage>>> {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
+    const exploreId = parseInt(id);
     if (isNaN(id)) {
       return NextResponse.json({
         success: false,
@@ -23,7 +24,7 @@ export async function GET(
     }
 
     const explore = await prisma.explorePage.findUnique({
-      where: { id },
+      where: { id: exploreId },
     });
 
     if (!explore) {
@@ -49,10 +50,11 @@ export async function GET(
 // PUT /api/explore/[id] - Update explore item
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse<ApiResponse<ExplorePage>>> {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
+    const exploreId = parseInt(id);
     if (isNaN(id)) {
       return NextResponse.json({
         success: false,
@@ -79,7 +81,7 @@ export async function PUT(
 
     // Update explore item
     const updatedExplore = await prisma.explorePage.update({
-      where: { id },
+      where: { id: exploreId },
       data: {
         title: body.title,
         location: body.location,

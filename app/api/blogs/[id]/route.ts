@@ -10,10 +10,11 @@ interface ApiResponse<T> {
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse<ApiResponse<Blog>>> {
   try {
-    const id = Number(params.id);
+    const { id } = await params;
+    const blogId = Number(id);
     if (isNaN(id)) {
       return NextResponse.json(
         { success: false, data: undefined, error: 'Invalid blog ID' },
@@ -22,7 +23,7 @@ export async function GET(
     }
 
     const blog = await prisma.blog.findUnique({
-      where: { id },
+      where: { id: blogId },
     });
 
     if (!blog) {
@@ -47,11 +48,12 @@ export async function GET(
 
 export async function PUT(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse<ApiResponse<Blog>>> {
   try {
-    const id = Number(params.id);
-    if (isNaN(id)) {
+    const { id } = await params;
+    const blogId = Number(id);
+    if (isNaN(blogId)) {
       return NextResponse.json(
         { success: false, data: undefined, error: 'Invalid blog ID' },
         { status: 400 }
@@ -69,7 +71,7 @@ export async function PUT(
     }
 
     const blog = await prisma.blog.update({
-      where: { id },
+      where: { id: blogId },
       data: {
         title: body.title.trim(),
         excerpt: body.excerpt.trim(),
@@ -106,11 +108,12 @@ export async function PUT(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse<ApiResponse<null>>> {
   try {
-    const id = Number(params.id);
-    if (isNaN(id)) {
+    const { id } = await params;
+    const blogId = Number(id);
+    if (isNaN(blogId)) {
       return NextResponse.json(
         { success: false, data: null, error: 'Invalid blog ID' },
         { status: 400 }
@@ -118,7 +121,7 @@ export async function DELETE(
     }
 
     await prisma.blog.delete({
-      where: { id },
+      where: { id: blogId },
     });
 
     return NextResponse.json({

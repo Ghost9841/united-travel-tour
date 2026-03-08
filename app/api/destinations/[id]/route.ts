@@ -7,10 +7,11 @@ import { ApiResponse } from "../../types";
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse<ApiResponse<Destination>>> {
   try {
-    const id = Number(params.id);
+    const { id } = await params;
+    const destinationId = Number(id);
     if (isNaN(id)) {
       return NextResponse.json(
         { success: false, data: undefined, error: 'Invalid destination ID' },
@@ -19,7 +20,7 @@ export async function GET(
     }
 
     const destination = await prisma.destination.findUnique({
-      where: { id },
+      where: { id: destinationId },
     });
 
     if (!destination) {
@@ -44,10 +45,11 @@ export async function GET(
 
 export async function PUT(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse<ApiResponse<Destination>>> {
   try {
-    const id = Number(params.id);
+    const { id } = await params;
+    const destinationId = Number(id);
     if (isNaN(id)) {
       return NextResponse.json(
         { success: false, data: undefined, error: 'Invalid destination ID' },
@@ -66,7 +68,7 @@ export async function PUT(
     }
 
     const destination = await prisma.destination.update({
-      where: { id },
+      where: { id: destinationId },
       data: {
         name: body.name.trim(),
         country: body.country.trim(),
@@ -107,10 +109,11 @@ export async function PUT(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse<ApiResponse<null>>> {
   try {
-    const id = Number(params.id);
+    const { id } = await params;
+    const destinationId = Number(id);
     if (isNaN(id)) {
       return NextResponse.json(
         { success: false, data: null, error: 'Invalid destination ID' },
@@ -119,7 +122,7 @@ export async function DELETE(
     }
 
     await prisma.destination.delete({
-      where: { id },
+      where: { id: destinationId },
     });
 
     return NextResponse.json({

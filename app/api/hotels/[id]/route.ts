@@ -11,10 +11,11 @@ interface ApiResponse<T> {
 // GET /api/hotels/[id] - Get single hotel
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse<ApiResponse<Hotel>>> {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
+    const hotelId = parseInt(id);
     if (isNaN(id)) {
       return NextResponse.json({
         success: false,
@@ -23,7 +24,7 @@ export async function GET(
     }
 
     const hotel = await prisma.hotel.findUnique({
-      where: { id },
+      where: { id: hotelId },
     });
 
     if (!hotel) {
@@ -49,10 +50,11 @@ export async function GET(
 // PUT /api/hotels/[id] - Update hotel
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse<ApiResponse<Hotel>>> {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
+    const hotelId = parseInt(id);
     if (isNaN(id)) {
       return NextResponse.json({
         success: false,
@@ -81,7 +83,7 @@ export async function PUT(
 
     // Update hotel
     const updatedHotel = await prisma.hotel.update({
-      where: { id },
+      where: { id: hotelId },
       data: {
         name: body.name,
         location: body.location,
@@ -125,10 +127,11 @@ export async function PUT(
 // DELETE /api/hotels/[id] - Delete hotel
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse<ApiResponse<{ deleted: boolean }>>> {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
+    const hotelId = parseInt(id);
     if (isNaN(id)) {
       return NextResponse.json({
         success: false,
@@ -137,7 +140,7 @@ export async function DELETE(
     }
 
     await prisma.hotel.delete({
-      where: { id },
+      where: { id: hotelId },
     });
 
     return NextResponse.json({
