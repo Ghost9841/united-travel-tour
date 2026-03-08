@@ -110,3 +110,24 @@ model Destination {
 
   @@map("destinations")
 }
+
+model Blog {
+  id          Int      @id @default(autoincrement())
+  title       String
+  excerpt     String   @db.Text
+  content     String   @db.Text
+  image       String
+  author      String
+  date        String
+  readTime    String   @map("read_time")
+  category    String
+  status      String   @default("published") // 'published' or 'draft'
+  views       Int      @default(0)
+  likes       Int      @default(0)
+
+  // Timestamps
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("blogs")
+}

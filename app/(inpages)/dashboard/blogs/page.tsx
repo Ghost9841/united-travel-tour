@@ -4,18 +4,26 @@ import { useState, useEffect } from 'react';
 import { Search, Plus, MoreVertical, Eye, Heart, FileText, Edit, Trash2, X } from 'lucide-react';
 
 interface Blog {
-  id: string;
+  id: number;
   title: string;
-  description: string;
+  excerpt: string;
   content: string;
   author: string;
   category: string;
-  imageUrl?: string;
-  status?: 'published' | 'draft';
-  views?: number;
-  likes?: number;
+  image: string;
+  date: string;
+  readTime: string;
+  status: 'published' | 'draft';
+  views: number;
+  likes: number;
   createdAt: string;
   updatedAt: string;
+}
+
+interface ApiResponse<T> {
+  success: boolean;
+  data: T;
+  error?: string;
 }
 
 export default function BlogsDashboard() {
@@ -24,14 +32,14 @@ export default function BlogsDashboard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
-  const [showMenu, setShowMenu] = useState<string | null>(null);
+  const [showMenu, setShowMenu] = useState<number | null>(null);
   const [formData, setFormData] = useState({
     title: '',
-    description: '',
+    excerpt: '',
     content: '',
     author: '',
     category: '',
-    imageUrl: '',
+    image: '',
     status: 'published' as 'published' | 'draft',
   });
 
@@ -40,10 +48,16 @@ export default function BlogsDashboard() {
     try {
       setLoading(true);
       const response = await fetch('/api/blogs');
-      const data = await response.json();
-      setBlogs(data);
+      const data: ApiResponse<Blog[]> = await response.json();
+      if (data.success) {
+        setBlogs(data.data);
+      } else {
+        console.error('Failed to fetch blogs:', data.error);
+        setBlogs([]);
+      }
     } catch (error) {
       console.error('Error fetching blogs:', error);
+      setBlogs([]);
     } finally {
       setLoading(false);
     }
@@ -52,8 +66,8 @@ export default function BlogsDashboard() {
   // Create new blog - POST function
   const handleCreateBlog = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!formData.title || !formData.description || !formData.content) {
+
+    if (!formData.title || !formData.excerpt || !formData.content) {
       alert('Please fill in all required fields');
       return;
     }
@@ -67,23 +81,29 @@ export default function BlogsDashboard() {
         },
         body: JSON.stringify({
           ...formData,
+          date: new Date().toISOString().split('T')[0],
+          readTime: '5 min read',
           views: 0,
           likes: Math.floor(Math.random() * 200),
         }),
       });
 
-      const newBlog = await response.json();
-      setBlogs([...blogs, newBlog]);
-      setFormData({
-        title: '',
-        description: '',
-        content: '',
-        author: '',
-        category: '',
-        imageUrl: '',
-        status: 'published',
-      });
-      setShowCreateModal(false);
+      const result: ApiResponse<Blog> = await response.json();
+      if (result.success && result.data) {
+        setBlogs([result.data, ...blogs]);
+        setFormData({
+          title: '',
+          excerpt: '',
+          content: '',
+          author: '',
+          category: '',
+          image: '',
+          status: 'published',
+        });
+        setShowCreateModal(false);
+      } else {
+        alert('Failed to create blog: ' + (result.error || 'Unknown error'));
+      }
     } catch (error) {
       console.error('Error creating blog:', error);
       alert('Failed to create blog');
@@ -93,18 +113,21 @@ export default function BlogsDashboard() {
   };
 
   // Delete blog - DELETE function
-  const handleDeleteBlog = async (id: string) => {
+  const handleDeleteBlog = async (id: number) => {
     if (!confirm('Are you sure you want to delete this blog?')) {
       return;
     }
 
     try {
-      const response = await fetch(`/api/blogs?id=${id}`, {
+      const response = await fetch(`/api/blogs/${id}`, {
         method: 'DELETE',
       });
 
-      if (response.ok) {
+      const result: ApiResponse<null> = await response.json();
+      if (result.success) {
         setBlogs(blogs.filter((blog) => blog.id !== id));
+      } else {
+        alert('Failed to delete blog: ' + (result.error || 'Unknown error'));
       }
     } catch (error) {
       console.error('Error deleting blog:', error);
@@ -124,7 +147,7 @@ export default function BlogsDashboard() {
   // Filter blogs based on search
   const filteredBlogs = blogs.filter(blog =>
     blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    blog.description.toLowerCase().includes(searchQuery.toLowerCase())
+    blog.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   if (loading) {
@@ -235,10 +258,10 @@ export default function BlogsDashboard() {
               >
                 {/* Status Badge and Menu */}
                 <div className="relative">
-                  {blog.imageUrl ? (
+                  {blog.image ? (
                     <div className="h-48 overflow-hidden bg-gradient-to-br from-orange-100 to-amber-100">
                       <img
-                        src={blog.imageUrl}
+                        src={blog.image}
                         alt={blog.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         onError={(e) => {
@@ -296,7 +319,7 @@ export default function BlogsDashboard() {
                   </h3>
                   
                   <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-                    {blog.description}
+                    {blog.excerpt}
                   </p>
 
                   {/* Stats */}
@@ -388,8 +411,8 @@ export default function BlogsDashboard() {
                 </label>
                 <input
                   type="text"
-                  value={formData.imageUrl}
-                  onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+                  value={formData.image}
+                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   placeholder="https://example.com/image.jpg"
                 />
@@ -411,14 +434,14 @@ export default function BlogsDashboard() {
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Description *
+                  Excerpt *
                 </label>
                 <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  value={formData.excerpt}
+                  onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
                   rows={3}
-                  placeholder="Brief description"
+                  placeholder="Brief excerpt for the blog post"
                   required
                 />
               </div>
