@@ -75,7 +75,7 @@ export default function TravelDetailPage() {
   const descriptionParagraphs = travel.description ? travel.description.split('\n\n') : ['No description available.'];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/40 via-blue-700 to-orange-500">
+    <div className="min-h-screen bg-gradient-to-br from-primary/10 via-blue-300 to-orange-500">
       {/* Header Section */}
       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
