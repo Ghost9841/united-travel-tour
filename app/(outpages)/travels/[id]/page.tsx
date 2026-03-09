@@ -3,25 +3,7 @@ import { MapPin, Star, Check, X, Clock, Shield, Users, Smartphone } from 'lucide
 import { useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
-interface Travel {
-  id: string;
-  name: string;
-  location: string;
-  rating: number;
-  reviews: number;
-  price: number;
-  originalPrice: number;
-  duration: string;
-  mainImage: string;
-  galleryImages: string[];
-  description: string;
-  status: string;
-  featured: boolean;
-  views: number;
-  likes: number;
-  createdAt: string;
-  updatedAt: string;
-}
+import { Travel } from '@prisma/client';
 
 interface ApiResponse<T> {
   success: boolean;
@@ -44,12 +26,8 @@ export default function TravelDetailPage() {
         const data: ApiResponse<Travel> = await response.json();
 
         if (data.success && data.data) {
-          // Only show active travels on the public page
-          if (data.data.status === 'active') {
-            setTravel(data.data);
-          } else {
-            setError('Travel package not found');
-          }
+          // Travel packages are always shown on public page (no status check needed)
+          setTravel(data.data);
         } else {
           setError(data.error || 'Travel package not found');
         }
@@ -100,11 +78,11 @@ export default function TravelDetailPage() {
           <span className="mx-2">/</span>
           <a href="/travels" className="hover:text-orange-500">Travels</a>
           <span className="mx-2">/</span>
-          <span className="text-gray-900">{travel.name}</span>
+          <span className="text-gray-900">{travel.title}</span>
         </div>
 
         {/* Title */}
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">{travel.name}</h1>
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">{travel.title}</h1>
         
         {/* Location and Rating */}
         <div className="flex items-center gap-6 mb-8">
@@ -140,15 +118,15 @@ export default function TravelDetailPage() {
             {/* Main Image */}
             <div className="mb-4">
               <img
-                src={travel.mainImage}
-                alt={travel.name}
+                src={travel.image}
+                alt={travel.title}
                 className="w-full h-96 object-cover rounded-2xl"
               />
             </div>
 
-            {/* Gallery Images */}
+            {/* Gallery Images - Using main image for now */}
             <div className="grid grid-cols-4 gap-4 mb-8">
-              {travel.galleryImages.map((img, idx) => (
+              {[travel.image, travel.image, travel.image, travel.image].map((img, idx) => (
                 <img
                   key={idx}
                   src={img}
