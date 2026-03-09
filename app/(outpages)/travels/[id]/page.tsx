@@ -202,9 +202,11 @@ export default function TravelDetailPage() {
             <div className="bg-white rounded-2xl p-8 shadow-md mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Description</h2>
               <div className="space-y-4 text-gray-700 leading-relaxed">
-                {travel.description.split('\n\n').map((paragraph, idx) => (
+                {travel.description ? travel.description.split('\n\n').map((paragraph, idx) => (
                   <p key={idx}>{paragraph}</p>
-                ))}
+                )) : (
+                  <p>No description available.</p>
+                )}
               </div>
             </div>
 
