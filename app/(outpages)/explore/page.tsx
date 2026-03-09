@@ -1,6 +1,7 @@
 'use client'
 import { Search, MapPin, Calendar, Users, DollarSign, Star, Loader2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 interface Destination {
   id: number;
@@ -215,9 +216,10 @@ export default function ExplorePage() {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredDestinations.map((offer) => (
-                <div
+                <Link
                   key={offer.id}
-                  className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
+                  href={`/explore/${offer.id}`}
+                  className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 block"
                 >
                   {/* Image */}
                   <div className="relative h-72 overflow-hidden">
@@ -273,14 +275,16 @@ export default function ExplorePage() {
                           )}
                         </div>
                       </div>
-                      <a href="/booknow">
-                        <button className="px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors">
-                          BOOK NOW
-                        </button>
-                      </a>
+                      <div onClick={(e) => e.stopPropagation()}>
+                        <Link href="/booknow">
+                          <button className="px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors">
+                            BOOK NOW
+                          </button>
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
 
