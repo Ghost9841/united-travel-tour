@@ -4,7 +4,7 @@ import { Star, Zap } from 'lucide-react';
 const HeroSection = () => {
   return (
     <div className="relative h-[70vh] overflow-hidden ">
-      <div className="absolute inset-0 mt-14">
+      <div className="absolute inset-0 ">
         <img 
           src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1920&h=1080&fit=crop"
           alt="Travel Background"
