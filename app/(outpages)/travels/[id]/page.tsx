@@ -1,81 +1,114 @@
-'use client';
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { MapPin, Star, Check, X, Clock, Shield, Users, Smartphone, Calendar, Users2, Tag } from 'lucide-react';
-import { useParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { Travel } from '@prisma/client';
+import Link from 'next/link';
+import prisma from '@/app/lib/prisma';
 
+// Generate metadata for SEO and social sharing
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
 
+  try {
+    const travelId = Number(id);
+    if (isNaN(travelId)) {
+      return {
+        title: 'Travel Package Not Found | United Travel & Tours',
+        description: 'The travel package you are looking for could not be found.',
+      };
+    }
 
-interface ApiResponse {
-  success: boolean;
-  data?: {
-    travel: Travel;
-  };
-  error?: string;
+    const travel = await prisma.travel.findUnique({
+      where: { id: travelId },
+    });
+
+    if (!travel) {
+      return {
+        title: 'Travel Package Not Found | United Travel & Tours',
+        description: 'The travel package you are looking for could not be found.',
+      };
+    }
+
+    // Create description from travel data
+    const description = travel.description
+      ? travel.description.split('\n\n')[0]?.substring(0, 160) + '...'
+      : `Discover ${travel.title} in ${travel.location}. Book your dream vacation today!`;
+
+    const imageUrl = travel.image || '/unitedtravellogo300x300pxfull-01.svg';
+
+    return {
+      title: `${travel.title} | United Travel & Tours`,
+      description,
+      openGraph: {
+        title: travel.title,
+        description,
+        url: `https://www.unitedtravels.co.uk/travels/${travel.id}`,
+        siteName: 'United Travel & Tours',
+        images: [
+          {
+            url: imageUrl,
+            width: 1200,
+            height: 630,
+            alt: travel.title,
+          },
+        ],
+        locale: 'en_US',
+        type: 'website',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: travel.title,
+        description,
+        images: [imageUrl],
+      },
+      alternates: {
+        canonical: `https://www.unitedtravels.co.uk/travels/${travel.id}`,
+      },
+    };
+  } catch (error) {
+    console.error('Error generating metadata:', error);
+    return {
+      title: 'United Travel & Tours - A Travel Agency',
+      description: 'A Travel Agency for All The United Travel & Tours',
+    };
+  }
 }
 
-export default function TravelDetailPage() {
-  const params = useParams();
-  const id = params?.id as string;
-  const [travel, setTravel] = useState<Travel | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+// Fetch travel data server-side
+async function getTravel(id: string): Promise<Travel | null> {
+  try {
+    const travelId = Number(id);
+    if (isNaN(travelId)) return null;
 
-  useEffect(() => {
-    const fetchTravel = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(`/api/travels/${id}`);
-        const data: ApiResponse = await response.json();
+    const travel = await prisma.travel.findUnique({
+      where: { id: travelId },
+    });
 
-        if (data.success && data.data?.travel) {
-          setTravel(data.data.travel);
-        } else {
-          setError(data.error || 'Travel package not found');
-        }
-      } catch (err) {
-        setError('Failed to load travel package');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (id) {
-      fetchTravel();
-    }
-  }, [id]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-orange-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-orange-500 border-t-orange-200 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-orange-800 font-semibold">Loading travel package...</p>
-        </div>
-      </div>
-    );
+    return travel;
+  } catch (error) {
+    console.error('Error fetching travel:', error);
+    return null;
   }
+}
 
-  if (error || !travel) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Travel Package Not Found</h1>
-          <p className="text-gray-600 mb-6">{error || 'The travel package you\'re looking for doesn\'t exist.'}</p>
-          <Link href="/travels" className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-block">
-            Back to All Packages
-          </Link>
-        </div>
-      </div>
-    );
+interface TravelDetailPageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default async function TravelDetailPage({ params }: TravelDetailPageProps) {
+  const { id } = await params;
+  const travel = await getTravel(id);
+
+  if (!travel) {
+    notFound();
   }
 
   // Parse description paragraphs
   const descriptionParagraphs = travel.description ? travel.description.split('\n\n') : ['No description available.'];
 
   return (
-<div className="min-h-screen bg-gradient-to-b from-primary/10 via-blue-300 to-orange-500">      {/* Header Section */}
+    <div className="min-h-screen bg-gradient-to-b from-primary/10 via-blue-300 to-orange-500">
+      {/* Header Section */}
       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
         <div className="mb-6 text-sm text-gray-600 mt-20">
