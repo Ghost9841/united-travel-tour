@@ -36,7 +36,6 @@ export default function ExploreFormPage() {
   const [deleting, setDeleting] = useState(false);
   const [imagePreview, setImagePreview] = useState('');
   const [categories, setCategories] = useState<Category[]>([]);
-  const [locations, setLocations] = useState<string[]>([]);
   const [form, setForm] = useState({
     title: '',
     description: '',
@@ -53,14 +52,10 @@ export default function ExploreFormPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch categories and locations
-        const [categoriesRes, locationsRes] = await Promise.all([
-          fetch('/api/categories'),
-          fetch('/api/locations')
-        ]);
+        // Fetch categories
+        const categoriesRes = await fetch('/api/categories');
 
         const categoriesData = await categoriesRes.json();
-        const locationsData = await locationsRes.json();
 
         if (categoriesData.success) {
           setCategories(categoriesData.data);
@@ -68,9 +63,6 @@ export default function ExploreFormPage() {
           if (creating && categoriesData.data.length > 0 && !form.category) {
             setForm(prev => ({ ...prev, category: categoriesData.data[0].name }));
           }
-        }
-        if (locationsData.success) {
-          setLocations(locationsData.data);
         }
 
         // If creating new item, set loading to false
@@ -236,11 +228,14 @@ export default function ExploreFormPage() {
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">Location *</label>
                   <div className="relative">
                     <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-400" />
-                    <select value={form.location} onChange={e => set('location', e.target.value)} required
-                      className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm bg-white">
-                      <option value="">Select a location</option>
-                      {locations.map(location => <option key={location} value={location}>{location}</option>)}
-                    </select>
+                    <input
+                      type="text"
+                      value={form.location}
+                      onChange={e => set('location', e.target.value)}
+                      required
+                      placeholder="e.g., Lisbon, Portugal"
+                      className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+                    />
                   </div>
                   <p className="text-xs text-gray-400 mt-1">Used by frontend location filter — match country name (e.g., Portugal)</p>
                 </div>
