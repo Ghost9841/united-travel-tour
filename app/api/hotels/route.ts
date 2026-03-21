@@ -50,6 +50,22 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse<Hotel
       }, { status: 400 });
     }
 
+    // Prepare images array
+    const images = Array.isArray(body.images)
+      ? body.images
+      : body.images
+      ? String(body.images).split(',').map((url: string) => url.trim()).filter(Boolean)
+      : [];
+
+    // Ensure at least one image exists
+    if (images.length === 0 && body.image) {
+      images.push(String(body.image));
+    }
+
+    if (images.length === 0) {
+      images.push("https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop");
+    }
+
     // Create new hotel
     const newHotel = await prisma.hotel.create({
       data: {
@@ -60,7 +76,7 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse<Hotel
         originalPrice: body.originalPrice ? Number(body.originalPrice) : Math.round(Number(body.pricePerNight) * 1.3),
         rating: body.rating ? Number(body.rating) : 4.0,
         reviews: body.reviews ? Number(body.reviews) : 0,
-        image: body.image || "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop",
+        images,
         amenities: Array.isArray(body.amenities) ? body.amenities : [],
         roomType: body.roomType,
         capacity: body.capacity,

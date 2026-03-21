@@ -12,7 +12,7 @@ interface Hotel {
   originalPrice: number;
   rating: number;
   reviews: number;
-  image: string;
+  images: string[];
   amenities: string[];
   roomType: string;
   capacity: string;
@@ -109,8 +109,7 @@ export default function HotelsListingPage() {
               {/* Image */}
               <div className="relative h-64 overflow-hidden">
                 <img
-                  src={hotel.image}
-                  alt={hotel.name}
+                      src={hotel.images?.[0] ?? 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop'}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 

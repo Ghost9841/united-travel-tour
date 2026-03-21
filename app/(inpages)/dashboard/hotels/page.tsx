@@ -71,8 +71,8 @@ function HotelCard({ hotel, onDelete }: { hotel: HotelItem; onDelete: () => void
   return (
     <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 group">
       <div className="relative h-52 overflow-hidden">
-        {hotel.image ? (
-          <img src={hotel.image} alt={hotel.name}
+        {hotel.images && hotel.images.length > 0 ? (
+          <img src={hotel.images[0]} alt={hotel.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-orange-100 to-amber-100 flex items-center justify-center">

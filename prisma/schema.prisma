@@ -73,7 +73,7 @@ model Hotel {
   originalPrice Float
   rating        Float    @default(4.0)
   reviews       Int      @default(0)
-  image         String
+  images        String[] // Array of image URLs
   amenities     String[] // Array of amenity strings
   roomType      String
   capacity      String

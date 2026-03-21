@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       ? hotel.description.split('\n\n')[0]?.substring(0, 160) + '...'
       : `Book your stay at ${hotel.name} in ${hotel.location}. Luxury accommodation with excellent amenities!`;
 
-    const imageUrl = hotel.image || '/unitedtravellogo300x300pxfull-01.svg';
+    const imageUrl = (hotel.images && hotel.images.length > 0 ? hotel.images[0] : '/') || '/unitedtravellogo300x300pxfull-01.svg';
 
     return {
       title: `${hotel.name} | United Travel & Tours`,
@@ -152,19 +152,19 @@ export default async function HotelDetailPage({ params }: HotelDetailPageProps) 
             {/* Main Image */}
             <div className="mb-4">
               <img
-                src={hotel.image}
+                src={hotel.images && hotel.images.length > 0 ? hotel.images[0] : '/unitedtravellogo300x300pxfull-01.svg'}
                 alt={hotel.name}
                 className="w-full h-96 object-cover rounded-2xl"
               />
             </div>
 
-            {/* Gallery Images - Using variations of the main image */}
+            {/* Gallery Images */}
             <div className="grid grid-cols-4 gap-4 mb-8">
-              {[1, 2, 3, 4].map((idx) => (
+              {(hotel.images && hotel.images.length > 0 ? hotel.images.slice(0, 4) : ['/unitedtravellogo300x300pxfull-01.svg', '/unitedtravellogo300x300pxfull-01.svg', '/unitedtravellogo300x300pxfull-01.svg', '/unitedtravellogo300x300pxfull-01.svg']).map((image, idx) => (
                 <img
                   key={idx}
-                  src={hotel.image}
-                  alt={`Gallery ${idx}`}
+                  src={image}
+                  alt={`Gallery ${idx + 1}`}
                   className="w-full h-32 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
                 />
               ))}
