@@ -1,20 +1,28 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { auth } from '@clerk/nextjs/server'
+import { auth, currentUser } from '@clerk/nextjs/server'
 
 // Running in /app/(inpages) scope by folder-level `middleware.ts`
 // protects all children paths under /dashboard and similar.
 export default async function middleware(req: NextRequest) {
-  const { userId, user } = auth(req)
+  const { userId } = await auth()
 
-  if (!userId || !user) {
-    // redirect to login if not signed in
+  if (!userId) {
+    return NextResponse.redirect(new URL('/auth/login', req.url))
+  }
+
+  const user = await currentUser()
+
+  if (!user) {
     return NextResponse.redirect(new URL('/auth/login', req.url))
   }
 
   const role = user.publicMetadata?.role
-  const emails = process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',').map((email) => email.trim().toLowerCase()) || []
-  const isAdmin = role === 'admin' || emails.includes((user.emailAddresses?.[0]?.emailAddress || '').toLowerCase())
+  const emails =
+    process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',').map((e) => e.trim().toLowerCase()) || []
+  const isAdmin =
+    role === 'admin' ||
+    emails.includes((user.emailAddresses?.[0]?.emailAddress || '').toLowerCase())
 
   if (!isAdmin) {
     return NextResponse.redirect(new URL('/', req.url))
