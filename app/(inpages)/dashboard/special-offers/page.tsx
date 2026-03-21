@@ -4,76 +4,9 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Search, Plus, MoreVertical, Eye, Heart, Star, MapPin,
-  Trash2, Edit, Tag, DollarSign, FileText, Percent, Ticket,
+  Trash2, Edit, FileText, Percent, Ticket,
 } from 'lucide-react';
 
-interface SpecialOffer {
-  id: string;
-  title: string;
-  description: string;
-  location: string;
-  price: number;
-  discountedPrice: number;
-  image: string;
-  rating: number;
-  status: 'active' | 'draft';
-  views?: number;
-  likes?: number;
-  createdAt: string;
-}
-
-const MOCK: SpecialOffer[] = [
-  {
-    id: '1',
-    title: 'London ⇄ Kathmandu ⇄ London (Two Way)',
-    description: 'Fly London ⇄ Kathmandu ⇄ London with Qatar Airways from £900 (subject to availability). Includes 40KG baggage. Limited seats, so book early. Call 020 3725 3460 for dates, fare rules, and quick booking support. Terms apply.',
-    location: 'London, Kathmandu',
-    price: 1000, discountedPrice: 900, rating: 5,
-    image: '/2026/populardestination/ktmtolondon.jpeg',
-    status: 'active', views: 4200, likes: 980,
-    createdAt: new Date(Date.now() - 86400000 * 60).toISOString(),
-  },
-  {
-    id: '2',
-    title: 'London ⇄ Kathmandu',
-    description: 'Fly London ⇄ Kathmandu with Qatar Airways at promo fares from £370 (subject to availability). Enjoy a generous 40KG baggage allowance and smooth connections. Limited seats available, so book early.',
-    location: 'London, Kathmandu',
-    price: 400, discountedPrice: 370, rating: 5,
-    image: '/2026/populardestination/ktmtolondon_2.jpeg',
-    status: 'active', views: 6100, likes: 1420,
-    createdAt: new Date(Date.now() - 86400000 * 45).toISOString(),
-  },
-  {
-    id: '3',
-    title: 'Extra Add Luggage',
-    description: 'Need extra baggage for your flight? United Travels can help you add checked baggage fast and hassle-free. Avoid last-minute airport charges by arranging it in advance.',
-    location: '',
-    price: 0, discountedPrice: 0, rating: 5,
-    image: '/2026/populardestination/luggage.jpeg',
-    status: 'active', views: 2800, likes: 540,
-    createdAt: new Date(Date.now() - 86400000 * 30).toISOString(),
-  },
-  {
-    id: '4',
-    title: 'Fly Anywhere',
-    description: 'Planning to fly anywhere, with any airline? Contact United Travel and Tours Limited for fast, friendly help and great fares. We specialise in routes to India, Nepal, Pakistan, Bhutan, and Bangladesh.',
-    location: 'London',
-    price: 0, discountedPrice: 0, rating: 5,
-    image: '/2026/populardestination/udyoplane.jpeg',
-    status: 'active', views: 5300, likes: 1230,
-    createdAt: new Date(Date.now() - 86400000 * 20).toISOString(),
-  },
-  {
-    id: '5',
-    title: 'Venice Canal Escape',
-    description: 'Experience Venice\'s iconic canals with a premium stay, gondola ride, and breakfast included.',
-    location: 'Venice, Italy',
-    price: 1100, discountedPrice: 880, rating: 5,
-    image: 'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=800&h=600&fit=crop',
-    status: 'draft', views: 1900, likes: 420,
-    createdAt: new Date(Date.now() - 86400000 * 10).toISOString(),
-  },
-];
 
 function formatRelativeTime(date: Date) {
   const d = Math.floor((Date.now() - date.getTime()) / 86400000);
@@ -128,7 +61,6 @@ function OfferCard({ offer, onDelete }: { offer: SpecialOffer; onDelete: () => v
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
-        {/* Save badge */}
         {saving && saving > 0 && (
           <div className="absolute top-3 left-3">
             <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-sm">
@@ -136,8 +68,6 @@ function OfferCard({ offer, onDelete }: { offer: SpecialOffer; onDelete: () => v
             </span>
           </div>
         )}
-
-        {/* Discount % */}
         {discountPct && discountPct > 0 && (
           <div className="absolute top-3 left-24">
             <span className="bg-green-500 text-white px-2.5 py-1 rounded-full text-xs font-bold shadow-sm">
@@ -146,7 +76,6 @@ function OfferCard({ offer, onDelete }: { offer: SpecialOffer; onDelete: () => v
           </div>
         )}
 
-        {/* Status */}
         <div className="absolute bottom-3 left-3">
           <span className={`px-2.5 py-1 rounded-full text-xs font-semibold shadow-sm ${
             offer.status === 'active'
@@ -155,14 +84,12 @@ function OfferCard({ offer, onDelete }: { offer: SpecialOffer; onDelete: () => v
           }`}>{offer.status === 'active' ? 'Active' : 'Draft'}</span>
         </div>
 
-        {/* Rating */}
         <div className="absolute bottom-3 right-3 flex items-center gap-0.5 bg-white/95 backdrop-blur-sm rounded-full px-2.5 py-1 shadow-sm">
-          {[...Array(offer.rating)].map((_, i) => (
+          {[...Array(Math.round(offer.rating))].map((_, i) => (
             <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
           ))}
         </div>
 
-        {/* Menu */}
         <div className="absolute top-3 right-3">
           <div className="relative">
             <button onClick={() => setMenuOpen(o => !o)}
@@ -190,17 +117,14 @@ function OfferCard({ offer, onDelete }: { offer: SpecialOffer; onDelete: () => v
         <h3 className="text-base font-bold text-gray-900 line-clamp-1 group-hover:text-orange-500 transition-colors mb-1">
           {offer.title}
         </h3>
-
         {offer.location && (
           <div className="flex items-center gap-1 text-sm text-gray-500 mb-3">
             <MapPin className="w-3.5 h-3.5 text-orange-500" />
             {offer.location}
           </div>
         )}
-
         <p className="text-sm text-gray-600 line-clamp-2 mb-4">{offer.description}</p>
 
-        {/* Price */}
         <div className="flex items-center justify-between pt-3 border-t border-gray-100">
           {offer.discountedPrice > 0 ? (
             <div>
@@ -219,11 +143,10 @@ function OfferCard({ offer, onDelete }: { offer: SpecialOffer; onDelete: () => v
           )}
         </div>
 
-        {/* Stats footer */}
         <div className="flex items-center justify-between pt-3 mt-2 border-t border-gray-100 text-sm text-gray-400">
           <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1"><Eye className="w-3.5 h-3.5" />{formatNumber(offer.views ?? 0)}</span>
-            <span className="flex items-center gap-1"><Heart className="w-3.5 h-3.5" />{formatNumber(offer.likes ?? 0)}</span>
+            <span className="flex items-center gap-1"><Eye className="w-3.5 h-3.5" />{formatNumber(offer.views)}</span>
+            <span className="flex items-center gap-1"><Heart className="w-3.5 h-3.5" />{formatNumber(offer.likes)}</span>
           </div>
           <span className="text-xs">{formatRelativeTime(new Date(offer.createdAt))}</span>
         </div>
@@ -238,21 +161,35 @@ export default function SpecialOffersPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'draft'>('all');
 
-  useEffect(() => {
-    // Replace with: const res = await fetch('/api/special-offers'); const data = await res.json(); setOffers(data);
-    setTimeout(() => { setOffers(MOCK); setLoading(false); }, 600);
-  }, []);
+  const fetchOffers = async () => {
+    try {
+      const res = await fetch('/api/special-offers');
+      const data = await res.json();
+      if (data.success) setOffers(data.data);
+    } catch (err) {
+      console.error('Failed to fetch offers', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const handleDelete = async (id: string) => {
+  useEffect(() => { fetchOffers(); }, []);
+
+  const handleDelete = async (id: number) => {
     if (!confirm('Are you sure you want to delete this offer?')) return;
-    // Replace with: await fetch(`/api/special-offers/${id}`, { method: 'DELETE' });
-    setOffers(prev => prev.filter(o => o.id !== id));
+    try {
+      const res = await fetch(`/api/special-offers/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) setOffers(prev => prev.filter(o => o.id !== id));
+    } catch (err) {
+      console.error('Failed to delete offer', err);
+    }
   };
 
   const active = offers.filter(o => o.status === 'active').length;
-  const drafts = offers.filter(o => o.status === 'draft').length;
-  const totalLikes = offers.reduce((s, o) => s + (o.likes ?? 0), 0);
-  const totalSavings = offers.reduce((s, o) => s + Math.max(0, o.price - o.discountedPrice), 0);
+  const drafts  = offers.filter(o => o.status === 'draft').length;
+  const totalLikes    = offers.reduce((s, o) => s + (o.likes  ?? 0), 0);
+  const totalSavings  = offers.reduce((s, o) => s + Math.max(0, o.price - o.discountedPrice), 0);
 
   const filtered = offers.filter(o => {
     const q = searchQuery.toLowerCase();
@@ -299,10 +236,10 @@ export default function SpecialOffersPage() {
 
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard label="Active Offers"  value={active}                      icon={Ticket}    accent="bg-orange-50 text-orange-600" />
-          <StatCard label="Drafts"         value={drafts}                      icon={FileText}  accent="bg-amber-50 text-amber-600" />
-          <StatCard label="Total Savings"  value={`£${totalSavings}`}          icon={Percent}   accent="bg-green-50 text-green-600" />
-          <StatCard label="Total Likes"    value={formatNumber(totalLikes)}    icon={Heart}     accent="bg-red-50 text-red-500" />
+          <StatCard label="Active Offers" value={active}               icon={Ticket}   accent="bg-orange-50 text-orange-600" />
+          <StatCard label="Drafts"        value={drafts}               icon={FileText} accent="bg-amber-50 text-amber-600" />
+          <StatCard label="Total Savings" value={`£${totalSavings}`}  icon={Percent}  accent="bg-green-50 text-green-600" />
+          <StatCard label="Total Likes"   value={formatNumber(totalLikes)} icon={Heart} accent="bg-red-50 text-red-500" />
         </div>
 
         {/* Filter tabs */}

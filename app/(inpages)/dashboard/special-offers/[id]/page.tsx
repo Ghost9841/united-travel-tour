@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import {
-  ArrowLeft, Save, X, MapPin, DollarSign,
+  ArrowLeft, Save, X, MapPin,
   Image as ImageIcon, Star, Trash2, Ticket,
 } from 'lucide-react';
 import {
@@ -16,51 +16,53 @@ import { toast } from 'sonner';
 const isNew = (id: string) => id === 'new';
 
 export default function SpecialOfferFormPage() {
-  const router = useRouter();
-  const params = useParams();
-  const id = params.id as string;
+  const router  = useRouter();
+  const params  = useParams();
+  const id      = params.id as string;
   const creating = isNew(id);
 
-  const [loading, setLoading] = useState(!creating);
-  const [saving, setSaving] = useState(false);
+  const [loading,  setLoading]  = useState(!creating);
+  const [saving,   setSaving]   = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [imagePreview, setImagePreview] = useState('');
+
   const [form, setForm] = useState({
-    title: '',
-    description: '',
-    location: '',
-    price: '',
+    title:           '',
+    description:     '',
+    location:        '',
+    price:           '',
     discountedPrice: '',
-    image: '',
-    rating: 5,
-    status: 'active' as 'active' | 'draft',
+    image:           '',
+    rating:          5,
+    status:          'active' as 'active' | 'draft',
   });
 
+  // Load existing offer when editing
   useEffect(() => {
     if (creating) return;
     (async () => {
       try {
-        const res = await fetch(`/api/special-offers/${id}`);
+        const res  = await fetch(`/api/special-offers/${id}`);
         const data = await res.json();
         if (data.success && data.data) {
-          const o = data.data.offer ?? data.data;
+          const o = data.data;
           setForm({
-            title: o.title ?? '',
-            description: o.description ?? '',
-            location: o.location ?? '',
-            price: o.price?.toString() ?? '',
+            title:           o.title           ?? '',
+            description:     o.description     ?? '',
+            location:        o.location        ?? '',
+            price:           o.price?.toString()           ?? '',
             discountedPrice: o.discountedPrice?.toString() ?? '',
-            image: o.image ?? '',
-            rating: o.rating ?? 5,
-            status: o.status ?? 'active',
+            image:           o.image           ?? '',
+            rating:          o.rating          ?? 5,
+            status:          o.status          ?? 'active',
           });
           setImagePreview(o.image ?? '');
         } else {
-          toast('Error', { description: 'Offer not found' });
+          toast.error('Offer not found');
           router.push('/dashboard/special-offers');
         }
       } catch {
-        toast('Error', { description: 'Failed to load offer' });
+        toast.error('Failed to load offer');
       } finally {
         setLoading(false);
       }
@@ -69,7 +71,7 @@ export default function SpecialOfferFormPage() {
 
   const set = (k: string, v: unknown) => setForm(p => ({ ...p, [k]: v }));
 
-  const saving$ = Number(form.price) > 0
+  const saving$    = Number(form.price) > 0
     ? Number(form.price) - Number(form.discountedPrice)
     : 0;
   const discountPct = Number(form.price) > 0 && Number(form.discountedPrice) > 0
@@ -82,26 +84,26 @@ export default function SpecialOfferFormPage() {
     try {
       const body = {
         ...form,
-        price: Number(form.price),
+        price:           Number(form.price),
         discountedPrice: Number(form.discountedPrice),
       };
       const res = await fetch(
         creating ? '/api/special-offers' : `/api/special-offers/${id}`,
         {
-          method: creating ? 'POST' : 'PUT',
+          method:  creating ? 'POST' : 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body),
+          body:    JSON.stringify(body),
         }
       );
       const data = await res.json();
       if (data.success) {
-        toast('Success!', { description: creating ? 'Offer created.' : 'Offer updated.' });
+        toast.success(creating ? 'Offer created.' : 'Offer updated.');
         router.push('/dashboard/special-offers');
       } else {
-        toast('Error', { description: data.error ?? 'Something went wrong.' });
+        toast.error(data.error ?? 'Something went wrong.');
       }
     } catch {
-      toast('Error', { description: 'Something went wrong.' });
+      toast.error('Something went wrong.');
     } finally {
       setSaving(false);
     }
@@ -110,16 +112,16 @@ export default function SpecialOfferFormPage() {
   const handleDelete = async () => {
     setDeleting(true);
     try {
-      const res = await fetch(`/api/special-offers/${id}`, { method: 'DELETE' });
+      const res  = await fetch(`/api/special-offers/${id}`, { method: 'DELETE' });
       const data = await res.json();
       if (data.success) {
-        toast('Success!', { description: 'Offer deleted.' });
+        toast.success('Offer deleted.');
         router.push('/dashboard/special-offers');
       } else {
-        toast('Error', { description: data.error ?? 'Failed to delete.' });
+        toast.error(data.error ?? 'Failed to delete.');
       }
     } catch {
-      toast('Error', { description: 'Something went wrong.' });
+      toast.error('Something went wrong.');
     } finally {
       setDeleting(false);
     }
@@ -264,7 +266,7 @@ export default function SpecialOfferFormPage() {
             {Number(form.price) === 0 && Number(form.discountedPrice) === 0 && (
               <div className="mt-4 p-3 bg-gray-50 rounded-xl border border-gray-100">
                 <p className="text-sm text-gray-500 text-center">
-                  💬 This offer will show <strong>"Contact for price"</strong> on the frontend
+                  💬 This offer will show <strong>&quot;Contact for price&quot;</strong> on the frontend
                 </p>
               </div>
             )}
@@ -288,7 +290,8 @@ export default function SpecialOfferFormPage() {
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
             <h2 className="text-lg font-bold text-gray-900 mb-1">Offer Image</h2>
             <p className="text-sm text-gray-500 mb-5">
-              Use a URL or a local path (e.g. <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs">/2026/populardestination/ktmtolondon.jpeg</code>)
+              Use a URL or a local path (e.g.{' '}
+              <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs">/2026/populardestination/ktmtolondon.jpeg</code>)
             </p>
             <div className="relative">
               <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -333,7 +336,10 @@ export default function SpecialOfferFormPage() {
             </Link>
             <button type="submit" disabled={saving}
               className="flex items-center gap-2 bg-orange-500 text-white px-8 py-3 rounded-xl hover:bg-orange-600 disabled:opacity-50 transition-all font-semibold shadow-md text-sm">
-              {saving ? 'Saving...' : (<><Save className="w-4 h-4" />{creating ? 'Create Offer' : 'Save Changes'}</>)}
+              {saving
+                ? 'Saving...'
+                : (<><Save className="w-4 h-4" />{creating ? 'Create Offer' : 'Save Changes'}</>)
+              }
             </button>
           </div>
         </form>

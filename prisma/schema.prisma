@@ -131,3 +131,22 @@ model Blog {
 
   @@map("blogs")
 }
+
+model SpecialOffer {
+  id              Int      @id @default(autoincrement())
+  title           String
+  description     String   @db.Text
+  location        String   @default("")
+  price           Float    @default(0)
+  discountedPrice Float    @default(0)  @map("discounted_price")
+  image           String   @default("")
+  rating          Float    @default(5)
+  status          String   @default("active") // 'active' or 'draft'
+  views           Int      @default(0)
+  likes           Int      @default(0)
+
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt      @map("updated_at")
+
+  @@map("special_offers")
+}
