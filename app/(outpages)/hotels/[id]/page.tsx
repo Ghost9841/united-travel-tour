@@ -1,77 +1,106 @@
-'use client';
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { MapPin, Star, Check, X, Wifi, Coffee, Car, Dumbbell, Users, Clock, Shield, Smartphone } from 'lucide-react';
-import { useParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { Hotel } from '@prisma/client';
+import Link from 'next/link';
+import { prisma } from '@/lib/prisma';
 
-type Hotel = {
-  id: number;
-  name: string;
-  location: string;
-  description: string;
-  pricePerNight: number;
-  originalPrice: number;
-  rating: number;
-  reviews: number;
-  image: string;
-  amenities: string[];
-  roomType: string;
-  capacity: string;
-};
+// Generate metadata for SEO and social sharing
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
 
-export default function HotelDetailPage() {
-  const params = useParams();
-  const id = params?.id as string;
-  const [hotel, setHotel] = useState<Hotel | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchHotel = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(`/api/hotels/${id}`);
-        const data = await response.json();
-
-        if (data.success && data.data) {
-          setHotel(data.data);
-        } else {
-          setError(data.error || 'Hotel not found');
-        }
-      } catch (err) {
-        setError('Failed to load hotel');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (id) {
-      fetchHotel();
+  try {
+    const hotelId = Number(id);
+    if (isNaN(hotelId)) {
+      return {
+        title: 'Hotel Not Found | United Travel & Tours',
+        description: 'The hotel you are looking for could not be found.',
+      };
     }
-  }, [id]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-orange-500 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-white border-t-orange-300 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white font-semibold">Loading hotel details...</p>
-        </div>
-      </div>
-    );
+    const hotel = await prisma.hotel.findUnique({
+      where: { id: hotelId },
+    });
+
+    if (!hotel) {
+      return {
+        title: 'Hotel Not Found | United Travel & Tours',
+        description: 'The hotel you are looking for could not be found.',
+      };
+    }
+
+    // Create description from hotel data
+    const description = hotel.description
+      ? hotel.description.split('\n\n')[0]?.substring(0, 160) + '...'
+      : `Book your stay at ${hotel.name} in ${hotel.location}. Luxury accommodation with excellent amenities!`;
+
+    const imageUrl = hotel.image || '/unitedtravellogo300x300pxfull-01.svg';
+
+    return {
+      title: `${hotel.name} | United Travel & Tours`,
+      description,
+      openGraph: {
+        title: hotel.name,
+        description,
+        url: `https://www.unitedtravels.co.uk/hotels/${hotel.id}`,
+        siteName: 'United Travel & Tours',
+        images: [
+          {
+            url: imageUrl,
+            width: 1200,
+            height: 630,
+            alt: hotel.name,
+          },
+        ],
+        locale: 'en_US',
+        type: 'website',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: hotel.name,
+        description,
+        images: [imageUrl],
+      },
+      alternates: {
+        canonical: `https://www.unitedtravels.co.uk/hotels/${hotel.id}`,
+      },
+    };
+  } catch (error) {
+    console.error('Error generating metadata:', error);
+    return {
+      title: 'United Travel & Tours - A Travel Agency',
+      description: 'A Travel Agency for All The United Travel & Tours',
+    };
   }
+}
 
-  if (error || !hotel) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Hotel Not Found</h1>
-          <p className="text-gray-600 mb-6">{error || 'The hotel you\'re looking for doesn\'t exist.'}</p>
-          <a href="/hotels" className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
-            Back to All Hotels
-          </a>
-        </div>
-      </div>
-    );
+// Fetch hotel data server-side
+async function getHotel(id: string): Promise<Hotel | null> {
+  try {
+    const hotelId = Number(id);
+    if (isNaN(hotelId)) return null;
+
+    const hotel = await prisma.hotel.findUnique({
+      where: { id: hotelId },
+    });
+
+    return hotel;
+  } catch (error) {
+    console.error('Error fetching hotel:', error);
+    return null;
+  }
+}
+
+interface HotelDetailPageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default async function HotelDetailPage({ params }: HotelDetailPageProps) {
+  const { id } = await params;
+  const hotel = await getHotel(id);
+
+  if (!hotel) {
+    notFound();
   }
 
   return (

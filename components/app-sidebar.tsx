@@ -55,7 +55,7 @@ const mainItems = [
   { title: "Explore", url: "/dashboard/explore", icon: Package },
   { title: "Travels", url: "/dashboard/travels", icon: Plane },
   { title: "Hotels", url: "/dashboard/hotels", icon: Hotel },
-  { title: "Blogs", url: "/dashboard/blogs", icon: FileText },
+  { title: "Offers", url: "/dashboard/offers", icon: FileText },
   { title: "Destination", url: "/dashboard/destinations", icon: MapPinHouse },
 ]
 

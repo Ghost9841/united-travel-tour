@@ -1,92 +1,106 @@
-'use client';
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { MapPin, Star, Check, X, Clock, Shield, Users, Smartphone, Calendar, Users2, Tag, Eye } from 'lucide-react';
-import { useParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { ExplorePage } from '@prisma/client';
 import Link from 'next/link';
+import { prisma } from '@/lib/prisma';
 
-interface ExplorePage {
-  id: number;
-  title: string;
-  description: string;
-  location: string;
-  price: number;
-  discountedPrice: number;
-  duration: string;
-  status: string;
-  rating: number;
-  views: number;
-  likes: number;
-  image: string;
-  category: string;
-  createdAt: string;
-  updatedAt: string;
-}
+// Generate metadata for SEO and social sharing
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
 
-interface ApiResponse {
-  success: boolean;
-  data?: ExplorePage;
-  error?: string;
-}
-
-export default function ExploreDetailPage() {
-  const params = useParams();
-  const id = params?.id as string;
-  const [explore, setExplore] = useState<ExplorePage | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchExplore = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(`/api/explore/${id}`);
-        const data: ApiResponse = await response.json();
-
-        if (data.success && data.data) {
-          // Only show active explore items on the public page
-          if (data.data.status === 'active') {
-            setExplore(data.data);
-          } else {
-            setError('Explore item not found');
-          }
-        } else {
-          setError(data.error || 'Explore item not found');
-        }
-      } catch (err) {
-        setError('Failed to load explore item');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (id) {
-      fetchExplore();
+  try {
+    const exploreId = Number(id);
+    if (isNaN(exploreId)) {
+      return {
+        title: 'Explore Item Not Found | United Travel & Tours',
+        description: 'The explore item you are looking for could not be found.',
+      };
     }
-  }, [id]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-primary/40 via-blue-700 to-orange-500 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-white border-t-orange-300 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white font-semibold">Loading explore item...</p>
-        </div>
-      </div>
-    );
+    const explore = await prisma.explorePage.findUnique({
+      where: { id: exploreId },
+    });
+
+    if (!explore) {
+      return {
+        title: 'Explore Item Not Found | United Travel & Tours',
+        description: 'The explore item you are looking for could not be found.',
+      };
+    }
+
+    // Create description from explore data
+    const description = explore.description
+      ? explore.description.split('\n\n')[0]?.substring(0, 160) + '...'
+      : `Discover ${explore.title} in ${explore.location}. An amazing experience awaits!`;
+
+    const imageUrl = explore.image || '/unitedtravellogo300x300pxfull-01.svg';
+
+    return {
+      title: `${explore.title} | United Travel & Tours`,
+      description,
+      openGraph: {
+        title: explore.title,
+        description,
+        url: `https://www.unitedtravels.co.uk/explore/${explore.id}`,
+        siteName: 'United Travel & Tours',
+        images: [
+          {
+            url: imageUrl,
+            width: 1200,
+            height: 630,
+            alt: explore.title,
+          },
+        ],
+        locale: 'en_US',
+        type: 'website',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: explore.title,
+        description,
+        images: [imageUrl],
+      },
+      alternates: {
+        canonical: `https://www.unitedtravels.co.uk/explore/${explore.id}`,
+      },
+    };
+  } catch (error) {
+    console.error('Error generating metadata:', error);
+    return {
+      title: 'United Travel & Tours - A Travel Agency',
+      description: 'A Travel Agency for All The United Travel & Tours',
+    };
   }
+}
 
-  if (error || !explore) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-primary/40 via-blue-700 to-orange-500 flex items-center justify-center">
-        <div className="text-center bg-white/90 backdrop-blur-sm p-8 rounded-2xl shadow-xl max-w-md">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Explore Item Not Found</h1>
-          <p className="text-gray-600 mb-6">{error || 'The explore item you\'re looking for doesn\'t exist.'}</p>
-          <Link href="/explore" className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-block">
-            Back to Explore
-          </Link>
-        </div>
-      </div>
-    );
+// Fetch explore data server-side
+async function getExplore(id: string): Promise<ExplorePage | null> {
+  try {
+    const exploreId = Number(id);
+    if (isNaN(exploreId)) return null;
+
+    const explore = await prisma.explorePage.findUnique({
+      where: { id: exploreId },
+    });
+
+    return explore;
+  } catch (error) {
+    console.error('Error fetching explore:', error);
+    return null;
+  }
+}
+
+interface ExploreDetailPageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default async function ExploreDetailPage({ params }: ExploreDetailPageProps) {
+  const { id } = await params;
+  const explore = await getExplore(id);
+
+  if (!explore) {
+    notFound();
   }
 
   // Parse description paragraphs

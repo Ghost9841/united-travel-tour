@@ -1,94 +1,106 @@
-'use client';
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { MapPin, Star, Check, X, Clock, Shield, Users, Smartphone, Plane, Hotel } from 'lucide-react';
-import { useParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { Destination } from '@prisma/client';
+import Link from 'next/link';
+import { prisma } from '@/lib/prisma';
 
-type Destination = {
-  id: number;
-  name: string;
-  country: string;
-  description: string;
-  image: string;
-  price: number;
-  originalPrice: number;
-  rating: number;
-  reviews: number;
-  duration: string;
-  groupSize: string;
-  category: string;
-  status: 'active' | 'draft';
-  featured: boolean;
-  views: number;
-  likes: number;
-  createdAt: string;
-  updatedAt: string;
-};
+// Generate metadata for SEO and social sharing
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
 
-interface ApiResponse<T> {
-  success: boolean;
-  data?: T;
-  error?: string;
+  try {
+    const destinationId = Number(id);
+    if (isNaN(destinationId)) {
+      return {
+        title: 'Destination Not Found | United Travel & Tours',
+        description: 'The destination you are looking for could not be found.',
+      };
+    }
+
+    const destination = await prisma.destination.findUnique({
+      where: { id: destinationId },
+    });
+
+    if (!destination) {
+      return {
+        title: 'Destination Not Found | United Travel & Tours',
+        description: 'The destination you are looking for could not be found.',
+      };
+    }
+
+    // Create description from destination data
+    const description = destination.description
+      ? destination.description.split('\n\n')[0]?.substring(0, 160) + '...'
+      : `Explore ${destination.name} in ${destination.country}. Discover amazing places and create unforgettable memories!`;
+
+    const imageUrl = destination.image || '/unitedtravellogo300x300pxfull-01.svg';
+
+    return {
+      title: `${destination.name} | United Travel & Tours`,
+      description,
+      openGraph: {
+        title: destination.name,
+        description,
+        url: `https://www.unitedtravels.co.uk/destinations/${destination.id}`,
+        siteName: 'United Travel & Tours',
+        images: [
+          {
+            url: imageUrl,
+            width: 1200,
+            height: 630,
+            alt: destination.name,
+          },
+        ],
+        locale: 'en_US',
+        type: 'website',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: destination.name,
+        description,
+        images: [imageUrl],
+      },
+      alternates: {
+        canonical: `https://www.unitedtravels.co.uk/destinations/${destination.id}`,
+      },
+    };
+  } catch (error) {
+    console.error('Error generating metadata:', error);
+    return {
+      title: 'United Travel & Tours - A Travel Agency',
+      description: 'A Travel Agency for All The United Travel & Tours',
+    };
+  }
 }
 
-export default function DestinationDetailPage() {
-  const params = useParams();
-  const id = params?.id as string;
-  const [destination, setDestination] = useState<Destination | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+// Fetch destination data server-side
+async function getDestination(id: string): Promise<Destination | null> {
+  try {
+    const destinationId = Number(id);
+    if (isNaN(destinationId)) return null;
 
-  useEffect(() => {
-    const fetchDestination = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(`/api/destinations/${id}`);
-        const data: ApiResponse<Destination> = await response.json();
+    const destination = await prisma.destination.findUnique({
+      where: { id: destinationId },
+    });
 
-        if (data.success && data.data) {
-          // Only show active destinations on the public page
-          if (data.data.status === 'active') {
-            setDestination(data.data);
-          } else {
-            setError('Destination not found');
-          }
-        } else {
-          setError(data.error || 'Destination not found');
-        }
-      } catch (err) {
-        setError('Failed to load destination');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (id) {
-      fetchDestination();
-    }
-  }, [id]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-orange-500 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-white border-t-orange-300 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white font-semibold">Loading destination details...</p>
-        </div>
-      </div>
-    );
+    return destination;
+  } catch (error) {
+    console.error('Error fetching destination:', error);
+    return null;
   }
+}
 
-  if (error || !destination) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Destination Not Found</h1>
-          <p className="text-gray-600 mb-6">{error || 'The destination you\'re looking for doesn\'t exist.'}</p>
-          <a href="/destinations" className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
-            Back to All Destinations
-          </a>
-        </div>
-      </div>
-    );
+interface DestinationDetailPageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default async function DestinationDetailPage({ params }: DestinationDetailPageProps) {
+  const { id } = await params;
+  const destination = await getDestination(id);
+
+  if (!destination) {
+    notFound();
   }
 
   return (

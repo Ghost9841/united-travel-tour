@@ -20,17 +20,6 @@ interface ApiResponse<T> {
   error?: string;
 }
 
-const categories = [
-  "All Posts",
-  "Travel Tips",
-  "Destination Guides",
-  "Food & Culture",
-  "Budget Travel",
-  "Travel Planning",
-  "Photography",
-  "Family Travel",
-  "Sustainable Travel"
-];
 
 export default function BlogsPage() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -90,24 +79,7 @@ export default function BlogsPage() {
 
       {/* Main Content */}
       <div className="max-w-8xl mx-auto px-6 py-12">
-        {/* Categories Filter */}
-        <div className="mb-12">
-          <div className="flex flex-wrap gap-3">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-full font-medium transition-colors ${
-                  selectedCategory === category
-                    ? 'bg-orange-500 text-white'
-                    : 'bg-white text-gray-700 hover:bg-orange-50 border border-gray-200'
-                }`}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-        </div>
+       
 
         {/* Featured Post */}
         {featuredPost && (
