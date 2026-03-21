@@ -193,7 +193,7 @@ export default function OffersPage() {
                     <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                       <div className="flex items-center gap-1 text-sm text-gray-500">
                         <Clock className="w-4 h-4" />
-                        <span>{post.readTime}</span>
+                        <span>{offer.readTime}</span>
                       </div>
 
                       <div className="flex items-center text-orange-500 font-semibold text-sm group-hover:gap-2 transition-all">
