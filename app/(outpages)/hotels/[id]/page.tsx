@@ -2,8 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { MapPin, Star, Check, X, Wifi, Coffee, Car, Dumbbell, Users, Clock, Shield, Smartphone } from 'lucide-react';
 import { Hotel } from '@prisma/client';
-import Link from 'next/link';
-import { prisma } from '@/lib/prisma';
+import prisma from '@/app/lib/prisma';
 
 // Generate metadata for SEO and social sharing
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
