@@ -41,14 +41,7 @@ const BUDGET_RANGES = [
   { value: "custom", label: "Custom Budget" }
 ];
 
-const TRAVEL_TYPES = [
-  { value: "leisure", label: "Leisure / Vacation", icon: "🏖️" },
-  { value: "business", label: "Business", icon: "💼" },
-  { value: "honeymoon", label: "Honeymoon", icon: "💑" },
-  { value: "family", label: "Family Trip", icon: "👨‍👩‍👧‍👦" },
-  { value: "adventure", label: "Adventure", icon: "🧗" },
-  { value: "cruise", label: "Cruise", icon: "🚢" }
-];
+
 
 export default function ModernBookNow() {
   const form = useRef<HTMLFormElement>(null);
@@ -209,29 +202,7 @@ export default function ModernBookNow() {
                 </div>
 
                 <form ref={form} onSubmit={sendEmail} className="p-8">
-                  {/* Travel Type Selection */}
-                  <div className="mb-10">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                      <span>🎯</span> What type of trip are you planning?
-                    </h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                      {TRAVEL_TYPES.map((type) => (
-                        <button
-                          key={type.value}
-                          type="button"
-                          onClick={() => setSelectedType(type.value)}
-                          className={`p-4 rounded-xl border-2 transition-all duration-300 text-center ${
-                            selectedType === type.value
-                              ? 'border-blue-500 bg-blue-50 transform scale-105 shadow-md'
-                              : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                          }`}
-                        >
-                          <div className="text-2xl mb-2">{type.icon}</div>
-                          <div className="text-sm font-medium text-gray-700">{type.label}</div>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                 
 
                   {/* Form Sections */}
                   <div className="space-y-8">
@@ -374,33 +345,7 @@ export default function ModernBookNow() {
                           </div>
                         </div>
 
-                        <div>
-                          <label htmlFor="budget" className="block text-sm font-medium text-gray-700 mb-2">
-                            Budget Range (Per Person)
-                          </label>
-                          <div className="relative">
-                            <select
-                              name="budget"
-                              id="budget"
-                              value={formData.budget}
-                              onChange={handleInputChange}
-                              className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none bg-white appearance-none"
-                            >
-                              <option value="">Select budget range</option>
-                              {BUDGET_RANGES.map((range) => (
-                                <option key={range.value} value={range.value}>
-                                  {range.label}
-                                </option>
-                              ))}
-                            </select>
-                            <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                              💷
-                            </div>
-                            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
-                              ▼
-                            </div>
-                          </div>
-                        </div>
+                    
 
                         <div>
                           <label htmlFor="departure_date" className="block text-sm font-medium text-gray-700 mb-2">
