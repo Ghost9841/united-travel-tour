@@ -159,12 +159,6 @@ export default function OffersDetailPage() {
             <button className="w-10 h-10 rounded-full bg-gray-100 hover:bg-blue-600 hover:text-white flex items-center justify-center transition-colors">
               <Facebook className="w-5 h-5" />
             </button>
-            <button className="w-10 h-10 rounded-full bg-gray-100 hover:bg-sky-500 hover:text-white flex items-center justify-center transition-colors">
-              <Twitter className="w-5 h-5" />
-            </button>
-            <button className="w-10 h-10 rounded-full bg-gray-100 hover:bg-blue-700 hover:text-white flex items-center justify-center transition-colors">
-              <Linkedin className="w-5 h-5" />
-            </button>
           </div>
         </div>
 
