@@ -139,12 +139,6 @@ export default function HotelsListingPage() {
                     <MapPin className="w-4 h-4 text-orange-500" />
                     <span className="text-sm font-medium">{hotel.location}</span>
                   </div>
-                  
-                  <div className="flex items-center gap-1">
-                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    <span className="font-semibold text-gray-900">{hotel.rating}</span>
-                    <span className="text-sm text-gray-500">({hotel.reviews})</span>
-                  </div>
                 </div>
 
                 {/* Title */}

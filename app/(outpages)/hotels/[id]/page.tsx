@@ -103,7 +103,11 @@ export default async function HotelDetailPage({ params }: HotelDetailPageProps) 
   }
 
   return (
-    <div className="min-h-screen bg-orange-500">
+<div className="min-h-screen bg-orange-500 relative overflow-hidden">
+  {/* Animated shapes */}
+  <div className="absolute top-0 left-0 w-96 h-96 bg-orange-400 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob" />
+  <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-400 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000" />
+    <div className="relative z-10">
       {/* Header Section */}
       <div className="max-w-8xl mx-auto px-6 py-8">
         {/* Breadcrumb */}
@@ -126,23 +130,6 @@ export default async function HotelDetailPage({ params }: HotelDetailPageProps) 
           </div>
           
           <div className="h-6 w-px bg-gray-300" />
-          
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`w-5 h-5 ${
-                    i < Math.floor(hotel.rating)
-                      ? 'fill-yellow-400 text-yellow-400'
-                      : 'text-gray-300'
-                  }`}
-                />
-              ))}
-            </div>
-            <span className="font-semibold text-gray-900">{hotel.rating}</span>
-            <span className="text-gray-500">({hotel.reviews} reviews)</span>
-          </div>
         </div>
 
         {/* Main Content Grid */}
@@ -425,6 +412,7 @@ export default async function HotelDetailPage({ params }: HotelDetailPageProps) 
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
