@@ -600,25 +600,7 @@ export default function ModernBookNow() {
                 </div>
               </div>
 
-              {/* Trust Badges */}
-              <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200">
-                <h4 className="font-semibold text-gray-900 mb-4 text-center">Trusted By</h4>
-                <div className="grid grid-cols-2 gap-4">
-                  {[
-                    { label: "⭐ 4.9/5 Rating", color: "from-yellow-500 to-yellow-600" },
-                    { label: "🔒 SSL Secure", color: "from-green-500 to-green-600" },
-                    { label: "🎖️ 15+ Years", color: "from-blue-500 to-blue-600" },
-                    { label: "👥 50k+ Clients", color: "from-purple-500 to-purple-600" }
-                  ].map((badge, index) => (
-                    <div
-                      key={index}
-                      className={`bg-gradient-to-r ${badge.color} text-white text-center py-3 rounded-xl font-medium`}
-                    >
-                      {badge.label}
-                    </div>
-                  ))}
-                </div>
-              </div>
+            
             </div>
           </div>
         </div>

@@ -217,7 +217,7 @@ const ContactPage = () => {
               
               <div className="flex items-center gap-4">
                 <a
-                  href="#"
+                  href="https://www.facebook.com/unitedtravel2025"
                   aria-label="Facebook"
                   className="bg-gray-100 p-3 rounded-lg hover:bg-blue-100 hover:text-blue-600 transition group"
                 >
@@ -225,7 +225,7 @@ const ContactPage = () => {
                 </a>
 
                 <a
-                  href="#"
+                  href="https://twitter.com/unitedtravel2025"
                   aria-label="Twitter"
                   className="bg-gray-100 p-3 rounded-lg hover:bg-sky-100 hover:text-sky-400 transition group"
                 >

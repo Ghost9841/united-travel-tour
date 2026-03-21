@@ -28,7 +28,7 @@ const navItems = [
   { href: '/explore', title: 'Explore' },
   { href: '/travels', title: 'Travels' },
   { href: '/hotels', title: 'Hotels' },
-  { href: '/blogs', title: 'Blogs' },
+  { href: '/offers', title: 'Offers' },
   { href: '/cargo', title: 'Cargo' },
   { href: '/contactus', title: 'Contact Us' },
 
