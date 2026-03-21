@@ -125,10 +125,11 @@ export default function HotelsListingPage() {
                 {hotel.originalPrice && (
                   <div className="absolute top-4 right-4">
                     <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                      {/* Save £{hotel.originalPrice - hotel.pricePerNight} */}
+                      Save £{hotel.originalPrice - hotel.pricePerNight}
                     </span>
                   </div>
-                )} */}
+                )}
+                as */}
               </div>
 
               {/* Content */}
