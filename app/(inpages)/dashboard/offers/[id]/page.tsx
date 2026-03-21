@@ -47,28 +47,28 @@ export default function BlogFormPage() {
     if (creating) return;
     (async () => {
       try {
-        const res = await fetch(`/api/blogs/${id}`);
+        const res = await fetch(`/api/offers/${id}`);
         const data = await res.json();
         if (data.success && data.data) {
-          const blog = data.data;
+          const offer = data.data;
           setForm({
-            title: blog.title ?? '',
-            excerpt: blog.excerpt ?? '',
-            content: blog.content ?? '',
-            author: blog.author ?? '',
-            category: blog.category ?? 'Travel Tips',
-            image: blog.image ?? '',
-            date: blog.date ?? '',
-            readTime: blog.readTime ?? '5 min read',
-            status: blog.status ?? 'published',
+            title: offer.title ?? '',
+            excerpt: offer.excerpt ?? '',
+            content: offer.content ?? '',
+            author: offer.author ?? '',
+            category: offer.category ?? 'Travel Tips',
+            image: offer.image ?? '',
+            date: offer.date ?? '',
+            readTime: offer.readTime ?? '5 min read',
+            status: offer.status ?? 'published',
           });
-          setImagePreview(blog.image ?? '');
+          setImagePreview(offer.image ?? '');
         } else {
-          toast('Error', { description: 'Blog not found' });
-          router.push('/dashboard/blogs');
+          toast('Error', { description: 'Offer not found' });
+          router.push('/dashboard/offers');
         }
       } catch {
-        toast('Error', { description: 'Failed to load blog' });
+        toast('Error', { description: 'Failed to load offer' });
       } finally {
         setLoading(false);
       }
@@ -86,7 +86,7 @@ export default function BlogFormPage() {
         date: form.date || new Date().toISOString().split('T')[0],
       };
       const res = await fetch(
-        creating ? '/api/blogs' : `/api/blogs/${id}`,
+        creating ? '/api/offers' : `/api/offers/${id}`,
         {
           method: creating ? 'POST' : 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -95,8 +95,8 @@ export default function BlogFormPage() {
       );
       const data = await res.json();
       if (data.success) {
-        toast('Success!', { description: creating ? 'Blog created.' : 'Blog updated.' });
-        router.push('/dashboard/blogs');
+        toast('Success!', { description: creating ? 'Offer created.' : 'Offer updated.' });
+        router.push('/dashboard/offers');
       } else {
         toast('Error', { description: data.error ?? 'Something went wrong.' });
       }
@@ -110,11 +110,11 @@ export default function BlogFormPage() {
   const handleDelete = async () => {
     setDeleting(true);
     try {
-      const res = await fetch(`/api/blogs/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/offers/${id}`, { method: 'DELETE' });
       const data = await res.json();
       if (data.success) {
-        toast('Success!', { description: 'Blog deleted.' });
-        router.push('/dashboard/blogs');
+        toast('Success!', { description: 'Offer deleted.' });
+        router.push('/dashboard/offers');
       } else {
         toast('Error', { description: data.error ?? 'Failed to delete.' });
       }

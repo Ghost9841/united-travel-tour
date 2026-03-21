@@ -21,41 +21,41 @@ interface ApiResponse<T> {
 }
 
 
-export default function BlogsPage() {
-  const [blogs, setBlogs] = useState<Blog[]>([]);
+export default function OffersPage() {
+  const [offers, setOffers] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("All Posts");
 
   useEffect(() => {
-    const fetchBlogs = async () => {
+    const fetchOffers = async () => {
       try {
-        const res = await fetch('/api/blogs');
+        const res = await fetch('/api/offers');
         const data: ApiResponse<Blog[]> = await res.json();
         if (data.success && data.data) {
-          // Only show published blogs on the public page
-          const publishedBlogs = data.data.filter(blog => blog.status === 'published');
-          setBlogs(publishedBlogs);
+          // Only show published offers on the public page
+          const publishedOffers = data.data.filter(offer => offer.status === 'published');
+          setOffers(publishedOffers);
         } else {
-          console.error('Failed to fetch blogs:', data.error);
-          setBlogs([]);
+          console.error('Failed to fetch offers:', data.error);
+          setOffers([]);
         }
       } catch (error) {
-        console.error('Error fetching blogs:', error);
-        setBlogs([]);
+        console.error('Error fetching offers:', error);
+        setOffers([]);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchBlogs();
+    fetchOffers();
   }, []);
 
-  const filteredBlogs = selectedCategory === "All Posts"
-    ? blogs
-    : blogs.filter(blog => blog.category === selectedCategory);
+  const filteredOffers = selectedCategory === "All Posts"
+    ? offers
+    : offers.filter(offer => offer.category === selectedCategory);
 
-  const featuredPost = filteredBlogs[0];
-  const otherPosts = filteredBlogs.slice(1);
+  const featuredOffer = filteredOffers[0];
+  const otherOffers = filteredOffers.slice(1);
 
   if (loading) {
     return (
@@ -82,23 +82,23 @@ export default function BlogsPage() {
        
 
         {/* Featured Post */}
-        {featuredPost && (
+        {featuredOffer && (
           <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Featured Post</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Featured Offer</h2>
             <a
-              href={`/blogs/${featuredPost.id}`}
+              href={`/offers/${featuredOffer.id}`}
               className="group block bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
             >
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
                 <div className="relative h-64 lg:h-auto overflow-hidden">
                   <img
-                    src={featuredPost.image}
-                    alt={featuredPost.title}
+                    src={featuredOffer.image}
+                    alt={featuredOffer.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute top-4 left-4">
                     <span className="bg-orange-500 text-white px-4 py-2 rounded-full text-sm font-semibold">
-                      {featuredPost.category}
+                      {featuredOffer.category}
                     </span>
                   </div>
                 </div>
@@ -107,24 +107,24 @@ export default function BlogsPage() {
                   <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
                     <div className="flex items-center gap-2">
                       <User className="w-4 h-4" />
-                      <span>{featuredPost.author}</span>
+                      <span>{featuredOffer.author}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4" />
-                      <span>{featuredPost.date}</span>
+                      <span>{featuredOffer.date}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Clock className="w-4 h-4" />
-                      <span>{featuredPost.readTime}</span>
+                      <span>{featuredOffer.readTime}</span>
                     </div>
                   </div>
 
                   <h2 className="text-3xl font-bold text-gray-900 mb-4 group-hover:text-orange-500 transition-colors">
-                    {featuredPost.title}
+                    {featuredOffer.title}
                   </h2>
 
                   <p className="text-gray-600 text-lg mb-6">
-                    {featuredPost.excerpt}
+                    {featuredOffer.excerpt}
                   </p>
 
                   <div className="flex items-center text-orange-500 font-semibold group-hover:gap-3 transition-all">
@@ -138,17 +138,17 @@ export default function BlogsPage() {
         )}
 
         {/* Blog Grid */}
-        {otherPosts.length > 0 && (
+        {otherOffers.length > 0 && (
           <>
             <div className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Latest Articles</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Latest Offers</h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {otherPosts.map((post) => (
+              {otherOffers.map((offer) => (
                 <a
-                  key={post.id}
-                  href={`/blogs/${post.id}`}
+                  key={offer.id}
+                  href={`/offers/${offer.id}`}
                   className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
                 >
                   {/* Image */}
@@ -209,9 +209,9 @@ export default function BlogsPage() {
           </>
         )}
 
-        {filteredBlogs.length === 0 && !loading && (
+        {filteredOffers.length === 0 && !loading && (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No blog posts found in this category.</p>
+            <p className="text-gray-500 text-lg">No offers found in this category.</p>
           </div>
         )}
 

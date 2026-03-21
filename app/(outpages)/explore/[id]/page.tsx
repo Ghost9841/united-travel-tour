@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { MapPin, Star, Check, X, Clock, Shield, Users, Smartphone, Calendar, Users2, Tag, Eye } from 'lucide-react';
 import { ExplorePage } from '@prisma/client';
 import Link from 'next/link';
-import { prisma } from '@/lib/prisma';
+import prisma from '@/app/lib/prisma';
 
 // Generate metadata for SEO and social sharing
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {

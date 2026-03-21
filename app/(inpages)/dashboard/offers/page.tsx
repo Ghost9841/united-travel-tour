@@ -43,28 +43,28 @@ export default function BlogsDashboard() {
     status: 'published' as 'published' | 'draft',
   });
 
-  // Fetch all blogs - GET function
-  const fetchBlogs = async () => {
+  // Fetch all offers - GET function
+  const fetchOffers = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/blogs');
+      const response = await fetch('/api/offers');
       const data: ApiResponse<Blog[]> = await response.json();
       if (data.success) {
         setBlogs(data.data);
       } else {
-        console.error('Failed to fetch blogs:', data.error);
+        console.error('Failed to fetch offers:', data.error);
         setBlogs([]);
       }
     } catch (error) {
-      console.error('Error fetching blogs:', error);
+      console.error('Error fetching offers:', error);
       setBlogs([]);
     } finally {
       setLoading(false);
     }
   };
 
-  // Create new blog - POST function
-  const handleCreateBlog = async (e: React.FormEvent) => {
+  // Create new offer - POST function
+  const handleCreateOffer = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.title || !formData.excerpt || !formData.content) {
@@ -74,7 +74,7 @@ export default function BlogsDashboard() {
 
     try {
       setIsCreating(true);
-      const response = await fetch('/api/blogs', {
+      const response = await fetch('/api/offers', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -102,24 +102,24 @@ export default function BlogsDashboard() {
         });
         setShowCreateModal(false);
       } else {
-        alert('Failed to create blog: ' + (result.error || 'Unknown error'));
+        alert('Failed to create offer: ' + (result.error || 'Unknown error'));
       }
     } catch (error) {
-      console.error('Error creating blog:', error);
-      alert('Failed to create blog');
+      console.error('Error creating offer:', error);
+      alert('Failed to create offer');
     } finally {
       setIsCreating(false);
     }
   };
 
-  // Delete blog - DELETE function
-  const handleDeleteBlog = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this blog?')) {
+  // Delete offer - DELETE function
+  const handleDeleteOffer = async (id: number) => {
+    if (!confirm('Are you sure you want to delete this offer?')) {
       return;
     }
 
     try {
-      const response = await fetch(`/api/blogs/${id}`, {
+      const response = await fetch(`/api/offers/${id}`, {
         method: 'DELETE',
       });
 
@@ -127,16 +127,16 @@ export default function BlogsDashboard() {
       if (result.success) {
         setBlogs(blogs.filter((blog) => blog.id !== id));
       } else {
-        alert('Failed to delete blog: ' + (result.error || 'Unknown error'));
+        alert('Failed to delete offer: ' + (result.error || 'Unknown error'));
       }
     } catch (error) {
-      console.error('Error deleting blog:', error);
-      alert('Failed to delete blog');
+      console.error('Error deleting offer:', error);
+      alert('Failed to delete offer');
     }
   };
 
   useEffect(() => {
-    fetchBlogs();
+    fetchOffers();
   }, []);
 
   // Calculate stats
