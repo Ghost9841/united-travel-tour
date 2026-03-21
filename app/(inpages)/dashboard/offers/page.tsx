@@ -466,7 +466,7 @@ export default function OffersDashboard() {
                   disabled={isCreating}
                   className="flex-1 bg-orange-500 text-white px-6 py-3 rounded-xl hover:bg-orange-600 disabled:opacity-50 transition-all font-medium shadow-lg"
                 >
-                  {isCreating ? 'Creating...' : 'Create Blog'}
+                  {isCreating ? 'Creating...' : 'Create Offer'}
                 </button>
                 <button
                   type="button"

@@ -2,7 +2,7 @@
 import { Calendar, User, Clock, ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
-type Blog = {
+type Offer = {
   id: number;
   title: string;
   excerpt: string;
@@ -22,7 +22,7 @@ interface ApiResponse<T> {
 
 
 export default function OffersPage() {
-  const [offers, setOffers] = useState<Blog[]>([]);
+  const [offers, setOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("All Posts");
 
@@ -30,7 +30,7 @@ export default function OffersPage() {
     const fetchOffers = async () => {
       try {
         const res = await fetch('/api/offers');
-        const data: ApiResponse<Blog[]> = await res.json();
+        const data: ApiResponse<Offer[]> = await res.json();
         if (data.success && data.data) {
           // Only show published offers on the public page
           const publishedOffers = data.data.filter(offer => offer.status === 'published');
@@ -62,7 +62,7 @@ export default function OffersPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 font-semibold">Loading travel stories...</p>
+          <p className="text-gray-600 font-semibold">Loading offers...</p>
         </div>
       </div>
     );
@@ -72,8 +72,8 @@ export default function OffersPage() {
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white py-20">
         <div className="max-w-8xl mx-auto px-6 mt-16">
-          <h1 className="text-5xl font-bold mb-4">Travel Stories & Guides</h1>
-          <p className="text-xl text-orange-100">Discover inspiration, tips, and insider knowledge from our travel experts</p>
+          <h1 className="text-5xl font-bold mb-4">Exclusive Offers & Travel Deals</h1>
+          <p className="text-xl text-orange-100">Discover top deals, trips, and special offers from our travel experts</p>
         </div>
       </div>
 
@@ -137,7 +137,7 @@ export default function OffersPage() {
           </div>
         )}
 
-        {/* Blog Grid */}
+        {/* Offer Grid */}
         {otherOffers.length > 0 && (
           <>
             <div className="mb-8">
@@ -154,13 +154,13 @@ export default function OffersPage() {
                   {/* Image */}
                   <div className="relative h-56 overflow-hidden">
                     <img
-                      src={post.image}
-                      alt={post.title}
+                      src={offer.image}
+                      alt={offer.title}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                     <div className="absolute top-4 left-4">
                       <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                        {post.category}
+                        {offer.category}
                       </span>
                     </div>
                   </div>
@@ -171,25 +171,24 @@ export default function OffersPage() {
                     <div className="flex items-center gap-3 text-xs text-gray-500 mb-3">
                       <div className="flex items-center gap-1">
                         <User className="w-3 h-3" />
-                        <span>{post.author}</span>
+                        <span>{offer.author}</span>
                       </div>
                       <span>•</span>
                       <div className="flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
-                        <span>{post.date}</span>
+                        <span>{offer.date}</span>
                       </div>
                     </div>
 
                     {/* Title */}
                     <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-orange-500 transition-colors line-clamp-2">
-                      {post.title}
+                      {offer.title}
                     </h3>
 
                     {/* Excerpt */}
                     <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-                      {post.excerpt}
+                      {offer.excerpt}
                     </p>
-
                     {/* Read Time */}
                     <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                       <div className="flex items-center gap-1 text-sm text-gray-500">
@@ -218,7 +217,7 @@ export default function OffersPage() {
         {/* Load More Button */}
         <div className="text-center mt-12">
           <button className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
-            Load More Articles
+            Load More Offers
           </button>
         </div>
       </div>
