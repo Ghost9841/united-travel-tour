@@ -138,13 +138,13 @@ export default function BlogFormPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
-            <Link href="/dashboard/blogs"
+            <Link href="/dashboard/offers"
               className="p-2 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors shadow-sm">
               <ArrowLeft className="w-5 h-5 text-gray-600" />
             </Link>
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                {creating ? 'Create New Blog' : 'Edit Blog'}
+                {creating ? 'Create New Offer' : 'Edit Offer'}
               </h1>
               <p className="text-sm text-gray-500 mt-0.5">
                 {creating ? 'Write a new blog post' : 'Update the blog post details'}
@@ -275,7 +275,7 @@ export default function BlogFormPage() {
 
           {/* Actions */}
           <div className="flex justify-end gap-4">
-            <Link href="/dashboard/blogs"
+            <Link href="/dashboard/offers"
               className="px-6 py-3 border-2 border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors font-medium text-sm">
               Cancel
             </Link>

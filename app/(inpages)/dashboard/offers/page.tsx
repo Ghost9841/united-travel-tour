@@ -26,8 +26,8 @@ interface ApiResponse<T> {
   error?: string;
 }
 
-export default function BlogsDashboard() {
-  const [blogs, setBlogs] = useState<Blog[]>([]);
+export default function OffersDashboard() {
+  const [offers, setOffers] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -50,14 +50,14 @@ export default function BlogsDashboard() {
       const response = await fetch('/api/offers');
       const data: ApiResponse<Blog[]> = await response.json();
       if (data.success) {
-        setBlogs(data.data);
+        setOffers(data.data);
       } else {
         console.error('Failed to fetch offers:', data.error);
-        setBlogs([]);
+        setOffers([]);
       }
     } catch (error) {
       console.error('Error fetching offers:', error);
-      setBlogs([]);
+      setOffers([]);
     } finally {
       setLoading(false);
     }
@@ -90,7 +90,7 @@ export default function BlogsDashboard() {
 
       const result: ApiResponse<Blog> = await response.json();
       if (result.success && result.data) {
-        setBlogs([result.data, ...blogs]);
+        setOffers([result.data, ...offers]);
         setFormData({
           title: '',
           excerpt: '',
@@ -125,7 +125,7 @@ export default function BlogsDashboard() {
 
       const result: ApiResponse<null> = await response.json();
       if (result.success) {
-        setBlogs(blogs.filter((blog) => blog.id !== id));
+        setOffers(offers.filter((blog) => blog.id !== id));
       } else {
         alert('Failed to delete offer: ' + (result.error || 'Unknown error'));
       }

@@ -26,59 +26,59 @@ interface ApiResponse<T> {
   error?: string;
 }
 
-export default function BlogsDetailPage() {
+export default function OffersDetailPage() {
   const params = useParams();
   const id = params?.id as string;
-  const [blog, setBlog] = useState<Blog | null>(null);
-  const [relatedPosts, setRelatedPosts] = useState<Blog[]>([]);
+  const [offer, setOffer] = useState<Blog | null>(null);
+  const [relatedOffers, setRelatedOffers] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchBlog = async () => {
+    const fetchOffer = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/blogs/${id}`);
+        const response = await fetch(`/api/offers/${id}`);
         const data: ApiResponse<Blog> = await response.json();
 
         if (data.success && data.data) {
-          // Only show published blogs on the public page
+          // Only show published offers on the public page
           if (data.data.status === 'published') {
-            setBlog(data.data);
-            // Fetch related posts
-            fetchRelatedPosts(data.data.category);
+            setOffer(data.data);
+            // Fetch related offers
+            fetchRelatedOffers(data.data.category);
           } else {
-            setError('Blog not found');
+            setError('Offer not found');
           }
         } else {
-          setError(data.error || 'Blog not found');
+          setError(data.error || 'Offer not found');
         }
       } catch (err) {
-        setError('Failed to load blog');
+        setError('Failed to load offer');
       } finally {
         setLoading(false);
       }
     };
 
-    const fetchRelatedPosts = async (category: string) => {
+    const fetchRelatedOffers = async (category: string) => {
       try {
-        const response = await fetch('/api/blogs');
+        const response = await fetch('/api/offers');
         const data: ApiResponse<Blog[]> = await response.json();
         if (data.success && data.data) {
-          // Get published blogs from same category, excluding current blog
+          // Get published offers from same category, excluding current offer
           const related = data.data
             .filter(b => b.status === 'published' && b.category === category && b.id !== id)
             .slice(0, 3);
-          setRelatedPosts(related);
+          setRelatedOffers(related);
         }
       } catch (err) {
-        // Silently fail for related posts
-        console.error('Failed to load related posts:', err);
+        // Silently fail for related offers
+        console.error('Failed to load related offers:', err);
       }
     };
 
     if (id) {
-      fetchBlog();
+      fetchOffer();
     }
   }, [id]);
 
@@ -93,29 +93,29 @@ export default function BlogsDetailPage() {
     );
   }
 
-  if (error || !blog) {
+  if (error || !offer) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Blog Post Not Found</h1>
-          <p className="text-gray-600 mb-6">{error || 'The article you\'re looking for doesn\'t exist.'}</p>
-          <a href="/blogs" className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
-            Back to All Blogs
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Offer Not Found</h1>
+          <p className="text-gray-600 mb-6">{error || 'The offer you\'re looking for doesn\'t exist.'}</p>
+          <a href="/offers" className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+            Back to All Offers
           </a>
         </div>
       </div>
     );
   }
 
-  const post = blog;
+  const post = offer;
 
   return (
     <div className="min-h-screen bg-orange-500">
       {/* Back Button */}
       <div className="max-w-4xl mx-auto px-6 pt-24 pb-4">
-        <a href="/blogs" className="inline-flex items-center gap-2 text-orange-500 hover:text-orange-600 font-medium">
+        <a href="/offers" className="inline-flex items-center gap-2 text-orange-500 hover:text-orange-600 font-medium">
           <ArrowLeft className="w-5 h-5" />
-          Back to Blog
+          Back to Offers
         </a>
       </div>
 
@@ -209,15 +209,15 @@ export default function BlogsDetailPage() {
       </article>
 
       {/* Related Posts */}
-      {relatedPosts.length > 0 && (
+      {relatedOffers.length > 0 && (
         <div className="bg-gray-100 py-16">
           <div className="max-w-6xl mx-auto px-6">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8">Related Articles</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-8">Related Offers</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {relatedPosts.map((related) => (
+              {relatedOffers.map((related) => (
                 <a
                   key={related.id}
-                  href={`/blogs/${related.id}`}
+                  href={`/offers/${related.id}`}
                   className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
                 >
                   <div className="relative h-48 overflow-hidden">
