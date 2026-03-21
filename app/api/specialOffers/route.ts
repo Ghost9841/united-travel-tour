@@ -2,7 +2,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/app/lib/prisma';
-import { CreateSpecialOfferInput } from '@/types/special-offer';
+import { CreateSpecialOfferInput } from './types';
 
 // GET /api/special-offers  — list all offers (optionally filter by status)
 export async function GET(req: NextRequest) {

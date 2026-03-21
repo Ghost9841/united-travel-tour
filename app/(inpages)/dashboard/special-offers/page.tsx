@@ -6,6 +6,7 @@ import {
   Search, Plus, MoreVertical, Eye, Heart, Star, MapPin,
   Trash2, Edit, FileText, Percent, Ticket,
 } from 'lucide-react';
+import SpecialOffer from '@/app/api/specialOffers/types';
 
 
 function formatRelativeTime(date: Date) {

@@ -2,7 +2,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/app/lib/prisma';
-import { UpdateSpecialOfferInput } from '@/types/special-offer';
+import { UpdateSpecialOfferInput } from '../types';
 
 type Params = { params: { id: string } };
 

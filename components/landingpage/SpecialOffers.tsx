@@ -1,8 +1,8 @@
 'use client';
 
+import SpecialOffer from '@/app/api/specialOffers/types';
 import { ChevronLeft, ChevronRight, MapPin, Star } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { SpecialOffer } from '@/types/special-offer';
 
 export default function SpecialOffers() {
   const [offers,     setOffers]     = useState<SpecialOffer[]>([]);
