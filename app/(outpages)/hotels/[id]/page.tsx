@@ -103,28 +103,24 @@ export default async function HotelDetailPage({ params }: HotelDetailPageProps) 
   }
 
   return (
-<div className="min-h-screen bg-orange-500 relative overflow-hidden">
-  {/* Animated shapes */}
-  <div className="absolute top-0 left-0 w-96 h-96 bg-orange-400 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob" />
-  <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-400 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000" />
-    <div className="relative z-10">
+<div className="min-h-screen bg-gradient-to-b from-orange-100 via-gray-50 to-gray-100">
       {/* Header Section */}
       <div className="max-w-8xl mx-auto px-6 py-8">
         {/* Breadcrumb */}
-        <div className="mb-6 text-sm text-gray-600 mt-20">
+        <div className="mb-6 text-sm text-white mt-20">
           <a href="/" className="hover:text-orange-500">Home</a>
           <span className="mx-2">/</span>
           <a href="/hotels" className="hover:text-orange-500">Hotels</a>
           <span className="mx-2">/</span>
-          <span className="text-gray-900">{hotel.name}</span>
+          <span className="text-white">{hotel.name}</span>
         </div>
 
         {/* Title */}
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">{hotel.name}</h1>
+        <h1 className="text-4xl font-bold text-white mb-4">{hotel.name}</h1>
         
         {/* Location and Rating */}
         <div className="flex items-center gap-6 mb-8">
-          <div className="flex items-center gap-2 text-gray-600">
+          <div className="flex items-center gap-2 text-white">
             <MapPin className="w-5 h-5 text-orange-500" />
             <span className="font-medium">{hotel.location}</span>
           </div>
@@ -412,7 +408,6 @@ export default async function HotelDetailPage({ params }: HotelDetailPageProps) 
             </div>
           </div>
         </div>
-      </div>
       </div>
     </div>
   );
