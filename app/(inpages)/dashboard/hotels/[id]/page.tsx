@@ -47,6 +47,7 @@ export default function HotelFormPage() {
     location: '',
     description: '',
     image: '',
+    images: ['', ''],
     pricePerNight: '',
     originalPrice: '',
     rating: 4.5,
@@ -64,11 +65,17 @@ export default function HotelFormPage() {
         const data = await res.json();
         if (data.success && data.data) {
           const h = data.data.hotel ?? data.data;
+          const imageList = Array.isArray(h.images) && h.images.length
+            ? h.images
+            : h.image
+              ? [h.image, '']
+              : ['', ''];
           setForm({
             name: h.name ?? '',
             location: h.location ?? '',
             description: h.description ?? '',
             image: h.image ?? '',
+            images: imageList,
             pricePerNight: h.pricePerNight?.toString() ?? '',
             originalPrice: h.originalPrice?.toString() ?? '',
             rating: h.rating ?? 4.5,
@@ -78,7 +85,7 @@ export default function HotelFormPage() {
             status: h.status ?? 'active',
           });
           setSelectedAmenities(h.amenities ?? []);
-          setImagePreview(h.image ?? '');
+          setImagePreview(imageList[0] ?? '');
         } else {
           toast('Error', { description: 'Hotel not found' });
           router.push('/dashboard/hotels');
@@ -100,8 +107,13 @@ export default function HotelFormPage() {
     e.preventDefault();
     setSaving(true);
     try {
+      const images = form.images?.filter(Boolean) ?? [];
+      if (images.length === 0 && form.image) images.push(form.image);
+
       const body = {
         ...form,
+        images,
+        image: images[0] || form.image,
         pricePerNight: Number(form.pricePerNight),
         originalPrice: Number(form.originalPrice),
         amenities: selectedAmenities,
@@ -319,27 +331,58 @@ export default function HotelFormPage() {
             )}
           </div>
 
-          {/* Image */}
+          {/* Images */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-1">Hotel Image</h2>
-            <p className="text-sm text-gray-500 mb-5">Add a cover image URL</p>
-            <div className="relative">
-              <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input value={form.image}
-                onChange={e => { set('image', e.target.value); setImagePreview(e.target.value); }}
-                placeholder="https://example.com/hotel.jpg"
-                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm" />
+            <h2 className="text-lg font-bold text-gray-900 mb-1">Hotel Images</h2>
+            <p className="text-sm text-gray-500 mb-5">Add up to 2 image URLs (first is cover)</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[0, 1].map((index) => (
+                <div key={index} className="space-y-1">
+                  <label className="text-sm font-semibold text-gray-700">Image {index + 1}</label>
+                  <input
+                    value={form.images[index] ?? ''}
+                    onChange={(e) => {
+                      const newImages = [...form.images];
+                      newImages[index] = e.target.value;
+                      set('images', newImages);
+                      if (index === 0) {
+                        setImagePreview(e.target.value);
+                        set('image', e.target.value);
+                      }
+                    }}
+                    placeholder={`https://example.com/hotel-${index + 1}.jpg`}
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+                  />
+                </div>
+              ))}
             </div>
-            {imagePreview && (
-              <div className="relative mt-4 rounded-xl overflow-hidden border border-gray-100">
-                <img src={imagePreview} alt="preview" className="w-full h-48 object-cover"
-                  onError={() => setImagePreview('')} />
-                <button type="button" onClick={() => { setImagePreview(''); set('image', ''); }}
-                  className="absolute top-2 right-2 p-1.5 bg-white rounded-lg shadow hover:bg-red-50">
-                  <X className="w-3.5 h-3.5 text-red-500" />
-                </button>
-              </div>
-            )}
+            <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+              {(form.images.filter(Boolean).length > 0 ? form.images.filter(Boolean) : [form.image]).map((url, idx) => (
+                <div key={idx} className="relative rounded-xl overflow-hidden border border-gray-100">
+                  <img
+                    src={url || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop'}
+                    alt={`preview-${idx + 1}`}
+                    className="w-full h-48 object-cover"
+                    onError={(e) => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop'; }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newImages = [...form.images];
+                      newImages[idx] = '';
+                      set('images', newImages);
+                      if (idx === 0) {
+                        setImagePreview(newImages[0] || '');
+                        set('image', newImages[0] || '');
+                      }
+                    }}
+                    className="absolute top-2 right-2 p-1.5 bg-white rounded-lg shadow hover:bg-red-50"
+                  >
+                    <X className="w-3.5 h-3.5 text-red-500" />
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Settings */}

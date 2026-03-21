@@ -17,7 +17,7 @@ interface HotelItem {
   originalPrice: number;
   rating: number;
   reviews: number;
-  image: string;
+  images: string[];
   amenities: string[];
   roomType: string;
   capacity: string;
