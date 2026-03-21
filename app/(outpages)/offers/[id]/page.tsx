@@ -185,21 +185,7 @@ export default function OffersDetailPage() {
           ))}
         </div>
 
-        {/* Author Bio */}
-        <div className="mt-16 p-8 bg-white rounded-2xl shadow-md">
-          <div className="flex items-start gap-6">
-            <img src={`https://i.pravatar.cc/150?img=${post.id}`} alt={post.author} className="w-20 h-20 rounded-full flex-shrink-0" />
-            <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">About {post.author}</h3>
-              <p className="text-gray-600 mb-4">
-                Travel writer and photographer with a passion for discovering hidden gems and authentic experiences. Specializes in European destinations and sustainable travel.
-              </p>
-              <div className="flex gap-3">
-                <a href="#" className="text-orange-500 hover:text-orange-600 font-medium">View all posts →</a>
-              </div>
-            </div>
-          </div>
-        </div>
+       
       </article>
 
       {/* Related Posts */}
