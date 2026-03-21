@@ -110,7 +110,7 @@ export default function OffersDetailPage() {
   const post = offer;
 
   return (
-    <div className="min-h-screen bg-orange-500">
+    <div className="min-h-screen bg-gradient-to-br from-orange-400 via-yellow-300 to-pink-400">
       {/* Back Button */}
       <div className="max-w-4xl mx-auto px-6 pt-24 pb-4">
         <a href="/offers" className="inline-flex items-center gap-2 text-orange-500 hover:text-orange-600 font-medium">
