@@ -103,8 +103,7 @@ export default async function HotelDetailPage({ params }: HotelDetailPageProps) 
   }
 
   return (
-<div className="min-h-screen bg-gradient-to-b from-orange-100 via-gray-50 to-gray-100">
-      {/* Header Section */}
+<div className="min-h-screen bg-gradient-to-b from-orange-400 via-orange-500 to-orange-600">      {/* Header Section */}
       <div className="max-w-8xl mx-auto px-6 py-8">
         {/* Breadcrumb */}
         <div className="mb-6 text-sm text-white mt-20">
