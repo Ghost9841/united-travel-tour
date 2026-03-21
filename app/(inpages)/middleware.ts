@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { auth } from '@clerk/nextjs'
+import { auth } from '@clerk/nextjs/server'
 
 // Running in /app/(inpages) scope by folder-level `middleware.ts`
 // protects all children paths under /dashboard and similar.
