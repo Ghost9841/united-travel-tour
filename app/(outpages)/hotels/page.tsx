@@ -88,10 +88,6 @@ export default function HotelsListingPage() {
             <p className="text-gray-600">Cities</p>
           </div>
           <div className="bg-white rounded-xl p-6 shadow-md text-center">
-            <p className="text-4xl font-bold text-orange-500 mb-2">4.7</p>
-            <p className="text-gray-600">Average Rating</p>
-          </div>
-          <div className="bg-white rounded-xl p-6 shadow-md text-center">
             <p className="text-4xl font-bold text-orange-500 mb-2">24/7</p>
             <p className="text-gray-600">Support</p>
           </div>
