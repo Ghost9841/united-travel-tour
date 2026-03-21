@@ -47,7 +47,7 @@ export default function HotelFormPage() {
     location: '',
     description: '',
     image: '',
-    images: ['', ''],
+    images: [''],
     pricePerNight: '',
     originalPrice: '',
     rating: 4.5,
@@ -334,29 +334,57 @@ export default function HotelFormPage() {
           {/* Images */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
             <h2 className="text-lg font-bold text-gray-900 mb-1">Hotel Images</h2>
-            <p className="text-sm text-gray-500 mb-5">Add up to 2 image URLs (first is cover)</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {[0, 1].map((index) => (
-                <div key={index} className="space-y-1">
-                  <label className="text-sm font-semibold text-gray-700">Image {index + 1}</label>
-                  <input
-                    value={form.images[index] ?? ''}
-                    onChange={(e) => {
-                      const newImages = [...form.images];
-                      newImages[index] = e.target.value;
-                      set('images', newImages);
-                      if (index === 0) {
-                        setImagePreview(e.target.value);
-                        set('image', e.target.value);
-                      }
-                    }}
-                    placeholder={`https://example.com/hotel-${index + 1}.jpg`}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
-                  />
+            <p className="text-sm text-gray-500 mb-5">Add one or more image URLs (first is cover)</p>
+
+            <div className="space-y-4">
+              {form.images.map((value, index) => (
+                <div key={index} className="flex gap-2 items-start">
+                  <div className="flex-1">
+                    <label className="text-sm font-semibold text-gray-700">Image {index + 1}</label>
+                    <input
+                      value={value}
+                      onChange={(e) => {
+                        const newImages = [...form.images];
+                        newImages[index] = e.target.value;
+                        set('images', newImages);
+                        if (index === 0) {
+                          setImagePreview(e.target.value);
+                          set('image', e.target.value);
+                        }
+                      }}
+                      placeholder={`https://example.com/hotel-${index + 1}.jpg`}
+                      className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+                    />
+                  </div>
+                  {form.images.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newImages = form.images.filter((_, i) => i !== index);
+                        set('images', newImages);
+                        if (index === 0) {
+                          setImagePreview(newImages[0] ?? '');
+                          set('image', newImages[0] ?? '');
+                        }
+                      }}
+                      className="mt-6 p-2 bg-red-100 rounded-lg hover:bg-red-200 text-red-600"
+                    >
+                      Remove
+                    </button>
+                  )}
                 </div>
               ))}
+
+              <button
+                type="button"
+                onClick={() => set('images', [...form.images, ''])}
+                className="px-4 py-2 rounded-xl border border-dashed border-orange-300 text-orange-600 hover:bg-orange-50 text-sm"
+              >
+                + Add another image
+              </button>
             </div>
-            <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
               {(form.images.filter(Boolean).length > 0 ? form.images.filter(Boolean) : [form.image]).map((url, idx) => (
                 <div key={idx} className="relative rounded-xl overflow-hidden border border-gray-100">
                   <img
@@ -365,21 +393,6 @@ export default function HotelFormPage() {
                     className="w-full h-48 object-cover"
                     onError={(e) => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop'; }}
                   />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const newImages = [...form.images];
-                      newImages[idx] = '';
-                      set('images', newImages);
-                      if (idx === 0) {
-                        setImagePreview(newImages[0] || '');
-                        set('image', newImages[0] || '');
-                      }
-                    }}
-                    className="absolute top-2 right-2 p-1.5 bg-white rounded-lg shadow hover:bg-red-50"
-                  >
-                    <X className="w-3.5 h-3.5 text-red-500" />
-                  </button>
                 </div>
               ))}
             </div>
