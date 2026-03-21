@@ -68,7 +68,7 @@ export function Hero() {
               ref={subtitleRef}
               className="text-lg md:text-xl text-white/90 mb-8 leading-relaxed text-balance"
             >
-              Special rates and a service team that keeps things simple. We help you ship personal parcels and business cargo with careful handling, clear guidance, and reliable delivery support.
+              Special rate and a service team that keeps things simple. We help you ship personal parcels and business cargo with careful handling, clear guidance, and reliable delivery support.
             </p>
             <div ref={ctaRef} className="flex flex-col sm:flex-row gap-4 justify-center">
               <button className="px-8 py-4 bg-primary text-white rounded-lg font-semibold hover:opacity-90 transition-opacity">
