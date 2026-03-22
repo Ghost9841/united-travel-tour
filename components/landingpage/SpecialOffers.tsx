@@ -156,20 +156,18 @@ export default function SpecialOffers() {
                   )}
                 </div>
 
-                <div className="flex items-center justify-between pt-3 border-t border-gray-700 gap-3">
-                  <div className="flex gap-2">  {/* Added wrapper with gap */}
-                    <Link href={`/offers/special-offers/${offer.id}`}>
-                      <button className="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors text-sm">
-                        VIEW DETAILS
-                      </button>
-                    </Link>
-                    <Link href={'/booknow'}>
-                      <button className="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors text-sm">
-                        BOOK NOW
-                      </button>
-                    </Link>
-                  </div>
-                </div>
+                <Link
+                  href={`/offers/special-offers/${offer.id}`}
+                  className="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors text-sm"
+                >
+                  VIEW DETAILS
+                </Link>
+                <Link
+                  href="/booknow"
+                  className="px-5 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg font-medium transition-colors text-sm border border-white/40"
+                >
+                  BOOK NOW
+                </Link>
               </div>
             </div>
 
