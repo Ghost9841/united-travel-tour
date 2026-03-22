@@ -2,6 +2,7 @@
 
 import SpecialOffer from '@/app/api/special-offers/types';
 import { ChevronLeft, ChevronRight, MapPin, Star } from 'lucide-react';
+import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
 export default function SpecialOffers() {
@@ -154,9 +155,11 @@ export default function SpecialOffers() {
                     <span className="text-sm text-gray-300">Contact for price</span>
                   )}
                 </div>
+                <Link href={'/booknow'}>
                 <button className="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors text-sm">
                   BOOK NOW
                 </button>
+                </Link>
               </div>
             </div>
 

@@ -4,6 +4,7 @@ import { MapPin, Star, Check, X, Clock, Shield, Users, Smartphone, Calendar, Use
 import { Travel } from '@prisma/client';
 import Link from 'next/link';
 import prisma from '@/app/lib/prisma';
+import ShareButtons from '@/components/manual-ui/ShareButtons';
 
 // Generate metadata for SEO and social sharing
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -135,6 +136,7 @@ export default async function TravelDetailPage({ params }: TravelDetailPageProps
           </div>
           
           <div className="hidden sm:block h-6 w-px bg-gray-300" />
+          <ShareButtons/>
         </div>
 
         {/* Main Content Grid */}
