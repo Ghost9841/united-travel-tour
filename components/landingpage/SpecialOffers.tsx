@@ -2,19 +2,18 @@
 
 import SpecialOffer from '@/app/api/special-offers/types';
 import { ChevronLeft, ChevronRight, MapPin, Star } from 'lucide-react';
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
 export default function SpecialOffers() {
-  const [offers, setOffers] = useState<SpecialOffer[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [offers,     setOffers]     = useState<SpecialOffer[]>([]);
+  const [loading,    setLoading]    = useState(true);
   const [startIndex, setStartIndex] = useState(0);
   const itemsToShow = 4;
 
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch('/api/special-offers?status=active');
+        const res  = await fetch('/api/special-offers?status=active');
         const data = await res.json();
         if (data.success) setOffers(data.data);
       } catch (err) {
@@ -37,7 +36,7 @@ export default function SpecialOffers() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') prev();
+      if (e.key === 'ArrowLeft')  prev();
       if (e.key === 'ArrowRight') next();
     };
     window.addEventListener('keydown', onKey);
@@ -103,7 +102,7 @@ export default function SpecialOffers() {
             className="group relative rounded-2xl overflow-hidden cursor-pointer h-96 bg-white shadow-lg hover:shadow-2xl transition-all duration-500"
           >
             {/* Image */}
-            <div className="absolute inset-0 transition-transform duration-500 group-hover:-translate-y-32">
+            <div className="absolute inset-0 transition-transform duration-500 group-hover:-translate-y-32 pointer-events-none">
               <img
                 src={offer.image || 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&h=600&fit=crop'}
                 alt={offer.title}
@@ -124,7 +123,7 @@ export default function SpecialOffers() {
             </div>
 
             {/* Hover detail panel */}
-            <div className="absolute bottom-0 left-0 right-0 p-5 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 bg-gradient-to-t from-black via-black/95 to-transparent pt-20">
+            <div className="absolute bottom-0 left-0 right-0 p-5 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 bg-gradient-to-t from-black via-black/95 to-transparent pt-20 z-10 pointer-events-none group-hover:pointer-events-auto">
               {offer.location && (
                 <div className="flex items-center gap-1 text-sm mb-2">
                   <MapPin className="w-4 h-4" />
@@ -155,19 +154,9 @@ export default function SpecialOffers() {
                     <span className="text-sm text-gray-300">Contact for price</span>
                   )}
                 </div>
-
-                <Link
-                  href={`/offers/special-offers/${offer.id}`}
-                  className="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors text-sm"
-                >
-                  VIEW DETAILS
-                </Link>
-                <Link
-                  href="/booknow"
-                  className="px-5 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg font-medium transition-colors text-sm border border-white/40"
-                >
+                <button className="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors text-sm">
                   BOOK NOW
-                </Link>
+                </button>
               </div>
             </div>
 
