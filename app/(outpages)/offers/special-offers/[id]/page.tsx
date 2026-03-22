@@ -118,6 +118,7 @@ export default async function SpecialOfferDetailPage({ params }: { params: Promi
             {/* Quick-facts bar */}
             <div className="bg-white rounded-2xl p-6 shadow-md mb-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-green-500 mt-1 flex-shrink-0" />
                   <div>
@@ -130,6 +131,13 @@ export default async function SpecialOfferDetailPage({ params }: { params: Promi
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-1">24/7 Support</h4>
                     <p className="text-sm text-gray-600">Always here to help</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Tag className="w-5 h-5 text-orange-500 mt-1 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-1">Contact Number</h4>
+                    <p className="text-sm text-gray-600">02037253460</p>
                   </div>
                 </div>
               </div>
@@ -146,7 +154,6 @@ export default async function SpecialOfferDetailPage({ params }: { params: Promi
             </div>
 
             <div className="border-t-2 border-gray-200 my-8" />
-
             {/* Terms */}
             <div className="bg-white rounded-2xl p-8 shadow-md">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Terms &amp; Conditions</h2>
