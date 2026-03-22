@@ -91,11 +91,6 @@ export default async function SpecialOfferDetailPage({ params }: { params: Promi
               <span className="font-medium">{offer.location}</span>
             </div>
           )}
-          <div className="flex items-center gap-1">
-            {[...Array(Math.round(offer.rating))].map((_, i) => (
-              <Star key={i} className="w-4 h-4 fill-yellow-300 text-yellow-300" />
-            ))}
-          </div>
           <div className="h-6 w-px bg-white/30" />
           <ShareButtons />
         </div>

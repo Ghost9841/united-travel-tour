@@ -134,14 +134,6 @@ export default function SpecialOffers() {
 
               <h3 className="text-xl font-bold mb-3">{offer.title}</h3>
 
-              <div className="flex gap-1 mb-3">
-                {[...Array(Math.round(offer.rating))].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-
-              <p className="text-sm text-gray-300 mb-4 line-clamp-3">{offer.description}</p>
-
               <div className="flex items-center justify-between pt-3 border-t border-gray-700">
                 <div>
                   {offer.discountedPrice > 0 ? (
