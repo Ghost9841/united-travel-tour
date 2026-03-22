@@ -18,12 +18,14 @@ export default async function DashboardLayout({ children }: { children: React.Re
     return redirect('/')
   }
 
-  return (
-    <SidebarProvider defaultOpen={false}>
+return (
+  <SidebarProvider defaultOpen={false}>
+    <div className="flex min-h-screen w-full">
       <AppSidebar />
-      <main>
+      <main className="flex-1 w-full min-w-0 overflow-auto">
         {children}
       </main>
-    </SidebarProvider>
-  )
+    </div>
+  </SidebarProvider>
+)
 }
