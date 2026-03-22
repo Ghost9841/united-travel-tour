@@ -10,6 +10,7 @@ import {
   User,
   HelpCircle,
   MapPinHouse,
+  CalendarPlus2,
 } from "lucide-react"
 
 import {
@@ -56,6 +57,7 @@ const mainItems = [
   { title: "Travels", url: "/dashboard/travels", icon: Plane },
   { title: "Hotels", url: "/dashboard/hotels", icon: Hotel },
   { title: "Offers", url: "/dashboard/offers", icon: FileText },
+  { title: "Special Offers", url: "/dashboard/special-offers", icon: CalendarPlus2 },
   { title: "Destination", url: "/dashboard/destinations", icon: MapPinHouse },
 ]
 
