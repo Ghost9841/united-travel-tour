@@ -4,6 +4,7 @@ import { MapPin, Star, Check, X, Clock, Shield, Users, Smartphone, Calendar, Use
 import { ExplorePage } from '@prisma/client';
 import Link from 'next/link';
 import prisma from '@/app/lib/prisma';
+import ShareButtons from '@/components/manual-ui/ShareButtons';
 
 // Generate metadata for SEO and social sharing
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -107,7 +108,7 @@ export default async function ExploreDetailPage({ params }: ExploreDetailPagePro
   const descriptionParagraphs = explore.description ? explore.description.split('\n\n') : ['No description available.'];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/40 via-blue-700 to-orange-500">
+<div className="min-h-screen bg-gradient-to-b from-orange-400 via-orange-500 to-orange-600">      {/* Header Section */}
       {/* Header Section */}
       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
@@ -135,26 +136,7 @@ export default async function ExploreDetailPage({ params }: ExploreDetailPagePro
           </div>
           
           <div className="hidden sm:block h-6 w-px bg-white/30" />
-          
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`w-5 h-5 ${
-                    i < Math.floor(explore.rating)
-                      ? 'fill-yellow-400 text-yellow-400'
-                      : 'text-white/30'
-                  }`}
-                />
-              ))}
-            </div>
-            <span className="font-semibold text-white">{explore.rating.toFixed(1)}</span>
-            <span className="text-white/70 flex items-center gap-1">
-              <Eye className="w-4 h-4" />
-              ({explore.views} views)
-            </span>
-          </div>
+          <ShareButtons/>
         </div>
 
         {/* Main Content Grid */}

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { MapPin, Star, Check, X, Wifi, Coffee, Car, Dumbbell, Users, Clock, Shield, Smartphone } from 'lucide-react';
 import { Hotel } from '@prisma/client';
 import prisma from '@/app/lib/prisma';
+import ShareButtons from '@/components/manual-ui/ShareButtons';
 
 // Generate metadata for SEO and social sharing
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -125,6 +126,7 @@ export default async function HotelDetailPage({ params }: HotelDetailPageProps) 
           </div>
           
           <div className="h-6 w-px bg-gray-300" />
+        <ShareButtons/>
         </div>
 
         {/* Main Content Grid */}
