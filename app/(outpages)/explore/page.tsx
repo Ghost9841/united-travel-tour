@@ -162,21 +162,7 @@ export default function ExplorePage() {
                       <MapPin className="w-4 h-4" />
                       <span className="text-sm">{offer.location}</span>
                     </div>
-
-                    {/* Stars */}
-                    <div className="flex gap-1 mb-3">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-4 h-4 ${
-                            i < Math.floor(offer.rating)
-                              ? 'fill-yellow-400 text-yellow-400'
-                              : 'text-gray-300'
-                          }`}
-                        />
-                      ))}
-                    </div>
-
+                    
                     {/* Title */}
                     <h3 className="text-lg font-bold text-gray-900 mb-2">{offer.title}</h3>
 
