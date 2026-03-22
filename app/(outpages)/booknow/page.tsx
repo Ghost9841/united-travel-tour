@@ -172,19 +172,7 @@ export default function ModernBookNow() {
       <style jsx global>{fadeInStyle}</style>
       <div className="min-h-screen bg-gradient-to-b from-blue-500 via-orange-400 to-orange-500 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto mt-16">
-          {/* Header Section */}
-          <div className="text-center mb-12 mt-8">
-            <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full mb-4">
-              <Plane className="w-4 h-4" />
-              <span className="text-sm font-medium">United Travels & Tours</span>
-            </div>
-            <h1 className="text-5xl font-bold text-gray-900 mb-4">
-              Start Your <span className="text-blue-600">Dream Journey</span>
-            </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Get personalized travel quotes from our experts. Fill in your details and we'll craft the perfect itinerary for you.
-            </p>
-          </div>
+         
 
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Left Side - Form */}

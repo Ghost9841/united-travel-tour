@@ -112,14 +112,15 @@ export default function SpecialOffers() {
                     'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&h=600&fit=crop';
                 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+              {/* <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
 
-              {/* Save badge */}
+              Save badge
               {offer.price > 0 && offer.price !== offer.discountedPrice && (
                 <div className="absolute top-4 left-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold">
                   Save £{offer.price - offer.discountedPrice}
                 </div>
               )}
+              asd */}
             </div>
 
             {/* Hover detail panel */}
