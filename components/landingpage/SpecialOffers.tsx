@@ -1,6 +1,6 @@
 'use client';
 
-import SpecialOffer from '@/app/api/specialOffers/types';
+import SpecialOffer from '@/app/api/special-offers/types';
 import { ChevronLeft, ChevronRight, MapPin, Star } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
