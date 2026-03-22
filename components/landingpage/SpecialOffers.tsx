@@ -155,7 +155,7 @@ export default function SpecialOffers() {
                     <span className="text-sm text-gray-300">Contact for price</span>
                   )}
                 </div>
-                 <Link href={'/offers/special-offers/' + offer.id}>
+                 <Link href={`/offers/special-offers/${offer.id}`}>
                 <button className="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors text-sm">
                   VIEW DETAILS
                 </button>
