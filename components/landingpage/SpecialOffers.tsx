@@ -112,15 +112,14 @@ export default function SpecialOffers() {
                     'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&h=600&fit=crop';
                 }}
               />
-              {/* <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
 
-              Save badge
+              {/* Save badge */}
               {offer.price > 0 && offer.price !== offer.discountedPrice && (
                 <div className="absolute top-4 left-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold">
                   Save £{offer.price - offer.discountedPrice}
                 </div>
               )}
-              asd */}
             </div>
 
             {/* Hover detail panel */}
@@ -146,14 +145,9 @@ export default function SpecialOffers() {
                 <div>
                   {offer.discountedPrice > 0 ? (
                     <>
-                      <div className="flex items-center gap-2">
-                        <span className="text-2xl font-bold text-orange-400">
-                          £{offer.discountedPrice}
-                        </span>
-                        {offer.price !== offer.discountedPrice && (
-                          <span className="text-gray-400 line-through text-sm">£{offer.price}</span>
-                        )}
-                      </div>
+                      <span className="text-2xl font-bold text-orange-400">
+                        £{offer.discountedPrice}
+                      </span>
                       <p className="text-xs text-gray-400 mt-1">Per person</p>
                     </>
                   ) : (
@@ -178,14 +172,9 @@ export default function SpecialOffers() {
                 )}
                 <div className="flex items-center gap-2 ml-auto">
                   {offer.discountedPrice > 0 ? (
-                    <>
-                      <span className="text-xl font-bold text-orange-400 drop-shadow-lg">
-                        £{offer.discountedPrice}
-                      </span>
-                      {offer.price !== offer.discountedPrice && (
-                        <span className="text-gray-300 line-through text-sm">£{offer.price}</span>
-                      )}
-                    </>
+                    <span className="text-xl font-bold text-orange-400 drop-shadow-lg">
+                      £{offer.discountedPrice}
+                    </span>
                   ) : (
                     <span className="text-sm text-gray-200 drop-shadow-lg">Contact for price</span>
                   )}
