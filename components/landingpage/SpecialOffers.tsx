@@ -6,15 +6,15 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
 export default function SpecialOffers() {
-  const [offers,     setOffers]     = useState<SpecialOffer[]>([]);
-  const [loading,    setLoading]    = useState(true);
+  const [offers, setOffers] = useState<SpecialOffer[]>([]);
+  const [loading, setLoading] = useState(true);
   const [startIndex, setStartIndex] = useState(0);
   const itemsToShow = 4;
 
   useEffect(() => {
     (async () => {
       try {
-        const res  = await fetch('/api/special-offers?status=active');
+        const res = await fetch('/api/special-offers?status=active');
         const data = await res.json();
         if (data.success) setOffers(data.data);
       } catch (err) {
@@ -37,7 +37,7 @@ export default function SpecialOffers() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft')  prev();
+      if (e.key === 'ArrowLeft') prev();
       if (e.key === 'ArrowRight') next();
     };
     window.addEventListener('keydown', onKey);
@@ -155,16 +155,21 @@ export default function SpecialOffers() {
                     <span className="text-sm text-gray-300">Contact for price</span>
                   )}
                 </div>
-                 <Link href={`/offers/special-offers/${offer.id}`}>
-                <button className="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors text-sm">
-                  VIEW DETAILS
-                </button>
-                </Link>
-                <Link href={'/booknow'}>
-                <button className="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors text-sm">
-                  BOOK NOW
-                </button>
-                </Link>
+
+                <div className="flex items-center justify-between pt-3 border-t border-gray-700 gap-3">
+                  <div className="flex gap-2">  {/* Added wrapper with gap */}
+                    <Link href={`/offers/special-offers/${offer.id}`}>
+                      <button className="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors text-sm">
+                        VIEW DETAILS
+                      </button>
+                    </Link>
+                    <Link href={'/booknow'}>
+                      <button className="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors text-sm">
+                        BOOK NOW
+                      </button>
+                    </Link>
+                  </div>
+                </div>
               </div>
             </div>
 
