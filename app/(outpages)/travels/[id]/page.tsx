@@ -135,23 +135,6 @@ export default async function TravelDetailPage({ params }: TravelDetailPageProps
           </div>
           
           <div className="hidden sm:block h-6 w-px bg-gray-300" />
-          
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`w-5 h-5 ${
-                    i < Math.floor(travel.rating)
-                      ? 'fill-yellow-400 text-yellow-400'
-                      : 'text-gray-300'
-                  }`}
-                />
-              ))}
-            </div>
-            <span className="font-semibold text-gray-900">{travel.rating.toFixed(1)}</span>
-            <span className="text-gray-500">({travel.reviews} {travel.reviews === 1 ? 'review' : 'reviews'})</span>
-          </div>
         </div>
 
         {/* Main Content Grid */}
