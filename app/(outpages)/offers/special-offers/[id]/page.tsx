@@ -119,13 +119,6 @@ export default async function SpecialOfferDetailPage({ params }: { params: Promi
             <div className="bg-white rounded-2xl p-6 shadow-md mb-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="flex items-start gap-3">
-                  <Tag className="w-5 h-5 text-orange-500 mt-1 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">Special Deal</h4>
-                    <p className="text-sm text-gray-600">Limited availability — book early</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-green-500 mt-1 flex-shrink-0" />
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-1">Instant Confirmation</h4>
@@ -148,28 +141,6 @@ export default async function SpecialOfferDetailPage({ params }: { params: Promi
               <div className="space-y-4 text-gray-700 leading-relaxed">
                 {offer.description.split('\n\n').map((para, i) => (
                   <p key={i}>{para}</p>
-                ))}
-              </div>
-            </div>
-
-            <div className="border-t-2 border-gray-200 my-8" />
-
-            {/* What's included */}
-            <div className="bg-white rounded-2xl p-8 shadow-md mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">What&apos;s Included</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[
-                  'Competitive fares across all major airlines',
-                  '40KG baggage allowance (where applicable)',
-                  'Dedicated booking support',
-                  'Flexible date options',
-                  'Quick confirmation',
-                  'Fare rules explained clearly',
-                ].map((item, i) => (
-                  <div key={i} className="flex items-start gap-3">
-                    <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">{item}</span>
-                  </div>
                 ))}
               </div>
             </div>
