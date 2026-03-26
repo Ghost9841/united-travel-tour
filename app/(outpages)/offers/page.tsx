@@ -70,13 +70,6 @@ export default function OffersPage() {
   }
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white py-20">
-        <div className="max-w-8xl mx-auto px-6 mt-16">
-          <h1 className="text-5xl font-bold mb-4">Exclusive Offers & Travel Deals</h1>
-          <p className="text-xl text-orange-100">Discover top deals, trips, and special offers from our travel experts</p>
-        </div>
-      </div>
       <HeroOffersCarousel/>
 
       {/* Main Content */}
