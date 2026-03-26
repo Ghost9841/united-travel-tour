@@ -1,6 +1,7 @@
 'use client';
 import { Calendar, User, Clock, ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import HeroOffersCarousel from './CarouselOffers';
 
 type Offer = {
   id: number;
@@ -76,6 +77,7 @@ export default function OffersPage() {
           <p className="text-xl text-orange-100">Discover top deals, trips, and special offers from our travel experts</p>
         </div>
       </div>
+      <HeroOffersCarousel/>
 
       {/* Main Content */}
       <div className="max-w-8xl mx-auto px-6 py-12">

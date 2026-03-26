@@ -11,7 +11,7 @@ interface CarouselImage {
   status: 'active' | 'draft'
 }
 
-export default function HeroCarousel() {
+export default function HeroOffersCarousel() {
   const [images, setImages] = useState<CarouselImage[]>([])
   const [loading, setLoading] = useState(true)
   const [currentSlide, setCurrentSlide] = useState(0)
