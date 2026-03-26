@@ -150,3 +150,15 @@ model SpecialOffer {
 
   @@map("special_offers")
 }
+model CarouselImage {
+  id        Int      @id @default(autoincrement())
+  src       String
+  alt       String   @default("")
+  order     Int      @default(0)   // controls display order
+  status    String   @default("active") // 'active' or 'draft'
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt      @map("updated_at")
+
+  @@map("carousel_images")
+}
