@@ -125,7 +125,7 @@ export default function TrendingRoutes() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {TRENDING_ROUTES.map(route => (
-          <Link key={route.id} href={`/flights/${route.id}`}>
+          <Link key={route.id} href={`/offers/${route.id}`}>
             <div className="flex items-center gap-3 border border-gray-200 rounded-xl p-3 hover:border-blue-400 hover:shadow-md transition-all cursor-pointer bg-white group">
               {/* City image */}
               <img
