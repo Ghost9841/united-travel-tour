@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ChevronLeft, Info, PlaneTakeoff } from 'lucide-react';
-import { TRENDING_ROUTES } from '../TrendingRoutes';
+import { TRENDING_ROUTES } from '../data';
 
 
 export default async function FlightDetailPage({ params }: { params: Promise<{ id: string }> }) {
