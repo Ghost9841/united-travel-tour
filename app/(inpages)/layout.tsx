@@ -2,6 +2,7 @@ import { SidebarProvider } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import { currentUser } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
+import { cookies } from "next/headers"
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user = await currentUser()
@@ -17,6 +18,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
   if (!isAdmin) {
     return redirect('/')
   }
+    const cookieStore = await cookies()
+  const sidebarOpen = cookieStore.get('sidebar:state')?.value === 'true'
 
 return (
   <SidebarProvider defaultOpen={false}>
