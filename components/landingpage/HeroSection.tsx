@@ -21,7 +21,7 @@ export default function HeroCarousel() {
   useEffect(() => {
     (async () => {
       try {
-        const res  = await fetch('/api/hero')
+        const res  = await fetch('/api/hero?status=active')
         const data = await res.json()
         if (data.success) setImages(data.data)
       } catch (err) {
