@@ -53,18 +53,18 @@ export default function HeroCarousel() {
   if (images.length === 0) return null
 
   return (
-    <section className="relative w-full h-screen overflow-hidden">
+    <section className="relative w-full h-[583px] overflow-hidden">
 
       {/* Draggable carousel — Embla handles touch/mouse drag */}
       <Carousel
         setApi={setApi}
         opts={{ loop: true }}
         plugins={[Autoplay({ delay: 5000, stopOnInteraction: true })]}
-        className="w-full h-full"
+        className="w-full h-[583px]"
       >
         <CarouselContent className="ml-0">
           {images.map(image => (
-            <CarouselItem key={image.id} className="pl-0 relative h-full">
+            <CarouselItem key={image.id} className="pl-0 relative h-[583px]">
               <img
                 src={image.src}
                 alt={image.alt}
