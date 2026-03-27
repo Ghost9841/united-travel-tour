@@ -162,3 +162,16 @@ model CarouselImage {
 
   @@map("carousel_images")
 }
+
+model LandingHeroCarouselImage {
+  id  Int   @id @default(autoincrement())
+  src String
+  alt String @default("")
+  order Int  @default(0)
+  status String @default("active")
+
+   createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt      @map("updated_at")
+
+  @@map("herocarousel_images")
+}
