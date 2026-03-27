@@ -1,355 +1,212 @@
-'use client';
-import { MapPin, Clock, Users, Star, ArrowLeft, Heart, Share2, Tag, CalendarDays, Eye } from 'lucide-react';
-import { useParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import { ChevronLeft, Info, PlaneTakeoff } from 'lucide-react';
+import { TRENDING_ROUTES } from '../TrendingRoutes';
 
-interface Offer {
-  id: string;
-  title: string;
-  content: string;
-  excerpt: string;
-  image: string;
-  author: string;
-  date: string;
-  readTime: string;
-  category: string;
-  status: string;
-  views: number;
-  likes: number;
-  createdAt: string;
-  updatedAt: string;
-}
 
-interface ApiResponse<T> {
-  success: boolean;
-  data?: T;
-  error?: string;
-}
+export default async function FlightDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const route = TRENDING_ROUTES.find(r => r.id === Number(id));
 
-export default function OffersDetailPage() {
-  const params = useParams();
-  const id = params?.id as string;
-  const [offer, setOffer] = useState<Offer | null>(null);
-  const [relatedOffers, setRelatedOffers] = useState<Offer[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [liked, setLiked] = useState(false);
+  if (!route) notFound();
 
-  useEffect(() => {
-    const fetchOffer = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(`/api/offers/${id}`);
-        const data: ApiResponse<Offer> = await response.json();
-
-        if (data.success && data.data) {
-          if (data.data.status === 'published') {
-            setOffer(data.data);
-            fetchRelatedOffers(data.data.category);
-          } else {
-            setError('Offer not found');
-          }
-        } else {
-          setError(data.error || 'Offer not found');
-        }
-      } catch (err) {
-        setError('Failed to load offer');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    const fetchRelatedOffers = async (category: string) => {
-      try {
-        const response = await fetch('/api/offers');
-        const data: ApiResponse<Offer[]> = await response.json();
-        if (data.success && data.data) {
-          const related = data.data
-            .filter((b) => b.status === 'published' && b.category === category && b.id !== id)
-            .slice(0, 3);
-          setRelatedOffers(related);
-        }
-      } catch (err) {
-        console.error('Failed to load related offers:', err);
-      }
-    };
-
-    if (id) fetchOffer();
-  }, [id]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#0f0c08] flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="w-14 h-14 rounded-full border-2 border-amber-400/30 border-t-amber-400 animate-spin mx-auto" />
-          <p className="text-amber-400/70 text-sm tracking-[0.2em] uppercase font-light">Loading offer</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error || !offer) {
-    return (
-      <div className="min-h-screen bg-[#0f0c08] flex items-center justify-center">
-        <div className="text-center space-y-6">
-          <div className="text-7xl">✈️</div>
-          <h1 className="text-3xl font-light text-white tracking-wide">Offer Not Found</h1>
-          <p className="text-white/40 text-sm">{error || "The offer you're looking for doesn't exist."}</p>
-          <a
-            href="/offers"
-            className="inline-block mt-4 px-8 py-3 border border-amber-400/50 text-amber-400 text-sm tracking-[0.15em] uppercase hover:bg-amber-400 hover:text-black transition-all duration-300"
-          >
-            Browse All Offers
-          </a>
-        </div>
-      </div>
-    );
-  }
+  const total = route.baseFare + route.tax + route.insurance;
 
   return (
-    <div className="min-h-screen bg-[#0f0c08] text-white" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+    <div className="min-h-screen bg-gray-50 pt-24 pb-16">
+      <div className="max-w-5xl mx-auto px-4">
 
-      {/* ── Hero ── */}
-      <div className="relative h-[90vh] min-h-[600px] overflow-hidden">
-        <img
-          src={offer.image}
-          alt={offer.title}
-          className="absolute inset-0 w-full h-full object-cover scale-105"
-          style={{ animation: 'slowZoom 20s ease-out forwards' }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0f0c08] via-[#0f0c08]/40 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0f0c08]/60 via-transparent to-transparent" />
+        {/* Back link */}
+        <Link href="/" className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 mb-6">
+          <ChevronLeft className="w-4 h-4" /> Back to Search
+        </Link>
 
-        {/* Back */}
-        <div className="absolute top-8 left-6 md:left-12">
-          <a
-            href="/offers"
-            className="inline-flex items-center gap-2 text-white/60 hover:text-amber-400 text-sm tracking-widest uppercase transition-colors duration-300"
-            style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
-          >
-            <ArrowLeft className="w-4 h-4" />
-            All Offers
-          </a>
-        </div>
+        <h1 className="text-2xl font-bold text-gray-900 mb-6">Review your flight details</h1>
 
-        {/* Actions */}
-        <div className="absolute top-8 right-6 md:right-12 flex items-center gap-3">
-          <button
-            onClick={() => setLiked(!liked)}
-            className={`w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-300 ${liked ? 'bg-red-500 border-red-500' : 'border-white/30 hover:border-red-400'}`}
-          >
-            <Heart className={`w-4 h-4 ${liked ? 'fill-white text-white' : 'text-white/70'}`} />
-          </button>
-          <button className="w-10 h-10 rounded-full border border-white/30 hover:border-amber-400 flex items-center justify-center transition-all duration-300">
-            <Share2 className="w-4 h-4 text-white/70" />
-          </button>
-        </div>
+        <div className="flex flex-col lg:flex-row gap-6">
 
-        {/* Hero text */}
-        <div className="absolute bottom-0 left-0 right-0 px-6 md:px-16 pb-16">
-          <div className="max-w-4xl">
-            <div className="mb-5">
-              <span
-                className="inline-flex items-center gap-2 px-4 py-1.5 border border-amber-400/60 text-amber-400 text-xs tracking-[0.25em] uppercase"
-                style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
-              >
-                <MapPin className="w-3 h-3" />
-                {offer.category}
-              </span>
-            </div>
+          {/* ── Left — flight card ── */}
+          <div className="flex-1 space-y-4">
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-light leading-[1.1] mb-6 tracking-tight text-white">
-              {offer.title}
-            </h1>
-
-            <div
-              className="flex flex-wrap items-center gap-6 text-white/50 text-sm"
-              style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
-            >
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-amber-400/70" />
-                <span>{offer.readTime}</span>
+              {/* Route header */}
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                    {route.from}
+                    <span className="text-gray-400">⟶</span>
+                    {route.to}
+                  </h2>
+                  <div className="flex items-center gap-3 text-sm text-gray-500 mt-1">
+                    <span>• {route.date.replace(/\//g, ' Apr ').split(' ')[0]} Apr {route.date.split('/')[2]}</span>
+                    <span>• Duration {route.duration}</span>
+                    <span>• {route.stops}</span>
+                  </div>
+                </div>
+                <span className="text-xs border border-gray-300 text-gray-600 px-3 py-1.5 rounded-full">
+                  Non Refundable
+                </span>
               </div>
-              <div className="h-3 w-px bg-white/20" />
-              <div className="flex items-center gap-2">
-                <CalendarDays className="w-4 h-4 text-amber-400/70" />
-                <span>{offer.date}</span>
+
+              <hr className="border-gray-100 mb-5" />
+
+              {/* Airline row */}
+              <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
+                    <PlaneTakeoff className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-900">{route.airline}</p>
+                    <p className="text-xs text-gray-400">{route.flightNo}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-6 text-sm">
+                  <div className="text-center border-r border-gray-200 pr-6">
+                    <p className="text-xs text-gray-400 mb-0.5">Travel Class</p>
+                    <p className="font-semibold text-gray-800">{route.travelClass}</p>
+                  </div>
+                  <div className="text-center border-r border-gray-200 pr-6">
+                    <p className="text-xs text-gray-400 mb-0.5">Check-In Baggage</p>
+                    <p className="font-semibold text-gray-800">{route.checkinBaggage}</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs text-gray-400 mb-0.5">Cabin Baggage</p>
+                    <p className="font-semibold text-gray-800">{route.cabinBaggage}</p>
+                  </div>
+                </div>
               </div>
-              <div className="h-3 w-px bg-white/20" />
-              <div className="flex items-center gap-2">
-                <Eye className="w-4 h-4 text-amber-400/70" />
-                <span>{offer.views?.toLocaleString() ?? 0} interested</span>
+
+              {/* Timeline */}
+              <div className="flex items-center gap-4">
+                {/* Departure */}
+                <div className="min-w-[100px]">
+                  <p className="text-3xl font-bold text-gray-900">{route.departure}</p>
+                  <p className="text-sm text-gray-500 mt-1">{route.fromFull}</p>
+                  <p className="text-xs text-gray-400">{route.from}</p>
+                  <p className="text-xs text-gray-400">{route.fromTerminal}</p>
+                </div>
+
+                {/* Duration line */}
+                <div className="flex-1 flex flex-col items-center">
+                  <p className="text-xs text-gray-400 mb-1">
+                    {route.duration.replace('h ', ' Hr. ').replace('m', ' Min.')}
+                  </p>
+                  <div className="flex items-center w-full">
+                    <div className="flex-1 border-t-2 border-dashed border-gray-300" />
+                    <PlaneTakeoff className="w-5 h-5 text-gray-400 mx-2" />
+                  </div>
+                </div>
+
+                {/* Arrival */}
+                <div className="min-w-[100px] text-right">
+                  <p className="text-3xl font-bold text-gray-900">{route.arrival}</p>
+                  <p className="text-sm text-gray-500 mt-1">{route.toFull}</p>
+                  <p className="text-xs text-gray-400">{route.to}</p>
+                  <p className="text-xs text-gray-400">{route.toTerminal}</p>
+                </div>
               </div>
-              <div className="h-3 w-px bg-white/20" />
-              <div className="flex items-center gap-2">
-                <Heart className="w-4 h-4 text-amber-400/70" />
-                <span>{offer.likes?.toLocaleString() ?? 0} saved</span>
+
+              <hr className="border-gray-100 my-5" />
+
+              {/* Info notices */}
+              <div className="space-y-2.5">
+                {[
+                  'Business/Visit/Tourist Visa Holders Are Required To Issue Single Return Ticket On Same Airline Only.',
+                  'For Change/Transfer of airport/terminal you may require Transit Visa.',
+                  'United Travels is not liable for visa information. Travelers are responsible for ensuring eligibility to enter destination & transit countries. Please verify travel rules on regulatory websites before booking & travel.',
+                ].map((notice, i) => (
+                  <div key={i} className="flex items-start gap-2 bg-blue-50 border border-blue-100 rounded-lg px-4 py-3">
+                    <Info className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                    <p className="text-xs text-blue-700">{notice}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* ── Body ── */}
-      <div className="max-w-5xl mx-auto px-6 md:px-12 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
+          {/* ── Right — fare sidebar ── */}
+          <div className="w-full lg:w-72 space-y-4">
 
-          {/* Main content */}
-          <div className="lg:col-span-2 space-y-10">
-            {offer.excerpt && (
-              <p className="text-xl md:text-2xl font-light text-amber-300/80 leading-relaxed border-l-2 border-amber-400/40 pl-6 italic">
-                {offer.excerpt}
-              </p>
-            )}
+            {/* Fare details */}
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-bold text-gray-900">Fare Details</h3>
+                <span className="text-xs text-blue-600 font-semibold">1 Traveller</span>
+              </div>
 
-            <div className="flex items-center gap-4">
-              <div className="h-px bg-gradient-to-r from-amber-400/50 to-transparent flex-1" />
-              <span className="text-amber-400/40 text-xs tracking-widest uppercase" style={{ fontFamily: "'Helvetica Neue', sans-serif" }}>Details</span>
-              <div className="h-px bg-gradient-to-l from-amber-400/50 to-transparent flex-1" />
+              <div className="space-y-3 text-sm">
+                {[
+                  { label: 'Base Fare',    value: route.baseFare },
+                  { label: 'Tax & Charges', value: route.tax },
+                  { label: 'Insurance',    value: route.insurance },
+                ].map(item => (
+                  <div key={item.label} className="flex items-center justify-between text-gray-600">
+                    <div className="flex items-center gap-1">
+                      <span className="text-gray-400 text-base leading-none">+</span>
+                      <span>{item.label}</span>
+                    </div>
+                    <span>£ {item.value.toLocaleString()}</span>
+                  </div>
+                ))}
+              </div>
+
+              <hr className="border-gray-100 my-4" />
+
+              <div className="flex items-center justify-between font-bold text-gray-900">
+                <span>Total Amount:</span>
+                <span className="text-lg">£ {total.toLocaleString()}</span>
+              </div>
             </div>
 
-            <div className="space-y-5">
-              {offer.content.split('\n\n').map((paragraph, idx) => (
-                <p key={idx} className="text-white/65 leading-[1.9] text-[1.05rem]">
-                  {paragraph.split('\n').map((line, lineIdx, arr) => (
-                    <span key={lineIdx}>
-                      {line}
-                      {lineIdx < arr.length - 1 && <br />}
-                    </span>
+            {/* Promo code */}
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+              <div className="bg-green-400 px-5 py-3">
+                <h3 className="font-bold text-white">Promo Code</h3>
+              </div>
+              <div className="p-5">
+                <div className="flex gap-2 mb-4">
+                  <input
+                    type="text"
+                    placeholder="Enter promocode"
+                    className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                  <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
+                    Apply
+                  </button>
+                </div>
+
+                <p className="text-xs text-gray-500 font-medium mb-3">Choose from the offers below</p>
+
+                <div className="space-y-3">
+                  {[
+                    { code: 'ZEROFEE', save: 650, desc: '#NoConvenienceFee. Choose this promo to get a discount of £650' },
+                    { code: 'UNITEDMARCH', save: 400, desc: '#UnitedSpecial - Choose this promo to enjoy a discount of £400' },
+                  ].map(promo => (
+                    <label key={promo.code} className="flex items-start gap-3 cursor-pointer">
+                      <input type="radio" name="promo" className="mt-0.5 accent-blue-600" />
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-bold text-gray-900">{promo.code}</span>
+                          <span className="text-xs text-green-600 font-semibold">Save {promo.save}</span>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-0.5">{promo.desc}</p>
+                      </div>
+                    </label>
                   ))}
-                </p>
-              ))}
-            </div>
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* CTA card */}
-            <div className="border border-amber-400/20 p-6 space-y-5 bg-white/[0.03]">
-              <p className="text-xs tracking-[0.2em] uppercase text-amber-400/60" style={{ fontFamily: "'Helvetica Neue', sans-serif" }}>
-                Exclusive Offer
-              </p>
-              <h3 className="text-xl font-light text-white leading-snug">
-                Interested in this package?
-              </h3>
-              <p className="text-white/40 text-sm leading-relaxed" style={{ fontFamily: "'Helvetica Neue', sans-serif" }}>
-                Speak to one of our travel experts to customise this offer for you.
-              </p>
-              <a
-                href="/contact"
-                className="block w-full text-center py-3.5 bg-amber-400 text-black text-sm font-semibold tracking-[0.15em] uppercase hover:bg-amber-300 transition-colors duration-300"
-                style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
-              >
-                Enquire Now
-              </a>
-              <a
-                href="tel:+441234567890"
-                className="block w-full text-center py-3 border border-white/20 text-white/60 text-sm tracking-[0.1em] uppercase hover:border-amber-400/50 hover:text-amber-400 transition-all duration-300"
-                style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
-              >
-                Call Us
-              </a>
-            </div>
-
-            {/* Info card */}
-            <div className="border border-white/10 p-6 space-y-4 bg-white/[0.02]" style={{ fontFamily: "'Helvetica Neue', sans-serif" }}>
-              <p className="text-xs tracking-[0.2em] uppercase text-white/30">Offer Info</p>
-              <div className="space-y-4">
-                <div className="flex items-start gap-3 text-sm">
-                  <Tag className="w-4 h-4 text-amber-400/60 mt-0.5 shrink-0" />
-                  <div>
-                    <p className="text-white/30 text-xs mb-0.5">Category</p>
-                    <p className="text-white/70">{offer.category}</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 text-sm">
-                  <Clock className="w-4 h-4 text-amber-400/60 mt-0.5 shrink-0" />
-                  <div>
-                    <p className="text-white/30 text-xs mb-0.5">Duration</p>
-                    <p className="text-white/70">{offer.readTime}</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 text-sm">
-                  <CalendarDays className="w-4 h-4 text-amber-400/60 mt-0.5 shrink-0" />
-                  <div>
-                    <p className="text-white/30 text-xs mb-0.5">Available From</p>
-                    <p className="text-white/70">{offer.date}</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 text-sm">
-                  <Users className="w-4 h-4 text-amber-400/60 mt-0.5 shrink-0" />
-                  <div>
-                    <p className="text-white/30 text-xs mb-0.5">Curated by</p>
-                    <p className="text-white/70">{offer.author}</p>
-                  </div>
                 </div>
               </div>
             </div>
+
+            {/* Book button */}
+            <a href="/booknow"
+              className="block w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 rounded-xl text-center transition-colors shadow-md">
+              BOOK NOW
+            </a>
           </div>
         </div>
       </div>
-
-      {/* ── Related Offers ── */}
-      {relatedOffers.length > 0 && (
-        <div className="border-t border-white/10 py-20 px-6 md:px-16">
-          <div className="max-w-6xl mx-auto">
-            <div className="flex items-center gap-6 mb-12">
-              <div className="h-px bg-amber-400/30 w-8" />
-              <h2
-                className="text-xs tracking-[0.3em] uppercase text-amber-400/60"
-                style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
-              >
-                Similar Offers
-              </h2>
-              <div className="h-px bg-white/10 flex-1" />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {relatedOffers.map((related) => (
-                <a
-                  key={related.id}
-                  href={`/offers/${related.id}`}
-                  className="group block overflow-hidden border border-white/10 hover:border-amber-400/30 transition-all duration-500 bg-white/[0.02] hover:bg-white/[0.04]"
-                >
-                  <div className="relative h-52 overflow-hidden">
-                    <img
-                      src={related.image}
-                      alt={related.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                    <span
-                      className="absolute bottom-4 left-4 text-[10px] tracking-[0.2em] uppercase text-amber-400 border border-amber-400/40 px-2.5 py-1"
-                      style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
-                    >
-                      {related.category}
-                    </span>
-                  </div>
-                  <div className="p-5 space-y-2">
-                    <h3 className="text-base font-light text-white/80 group-hover:text-amber-300 transition-colors duration-300 leading-snug">
-                      {related.title}
-                    </h3>
-                    <p
-                      className="text-white/30 text-xs flex items-center gap-2"
-                      style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
-                    >
-                      <Clock className="w-3 h-3" />
-                      {related.readTime}
-                    </p>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      <style>{`
-        @keyframes slowZoom {
-          from { transform: scale(1.05); }
-          to   { transform: scale(1); }
-        }
-      `}</style>
     </div>
   );
 }
