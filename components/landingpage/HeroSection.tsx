@@ -1,81 +1,90 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
+import { CarouselApi } from '../ui/carousel'
 
-const HERO_IMAGES = [
-    {
-        id: 1,
-        src: '/2026/herosection/passport.jpeg',
-        alt: 'Alpine Village',
-    },
-    {
-        id: 2,
-        src: '/2026/herosection/airplane.jpeg',
-        alt: 'Beach Paradise',
-    },
-    {
-        id: 3,
-        src: '/2026/herosection/airplane_2.jpeg',
-        alt: 'City Skyline',
-    },
-    {
-        id: 4,
-        src: '/2026/herosection/airplane_3.jpeg',
-        alt: 'Tropical Island',
-    },
-    {
-        id: 5,
-        src: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1920&h=1080&fit=crop',
-        alt: 'Tropical Island',
-    },
-    {
-        id: 6,
-        src: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1920&h=1080&fit=crop',
-        alt: 'Tropical Island',
-    },
-]
+interface HeroCarouselImage {
+  id: number
+  src: string
+  alt: string
+  order: number
+  status: 'active' | 'draft'
+}
 
 export default function HeroCarousel() {
-    const [currentSlide, setCurrentSlide] = useState(0)
+    const [images, setImages] = useState<HeroCarouselImage[]>([])
+    const [loading, setLoading] = useState(true)
+    const [api, setApi] = useState<CarouselApi>()
+    const [current, setCurrent] = useState(0)
     const [isAutoPlay, setIsAutoPlay] = useState(true)
-
+  
     useEffect(() => {
-        if (!isAutoPlay) return
+      (async () => {
+        try {
+          const res = await fetch('/api/hero?status=active')
+          const data = await res.json()
+          if (data.success) setImages(data.data)
+        } catch (err) {
+          console.error('Failed to fetch carousel images', err)
+        } finally {
+          setLoading(false)
+        }
+      })()
+    }, [])
+  
+    useEffect(() => {
+      if (!api) return
+      setCurrent(api.selectedScrollSnap())
+      api.on('select', () => setCurrent(api.selectedScrollSnap()))
+    }, [api])
+  
+    const goToSlide = useCallback((idx: number) => {
+      api?.scrollTo(idx)
+    }, [api])
 
-        const timer = setInterval(() => {
-            setCurrentSlide((prev) => (prev + 1) % HERO_IMAGES.length)
-        }, 5000)
+    // Auto-play effect using the api
+    useEffect(() => {
+      if (!isAutoPlay || !api) return
 
-        return () => clearInterval(timer)
-    }, [isAutoPlay])
+      const timer = setInterval(() => {
+        const nextSlide = (current + 1) % images.length
+        api.scrollTo(nextSlide)
+      }, 5000)
 
-    const goToSlide = (index: number) => {
-        setCurrentSlide(index)
-        setIsAutoPlay(false)
-    }
+      return () => clearInterval(timer)
+    }, [isAutoPlay, api, current, images.length])
 
     const nextSlide = () => {
-        goToSlide((currentSlide + 1) % HERO_IMAGES.length)
+      if (!api) return
+      const nextSlide = (current + 1) % images.length
+      api.scrollTo(nextSlide)
     }
 
     const prevSlide = () => {
-        goToSlide((currentSlide - 1 + HERO_IMAGES.length) % HERO_IMAGES.length)
+      if (!api) return
+      const prevSlide = (current - 1 + images.length) % images.length
+      api.scrollTo(prevSlide)
     }
+  
+    if (loading) return (
+      <section className="relative w-full h-screen overflow-hidden bg-gray-200 animate-pulse">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-12 h-12 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin" />
+        </div>
+      </section>
+    )
+  
+    if (images.length === 0) return null
 
     return (
         <section className="relative w-full h-screen overflow-hidden">
-            {/* Top Thin Navbar */}
-            {/* <div className=''>
-            <TopThinNavbar/>
-
-            </div> */}
             {/* Background Images */}
             <div className="relative w-full h-full">
-                {HERO_IMAGES.map((image, index) => (
+                {images.map((image, index) => (
                     <div
                         key={image.id}
-                        className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? 'opacity-100' : 'opacity-0'
+                        className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === current ? 'opacity-100' : 'opacity-0'
                             }`}
                     >
                         <img
@@ -89,10 +98,6 @@ export default function HeroCarousel() {
                 ))}
             </div>
 
-            {/* Navigation Bar */}
-            {/* <nav className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-8 md:px-16 py-6">
-                <Navbar />
-            </nav> */}
             {/* Content Overlay */}
             <div className="absolute inset-0 flex flex-col justify-between px-8 md:px-16 py-16 z-10">
                 {/* Text Content */}
@@ -104,17 +109,18 @@ export default function HeroCarousel() {
                         The best travel for your journey begins now
                     </p>
                 </div>
+                
                 {/* Combined Navigation - Dots and Arrows */}
                 <div className="flex flex-col items-center gap-6">
-                    {/*  Vertical nav – centred on the right edge  */}
+                    {/* Vertical nav – centred on the right edge */}
                     <div className="absolute right-6 top-1/2 -translate-y-1/2 z-30 flex flex-col items-center gap-6">
                         {/* Dots */}
                         <div className="flex flex-col gap-4">
-                            {HERO_IMAGES.map((_, idx) => (
+                            {images.map((_, idx) => (
                                 <button
                                     key={idx}
                                     onClick={() => goToSlide(idx)}
-                                    className={`rounded-full transition-all duration-300 ${idx === currentSlide ? 'bg-white w-3 h-8' : 'bg-white/50 hover:bg-white/80 w-3 h-3'
+                                    className={`rounded-full transition-all duration-300 ${idx === current ? 'bg-white w-3 h-8' : 'bg-white/50 hover:bg-white/80 w-3 h-3'
                                         }`}
                                     aria-label={`Go to slide ${idx + 1}`}
                                 />
@@ -139,42 +145,8 @@ export default function HeroCarousel() {
                             </button>
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
     )
 }
-// if bottom ma rakhnu paryo bhaney
-//                         {/* <div className="flex flex-col items-center gap-6">
-//                             {/* Vertical Dots Navigation */}
-//                             <div className="flex flex-col gap-4">
-//                                 {HERO_IMAGES.map((_, index) => (
-//                                     <button
-//                                         key={index}
-//                                         onClick={() => goToSlide(index)}
-//                                         className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-white w-3 h-8' : 'bg-white/50 hover:bg-white/80'
-//                                             }`}
-//                                         aria-label={`Go to slide ${index + 1}`}
-//                                     />
-//                                 ))}
-//                             </div>
-
-//                             {/* Vertical Chevron Navigation */}
-//                             <div className="flex flex-col gap-2">
-//                                 <button
-//                                     onClick={prevSlide}
-//                                     className="p-2 rounded-full bg-white/20 hover:bg-white/40 transition-colors text-white"
-//                                     aria-label="Previous slide"
-//                                 >
-//                                     <ChevronUp className="w-6 h-6" />
-//                                 </button>
-//                                 <button
-//                                     onClick={nextSlide}
-//                                     className="p-2 rounded-full bg-white/20 hover:bg-white/40 transition-colors text-white"
-//                                     aria-label="Next slide"
-//                                 >
-//                                     <ChevronDown className="w-6 h-6" />
-//                                 </button>
-//                             </div>
-//                         </div> */}
