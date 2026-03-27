@@ -62,9 +62,9 @@ export default function HeroCarousel() {
         plugins={[Autoplay({ delay: 5000, stopOnInteraction: true })]}
         className="w-full h-full"
       >
-        <CarouselContent className="h-screen ml-0">
+        <CarouselContent className="ml-0">
           {images.map(image => (
-            <CarouselItem key={image.id} className="pl-0 relative h-screen">
+            <CarouselItem key={image.id} className="pl-0 relative h-full">
               <img
                 src={image.src}
                 alt={image.alt}

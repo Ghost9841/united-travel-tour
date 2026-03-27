@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import { CarouselApi } from '../ui/carousel'
 
 interface HeroCarouselImage {
   id: number
@@ -15,8 +14,7 @@ interface HeroCarouselImage {
 export default function HeroCarousel() {
     const [images, setImages] = useState<HeroCarouselImage[]>([])
     const [loading, setLoading] = useState(true)
-    const [api, setApi] = useState<CarouselApi>()
-    const [current, setCurrent] = useState(0)
+    const [currentSlide, setCurrentSlide] = useState(0)
     const [isAutoPlay, setIsAutoPlay] = useState(true)
   
     useEffect(() => {
@@ -33,38 +31,27 @@ export default function HeroCarousel() {
       })()
     }, [])
   
-    useEffect(() => {
-      if (!api) return
-      setCurrent(api.selectedScrollSnap())
-      api.on('select', () => setCurrent(api.selectedScrollSnap()))
-    }, [api])
-  
     const goToSlide = useCallback((idx: number) => {
-      api?.scrollTo(idx)
-    }, [api])
+      setCurrentSlide(idx)
+    }, [])
 
-    // Auto-play effect using the api
+    // Auto-play effect
     useEffect(() => {
-      if (!isAutoPlay || !api) return
+      if (!isAutoPlay || images.length === 0) return
 
       const timer = setInterval(() => {
-        const nextSlide = (current + 1) % images.length
-        api.scrollTo(nextSlide)
-      }, 5000)
+        setCurrentSlide((prev) => (prev + 1) % images.length)
+      }, 3000) // Changed to 3 seconds
 
       return () => clearInterval(timer)
-    }, [isAutoPlay, api, current, images.length])
+    }, [isAutoPlay, images.length])
 
     const nextSlide = () => {
-      if (!api) return
-      const nextSlide = (current + 1) % images.length
-      api.scrollTo(nextSlide)
+      setCurrentSlide((prev) => (prev + 1) % images.length)
     }
 
     const prevSlide = () => {
-      if (!api) return
-      const prevSlide = (current - 1 + images.length) % images.length
-      api.scrollTo(prevSlide)
+      setCurrentSlide((prev) => (prev - 1 + images.length) % images.length)
     }
   
     if (loading) return (
@@ -84,7 +71,7 @@ export default function HeroCarousel() {
                 {images.map((image, index) => (
                     <div
                         key={image.id}
-                        className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === current ? 'opacity-100' : 'opacity-0'
+                        className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? 'opacity-100' : 'opacity-0'
                             }`}
                     >
                         <img
@@ -120,7 +107,7 @@ export default function HeroCarousel() {
                                 <button
                                     key={idx}
                                     onClick={() => goToSlide(idx)}
-                                    className={`rounded-full transition-all duration-300 ${idx === current ? 'bg-white w-3 h-8' : 'bg-white/50 hover:bg-white/80 w-3 h-3'
+                                    className={`rounded-full transition-all duration-300 ${idx === currentSlide ? 'bg-white w-3 h-8' : 'bg-white/50 hover:bg-white/80 w-3 h-3'
                                         }`}
                                     aria-label={`Go to slide ${idx + 1}`}
                                 />
