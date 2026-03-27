@@ -22,7 +22,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const sidebarOpen = cookieStore.get('sidebar:state')?.value === 'true'
 
 return (
-  <SidebarProvider defaultOpen={false}>
+  <SidebarProvider defaultOpen={sidebarOpen}>
     <div className="flex min-h-screen w-full">
       <AppSidebar />
       <main className="flex-1 w-full min-w-0 overflow-auto">
