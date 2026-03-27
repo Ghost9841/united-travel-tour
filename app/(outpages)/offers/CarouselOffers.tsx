@@ -81,15 +81,6 @@ export default function HeroCarousel() {
         </CarouselContent>
       </Carousel>
 
-      {/* Text content */}
-      <div className="absolute inset-0 z-10 flex flex-col px-8 md:px-16 pt-40 pointer-events-none">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold text-white mb-4 drop-shadow-lg max-w-2xl">
-          Start your unforgettable journey with us.
-        </h1>
-        <p className="text-lg md:text-xl text-white drop-shadow-md max-w-xl">
-          The best travel for your journey begins now
-        </p>
-      </div>
 
       {/* Bottom dots */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3">
