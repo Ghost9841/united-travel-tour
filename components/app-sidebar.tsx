@@ -11,6 +11,7 @@ import {
   HelpCircle,
   MapPinHouse,
   CalendarPlus2,
+  Birdhouse,
 } from "lucide-react"
 
 import {
@@ -53,6 +54,7 @@ import Image from "next/image"
 // Main navigation items
 const mainItems = [
   { title: "Dashboard", url: "/dashboard", icon: Home },
+  { title: "HomePage", url: "/dashboard/landingpage", icon: Birdhouse },
   { title: "Explore", url: "/dashboard/explore", icon: Package },
   { title: "Travels", url: "/dashboard/travels", icon: Plane },
   { title: "Hotels", url: "/dashboard/hotels", icon: Hotel },
