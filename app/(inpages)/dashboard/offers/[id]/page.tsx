@@ -91,7 +91,7 @@ export default function TrendingRouteFormPage() {
           setPreview(d.image ?? '');
         } else {
           toast.error('Route not found');
-          router.push('/dashboard/offers/trending');
+          router.push('/dashboard/offers/');
         }
       } catch {
         toast.error('Failed to load route');
@@ -125,7 +125,7 @@ export default function TrendingRouteFormPage() {
       const data = await res.json();
       if (data.success) {
         toast.success(creating ? 'Route created.' : 'Route updated.');
-        router.push('/dashboard/offers/trending');
+        router.push('/dashboard/offers/');
       } else toast.error(data.error ?? 'Something went wrong.');
     } catch { toast.error('Something went wrong.'); }
     finally { setSaving(false); }
@@ -138,7 +138,7 @@ export default function TrendingRouteFormPage() {
       const data = await res.json();
       if (data.success) {
         toast.success('Route deleted.');
-        router.push('/dashboard/offers/trending');
+        router.push('/dashboard/offers/');
       } else toast.error(data.error ?? 'Failed to delete.');
     } catch { toast.error('Something went wrong.'); }
     finally { setDeleting(false); }
@@ -157,7 +157,7 @@ export default function TrendingRouteFormPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
-            <Link href="/dashboard/offers/trending"
+            <Link href="/dashboard/offers/"
               className="p-2 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors shadow-sm">
               <ArrowLeft className="w-5 h-5 text-gray-600" />
             </Link>
@@ -341,7 +341,7 @@ export default function TrendingRouteFormPage() {
 
           {/* Actions */}
           <div className="flex justify-end gap-4">
-            <Link href="/dashboard/offers/trending"
+            <Link href="/dashboard/offers/"
               className="px-6 py-3 border-2 border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 font-medium text-sm">
               Cancel
             </Link>
