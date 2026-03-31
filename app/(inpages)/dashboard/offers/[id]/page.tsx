@@ -3,126 +3,145 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
-import {
-  ArrowLeft, Save, X, FileText, User, Tag, Image as ImageIcon,
-  Calendar, Clock, Eye, Heart, Trash2,
-} from 'lucide-react';
+import { ArrowLeft, Save, Trash2, Plane, Image as ImageIcon, X } from 'lucide-react';
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
 
-const CATEGORIES = [
-  'Travel Tips', 'Destination Guides', 'Food & Culture', 'Budget Travel',
-  'Travel Planning', 'Photography', 'Family Travel', 'Sustainable Travel',
-  'Adventure', 'Luxury Travel', 'Backpacking', 'Cultural Experiences'
-];
-
 const isNew = (id: string) => id === 'new';
 
-export default function BlogFormPage() {
-  const router = useRouter();
-  const params = useParams();
-  const id = params.id as string;
+export default function TrendingRouteFormPage() {
+  const router   = useRouter();
+  const params   = useParams();
+  const id       = params.id as string;
   const creating = isNew(id);
 
-  const [loading, setLoading] = useState(!creating);
-  const [saving, setSaving] = useState(false);
+  const [loading,  setLoading]  = useState(!creating);
+  const [saving,   setSaving]   = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const [imagePreview, setImagePreview] = useState('');
+  const [preview,  setPreview]  = useState('');
+
   const [form, setForm] = useState({
-    title: '',
-    excerpt: '',
-    content: '',
-    author: '',
-    category: 'Travel Tips',
-    image: '',
-    date: '',
-    readTime: '5 min read',
-    status: 'published' as 'published' | 'draft',
+    from:           '',
+    fromCode:       '',
+    to:             '',
+    toCode:         '',
+    date:           '',
+    price:          '',
+    currency:       '£',
+    image:          '',
+    airline:        '',
+    flightNo:       '',
+    duration:       '',
+    stops:          'Non Stop',
+    departure:      '',
+    arrival:        '',
+    fromFull:       '',
+    toFull:         '',
+    fromTerminal:   '',
+    toTerminal:     '',
+    travelClass:    'Economy',
+    checkinBaggage: '',
+    cabinBaggage:   '',
+    baseFare:       '',
+    tax:            '',
+    insurance:      '',
+    status:         'active' as 'active' | 'draft',
+    order:          '0',
   });
 
   useEffect(() => {
     if (creating) return;
     (async () => {
       try {
-        const res = await fetch(`/api/offers/${id}`);
+        const res  = await fetch(`/api/offer/${id}`);
         const data = await res.json();
         if (data.success && data.data) {
-          const offer = data.data;
+          const d = data.data;
           setForm({
-            title: offer.title ?? '',
-            excerpt: offer.excerpt ?? '',
-            content: offer.content ?? '',
-            author: offer.author ?? '',
-            category: offer.category ?? 'Travel Tips',
-            image: offer.image ?? '',
-            date: offer.date ?? '',
-            readTime: offer.readTime ?? '5 min read',
-            status: offer.status ?? 'published',
+            from:           d.from           ?? '',
+            fromCode:       d.fromCode       ?? '',
+            to:             d.to             ?? '',
+            toCode:         d.toCode         ?? '',
+            date:           d.date           ?? '',
+            price:          d.price?.toString()     ?? '',
+            currency:       d.currency       ?? '£',
+            image:          d.image          ?? '',
+            airline:        d.airline        ?? '',
+            flightNo:       d.flightNo       ?? '',
+            duration:       d.duration       ?? '',
+            stops:          d.stops          ?? 'Non Stop',
+            departure:      d.departure      ?? '',
+            arrival:        d.arrival        ?? '',
+            fromFull:       d.fromFull       ?? '',
+            toFull:         d.toFull         ?? '',
+            fromTerminal:   d.fromTerminal   ?? '',
+            toTerminal:     d.toTerminal     ?? '',
+            travelClass:    d.travelClass    ?? 'Economy',
+            checkinBaggage: d.checkinBaggage ?? '',
+            cabinBaggage:   d.cabinBaggage   ?? '',
+            baseFare:       d.baseFare?.toString()  ?? '',
+            tax:            d.tax?.toString()       ?? '',
+            insurance:      d.insurance?.toString() ?? '',
+            status:         d.status         ?? 'active',
+            order:          d.order?.toString()     ?? '0',
           });
-          setImagePreview(offer.image ?? '');
+          setPreview(d.image ?? '');
         } else {
-          toast('Error', { description: 'Offer not found' });
-          router.push('/dashboard/offers');
+          toast.error('Route not found');
+          router.push('/dashboard/offers/trending');
         }
       } catch {
-        toast('Error', { description: 'Failed to load offer' });
+        toast.error('Failed to load route');
       } finally {
         setLoading(false);
       }
     })();
   }, [id]);
 
-  const set = (k: string, v: unknown) => setForm(p => ({ ...p, [k]: v }));
+  const set = (k: string, v: string) => setForm(p => ({ ...p, [k]: v }));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.from || !form.to || !form.airline) {
+      toast.error('From, To and Airline are required'); return;
+    }
     setSaving(true);
     try {
       const body = {
         ...form,
-        date: form.date || new Date().toISOString().split('T')[0],
+        price:     Number(form.price)     || 0,
+        baseFare:  Number(form.baseFare)  || 0,
+        tax:       Number(form.tax)       || 0,
+        insurance: Number(form.insurance) || 0,
+        order:     Number(form.order)     || 0,
       };
       const res = await fetch(
-        creating ? '/api/offers' : `/api/offers/${id}`,
-        {
-          method: creating ? 'POST' : 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body),
-        }
+        creating ? '/api/offer' : `/api/offer/${id}`,
+        { method: creating ? 'POST' : 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
       );
       const data = await res.json();
       if (data.success) {
-        toast('Success!', { description: creating ? 'Offer created.' : 'Offer updated.' });
-        router.push('/dashboard/offers');
-      } else {
-        toast('Error', { description: data.error ?? 'Something went wrong.' });
-      }
-    } catch {
-      toast('Error', { description: 'Something went wrong.' });
-    } finally {
-      setSaving(false);
-    }
+        toast.success(creating ? 'Route created.' : 'Route updated.');
+        router.push('/dashboard/offers/trending');
+      } else toast.error(data.error ?? 'Something went wrong.');
+    } catch { toast.error('Something went wrong.'); }
+    finally { setSaving(false); }
   };
 
   const handleDelete = async () => {
     setDeleting(true);
     try {
-      const res = await fetch(`/api/offers/${id}`, { method: 'DELETE' });
+      const res  = await fetch(`/api/offer/${id}`, { method: 'DELETE' });
       const data = await res.json();
       if (data.success) {
-        toast('Success!', { description: 'Offer deleted.' });
-        router.push('/dashboard/offers');
-      } else {
-        toast('Error', { description: data.error ?? 'Failed to delete.' });
-      }
-    } catch {
-      toast('Error', { description: 'Something went wrong.' });
-    } finally {
-      setDeleting(false);
-    }
+        toast.success('Route deleted.');
+        router.push('/dashboard/offers/trending');
+      } else toast.error(data.error ?? 'Failed to delete.');
+    } catch { toast.error('Something went wrong.'); }
+    finally { setDeleting(false); }
   };
 
   if (loading) return (
@@ -138,16 +157,16 @@ export default function BlogFormPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
-            <Link href="/dashboard/offers"
+            <Link href="/dashboard/offers/trending"
               className="p-2 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors shadow-sm">
               <ArrowLeft className="w-5 h-5 text-gray-600" />
             </Link>
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                {creating ? 'Create New Offer' : 'Edit Offer'}
+                {creating ? 'Add Trending Route' : 'Edit Route'}
               </h1>
               <p className="text-sm text-gray-500 mt-0.5">
-                {creating ? 'Write a new blog post' : 'Update the blog post details'}
+                {creating ? 'Add a new trending flight route' : 'Update this route'}
               </p>
             </div>
           </div>
@@ -155,15 +174,15 @@ export default function BlogFormPage() {
           {!creating && (
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <button className="flex items-center gap-2 bg-red-500 text-white px-4 py-2.5 rounded-xl hover:bg-red-600 transition-colors font-semibold text-sm shadow-md">
+                <button className="flex items-center gap-2 bg-red-500 text-white px-4 py-2.5 rounded-xl hover:bg-red-600 font-semibold text-sm shadow-md">
                   <Trash2 className="w-4 h-4" /> Delete
                 </button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  <AlertDialogTitle>Delete this route?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This will permanently delete &quot;{form.title}&quot;. This action cannot be undone.
+                    This will permanently remove {form.from} → {form.to}. This cannot be undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -180,74 +199,115 @@ export default function BlogFormPage() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
 
-          {/* Basic Info */}
+          {/* Route */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-1">Basic Information</h2>
-            <p className="text-sm text-gray-500 mb-5">Title, excerpt and author details</p>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Title *</label>
-                <input value={form.title} onChange={e => set('title', e.target.value)} required
-                  placeholder="Blog post title"
-                  className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm" />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Excerpt *</label>
-                <textarea value={form.excerpt} onChange={e => set('excerpt', e.target.value)} required
-                  rows={3} placeholder="Brief excerpt for the blog post"
-                  className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm resize-none" />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Author *</label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <input value={form.author} onChange={e => set('author', e.target.value)} required
-                      placeholder="Author name"
-                      className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm" />
-                  </div>
+            <h2 className="text-lg font-bold text-gray-900 mb-1">Route</h2>
+            <p className="text-sm text-gray-500 mb-5">Origin and destination details</p>
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { label: 'From City *',     k: 'from',     placeholder: 'e.g., London' },
+                { label: 'From Code *',     k: 'fromCode', placeholder: 'e.g., LHR' },
+                { label: 'To City *',       k: 'to',       placeholder: 'e.g., Kathmandu' },
+                { label: 'To Code *',       k: 'toCode',   placeholder: 'e.g., KTM' },
+                { label: 'From Full',       k: 'fromFull', placeholder: 'London [LHR]' },
+                { label: 'To Full',         k: 'toFull',   placeholder: 'Kathmandu [KTM]' },
+                { label: 'From Terminal',   k: 'fromTerminal', placeholder: 'Terminal 5' },
+                { label: 'To Terminal',     k: 'toTerminal',   placeholder: 'Terminal 1' },
+              ].map(({ label, k, placeholder }) => (
+                <div key={k}>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">{label}</label>
+                  <input value={(form as any)[k]} onChange={e => set(k, e.target.value)}
+                    placeholder={placeholder}
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm" />
                 </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Category *</label>
-                  <div className="relative">
-                    <Tag className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <select value={form.category} onChange={e => set('category', e.target.value)}
-                      className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm bg-white">
-                      {CATEGORIES.map(c => <option key={c}>{c}</option>)}
-                    </select>
-                  </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Flight */}
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <h2 className="text-lg font-bold text-gray-900 mb-1">Flight Details</h2>
+            <p className="text-sm text-gray-500 mb-5">Airline, schedule and baggage</p>
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { label: 'Airline *',         k: 'airline',        placeholder: 'Qatar Airways' },
+                { label: 'Flight No',         k: 'flightNo',       placeholder: 'QR-006' },
+                { label: 'Departure',         k: 'departure',      placeholder: '06:30' },
+                { label: 'Arrival',           k: 'arrival',        placeholder: '22:45' },
+                { label: 'Duration',          k: 'duration',       placeholder: '7h 30m' },
+                { label: 'Date',              k: 'date',           placeholder: '10/04/2026' },
+                { label: 'Check-in Baggage',  k: 'checkinBaggage', placeholder: 'Adult - 30 KG' },
+                { label: 'Cabin Baggage',     k: 'cabinBaggage',   placeholder: 'Adult - 7 KG' },
+              ].map(({ label, k, placeholder }) => (
+                <div key={k}>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">{label}</label>
+                  <input value={(form as any)[k]} onChange={e => set(k, e.target.value)}
+                    placeholder={placeholder}
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm" />
                 </div>
+              ))}
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Stops</label>
+                <select value={form.stops} onChange={e => set('stops', e.target.value)}
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 text-sm bg-white">
+                  <option>Non Stop</option>
+                  <option>1 Stop</option>
+                  <option>2 Stops</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Travel Class</label>
+                <select value={form.travelClass} onChange={e => set('travelClass', e.target.value)}
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 text-sm bg-white">
+                  <option>Economy</option>
+                  <option>Business</option>
+                  <option>First Class</option>
+                </select>
               </div>
             </div>
           </div>
 
-          {/* Content */}
+          {/* Pricing */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-1">Content</h2>
-            <p className="text-sm text-gray-500 mb-5">The full blog post content</p>
-            <div>
-              <textarea value={form.content} onChange={e => set('content', e.target.value)} required
-                rows={12} placeholder="Write your blog post content here..."
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm resize-none" />
+            <h2 className="text-lg font-bold text-gray-900 mb-1">Pricing</h2>
+            <p className="text-sm text-gray-500 mb-5">Fare breakdown shown on the detail page</p>
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { label: 'Display Price',  k: 'price',     placeholder: '900' },
+                { label: 'Currency',       k: 'currency',  placeholder: '£' },
+                { label: 'Base Fare',      k: 'baseFare',  placeholder: '800' },
+                { label: 'Tax & Charges',  k: 'tax',       placeholder: '80' },
+                { label: 'Insurance',      k: 'insurance', placeholder: '20' },
+              ].map(({ label, k, placeholder }) => (
+                <div key={k}>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">{label}</label>
+                  <input type={k === 'currency' ? 'text' : 'number'} min="0"
+                    value={(form as any)[k]} onChange={e => set(k, e.target.value)}
+                    placeholder={placeholder}
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm" />
+                </div>
+              ))}
             </div>
           </div>
 
           {/* Image */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-1">Cover Image</h2>
-            <p className="text-sm text-gray-500 mb-5">Add a cover image URL for the blog post</p>
+            <h2 className="text-lg font-bold text-gray-900 mb-1">City Image</h2>
+            <p className="text-sm text-gray-500 mb-5">Destination photo shown on the route card</p>
             <div className="relative">
               <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input value={form.image}
-                onChange={e => { set('image', e.target.value); setImagePreview(e.target.value); }}
-                placeholder="https://example.com/image.jpg"
+                onChange={e => { set('image', e.target.value); setPreview(e.target.value); }}
+                placeholder="https://... or /images/destination.jpeg"
                 className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm" />
             </div>
-            {imagePreview && (
+            {preview && (
               <div className="relative mt-4 rounded-xl overflow-hidden border border-gray-100">
-                <img src={imagePreview} alt="preview" className="w-full h-48 object-cover"
-                  onError={() => setImagePreview('')} />
-                <button type="button" onClick={() => { setImagePreview(''); set('image', ''); }}
+                <img src={preview} alt="preview" className="w-full h-40 object-cover"
+                  onError={() => setPreview('')} />
+                <button type="button" onClick={() => { setPreview(''); set('image', ''); }}
                   className="absolute top-2 right-2 p-1.5 bg-white rounded-lg shadow hover:bg-red-50">
                   <X className="w-3.5 h-3.5 text-red-500" />
                 </button>
@@ -258,30 +318,36 @@ export default function BlogFormPage() {
           {/* Settings */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
             <h2 className="text-lg font-bold text-gray-900 mb-5">Settings</h2>
-            <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
                 <div>
                   <p className="text-sm font-semibold text-gray-800">Status</p>
-                  <p className="text-xs text-gray-500">Published posts are visible to readers</p>
+                  <p className="text-xs text-gray-500">Active routes appear on the homepage</p>
                 </div>
                 <select value={form.status} onChange={e => set('status', e.target.value)}
                   className="px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 text-sm bg-white">
-                  <option value="published">Published</option>
+                  <option value="active">Active</option>
                   <option value="draft">Draft</option>
                 </select>
+              </div>
+              <div className="p-4 bg-gray-50 rounded-xl">
+                <label className="block text-sm font-semibold text-gray-800 mb-1">Display Order</label>
+                <p className="text-xs text-gray-500 mb-2">Lower = appears first</p>
+                <input type="number" min="0" value={form.order} onChange={e => set('order', e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 text-sm" />
               </div>
             </div>
           </div>
 
           {/* Actions */}
           <div className="flex justify-end gap-4">
-            <Link href="/dashboard/offers"
-              className="px-6 py-3 border-2 border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors font-medium text-sm">
+            <Link href="/dashboard/offers/trending"
+              className="px-6 py-3 border-2 border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 font-medium text-sm">
               Cancel
             </Link>
             <button type="submit" disabled={saving}
-              className="flex items-center gap-2 bg-orange-500 text-white px-8 py-3 rounded-xl hover:bg-orange-600 disabled:opacity-50 transition-all font-semibold shadow-md text-sm">
-              {saving ? 'Saving...' : (<><Save className="w-4 h-4" />{creating ? 'Create Blog' : 'Save Changes'}</>)}
+              className="flex items-center gap-2 bg-orange-500 text-white px-8 py-3 rounded-xl hover:bg-orange-600 disabled:opacity-50 font-semibold shadow-md text-sm">
+              {saving ? 'Saving...' : <><Save className="w-4 h-4" />{creating ? 'Add Route' : 'Save Changes'}</>}
             </button>
           </div>
         </form>

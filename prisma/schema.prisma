@@ -111,25 +111,39 @@ model Destination {
   @@map("destinations")
 }
 
-model Blog {
-  id          Int      @id @default(autoincrement())
-  title       String
-  excerpt     String   @db.Text
-  content     String   @db.Text
-  image       String
-  author      String
-  date        String
-  readTime    String   @map("read_time")
-  category    String
-  status      String   @default("published") // 'published' or 'draft'
-  views       Int      @default(0)
-  likes       Int      @default(0)
+model TrendingRoute {
+  id             Int      @id @default(autoincrement())
+  from           String
+  fromCode       String   @map("from_code")
+  to             String
+  toCode         String   @map("to_code")
+  date           String
+  price          Float
+  currency       String   @default("£")
+  image          String   @default("")
+  airline        String
+  flightNo       String   @map("flight_no")
+  duration       String
+  stops          String   @default("Non Stop")
+  departure      String
+  arrival        String
+  fromFull       String   @map("from_full")
+  toFull         String   @map("to_full")
+  fromTerminal   String   @map("from_terminal")
+  toTerminal     String   @map("to_terminal")
+  travelClass    String   @default("Economy") @map("travel_class")
+  checkinBaggage String   @map("checkin_baggage")
+  cabinBaggage   String   @map("cabin_baggage")
+  baseFare       Float    @map("base_fare")
+  tax            Float
+  insurance      Float
+  status         String   @default("active") // 'active' or 'draft'
+  order          Int      @default(0)
 
-  // Timestamps
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt      @map("updated_at")
 
-  @@map("blogs")
+  @@map("trending_routes")
 }
 
 model SpecialOffer {

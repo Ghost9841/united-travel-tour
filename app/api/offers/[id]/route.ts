@@ -1,144 +1,90 @@
+// app/api/trending-routes/[id]/route.ts
 import { NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
-import Blog from "../types";
 
-interface ApiResponse<T> {
-  success: boolean;
-  data?: T;
-  error?: string;
+type Params = { params: Promise<{ id: string }> };
+
+function parseId(raw: string) {
+  const n = Number(raw);
+  return isNaN(n) ? null : n;
 }
 
-export async function GET(
-  req: Request,
-  { params }: { params: Promise<{ id: string }> }
-): Promise<NextResponse<ApiResponse<Blog>>> {
+export async function GET(_req: Request, { params }: Params) {
   try {
-    const { id } = await params;
-    const blogId = Number(id);
-    if (isNaN(blogId)) {
-      return NextResponse.json(
-        { success: false, data: undefined, error: 'Invalid blog ID' },
-        { status: 400 }
-      );
-    }
+    const { id: raw } = await params;
+    const id = parseId(raw);
+    if (!id) return NextResponse.json({ success: false, error: 'Invalid ID' }, { status: 400 });
 
-    const blog = await prisma.blog.findUnique({
-      where: { id: blogId },
-    });
+    const route = await prisma.trendingRoute.findUnique({ where: { id } });
+    if (!route) return NextResponse.json({ success: false, error: 'Route not found' }, { status: 404 });
 
-    if (!blog) {
-      return NextResponse.json(
-        { success: false, data: undefined, error: 'Blog not found' },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json({
-      success: true,
-      data: blog as Blog,
-    });
+    return NextResponse.json({ success: true, data: route });
   } catch (error) {
-    console.error('Error fetching blog:', error);
-    return NextResponse.json(
-      { success: false, data: undefined, error: 'Failed to fetch blog' },
-      { status: 500 }
-    );
+    console.error('Error fetching trending route:', error);
+    return NextResponse.json({ success: false, error: 'Failed to fetch route' }, { status: 500 });
   }
 }
 
-export async function PUT(
-  req: Request,
-  { params }: { params: Promise<{ id: string }> }
-): Promise<NextResponse<ApiResponse<Blog>>> {
+export async function PUT(req: Request, { params }: Params) {
   try {
-    const { id } = await params;
-    const blogId = Number(id);
-    if (isNaN(blogId)) {
-      return NextResponse.json(
-        { success: false, data: undefined, error: 'Invalid blog ID' },
-        { status: 400 }
-      );
-    }
+    const { id: raw } = await params;
+    const id = parseId(raw);
+    if (!id) return NextResponse.json({ success: false, error: 'Invalid ID' }, { status: 400 });
 
     const body = await req.json();
 
-    // Validation
-    if (!body.title?.trim() || !body.excerpt?.trim() || !body.content?.trim()) {
-      return NextResponse.json(
-        { success: false, data: undefined, error: 'Missing required fields' },
-        { status: 400 }
-      );
-    }
+    const data: Record<string, unknown> = {};
+    if (body.from           !== undefined) data.from           = body.from.trim();
+    if (body.fromCode       !== undefined) data.fromCode       = body.fromCode.trim();
+    if (body.to             !== undefined) data.to             = body.to.trim();
+    if (body.toCode         !== undefined) data.toCode         = body.toCode.trim();
+    if (body.date           !== undefined) data.date           = body.date;
+    if (body.price          !== undefined) data.price          = Number(body.price);
+    if (body.currency       !== undefined) data.currency       = body.currency;
+    if (body.image          !== undefined) data.image          = body.image.trim();
+    if (body.airline        !== undefined) data.airline        = body.airline.trim();
+    if (body.flightNo       !== undefined) data.flightNo       = body.flightNo.trim();
+    if (body.duration       !== undefined) data.duration       = body.duration.trim();
+    if (body.stops          !== undefined) data.stops          = body.stops;
+    if (body.departure      !== undefined) data.departure      = body.departure.trim();
+    if (body.arrival        !== undefined) data.arrival        = body.arrival.trim();
+    if (body.fromFull       !== undefined) data.fromFull       = body.fromFull.trim();
+    if (body.toFull         !== undefined) data.toFull         = body.toFull.trim();
+    if (body.fromTerminal   !== undefined) data.fromTerminal   = body.fromTerminal.trim();
+    if (body.toTerminal     !== undefined) data.toTerminal     = body.toTerminal.trim();
+    if (body.travelClass    !== undefined) data.travelClass    = body.travelClass;
+    if (body.checkinBaggage !== undefined) data.checkinBaggage = body.checkinBaggage.trim();
+    if (body.cabinBaggage   !== undefined) data.cabinBaggage   = body.cabinBaggage.trim();
+    if (body.baseFare       !== undefined) data.baseFare       = Number(body.baseFare);
+    if (body.tax            !== undefined) data.tax            = Number(body.tax);
+    if (body.insurance      !== undefined) data.insurance      = Number(body.insurance);
+    if (body.status         !== undefined) data.status         = body.status;
+    if (body.order          !== undefined) data.order          = Number(body.order);
 
-    const blog = await prisma.blog.update({
-      where: { id: blogId },
-      data: {
-        title: body.title.trim(),
-        excerpt: body.excerpt.trim(),
-        content: body.content.trim(),
-        image: body.image || '',
-        author: body.author || 'Anonymous',
-        date: body.date || new Date().toISOString().split('T')[0],
-        readTime: body.readTime || '5 min read',
-        category: body.category || 'General',
-        status: body.status || 'published',
-        views: Number(body.views) || 0,
-        likes: Number(body.likes) || 0,
-      },
-    });
-
-    return NextResponse.json({
-      success: true,
-      data: blog as Blog,
-    });
-  } catch (error) {
-    console.error('Error updating blog:', error);
-    if ((error as any).code === 'P2025') {
-      return NextResponse.json(
-        { success: false, data: undefined, error: 'Blog not found' },
-        { status: 404 }
-      );
+    const route = await prisma.trendingRoute.update({ where: { id }, data });
+    return NextResponse.json({ success: true, data: route });
+  } catch (error: any) {
+    if (error?.code === 'P2025') {
+      return NextResponse.json({ success: false, error: 'Route not found' }, { status: 404 });
     }
-    return NextResponse.json(
-      { success: false, data: undefined, error: 'Failed to update blog' },
-      { status: 500 }
-    );
+    console.error('Error updating trending route:', error);
+    return NextResponse.json({ success: false, error: 'Failed to update route' }, { status: 500 });
   }
 }
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: Promise<{ id: string }> }
-): Promise<NextResponse<ApiResponse<null>>> {
+export async function DELETE(_req: Request, { params }: Params) {
   try {
-    const { id } = await params;
-    const blogId = Number(id);
-    if (isNaN(blogId)) {
-      return NextResponse.json(
-        { success: false, data: null, error: 'Invalid blog ID' },
-        { status: 400 }
-      );
-    }
+    const { id: raw } = await params;
+    const id = parseId(raw);
+    if (!id) return NextResponse.json({ success: false, error: 'Invalid ID' }, { status: 400 });
 
-    await prisma.blog.delete({
-      where: { id: blogId },
-    });
-
-    return NextResponse.json({
-      success: true,
-      data: null,
-    });
-  } catch (error) {
-    console.error('Error deleting blog:', error);
-    if ((error as any).code === 'P2025') {
-      return NextResponse.json(
-        { success: false, data: null, error: 'Blog not found' },
-        { status: 404 }
-      );
+    await prisma.trendingRoute.delete({ where: { id } });
+    return NextResponse.json({ success: true, data: { id } });
+  } catch (error: any) {
+    if (error?.code === 'P2025') {
+      return NextResponse.json({ success: false, error: 'Route not found' }, { status: 404 });
     }
-    return NextResponse.json(
-      { success: false, data: null, error: 'Failed to delete blog' },
-      { status: 500 }
-    );
+    console.error('Error deleting trending route:', error);
+    return NextResponse.json({ success: false, error: 'Failed to delete route' }, { status: 500 });
   }
 }
