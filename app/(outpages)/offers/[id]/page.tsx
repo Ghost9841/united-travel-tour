@@ -25,7 +25,7 @@ export default async function FlightDetailPage({ params }: { params: Promise<{ i
 <div className="min-h-screen bg-gradient-to-b from-orange-400 via-orange-500 to-orange-600 pt-24 pb-16">   
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <Link href="/" className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 mb-6">
+        <Link href="/" className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 mb-6 mt-8">
           <ChevronLeft className="w-4 h-4" /> Back to Search
         </Link>
 
@@ -150,39 +150,6 @@ export default async function FlightDetailPage({ params }: { params: Promise<{ i
               <div className="flex items-center justify-between font-bold text-gray-900">
                 <span>Total Amount:</span>
                 <span className="text-lg">{route.currency} {total.toLocaleString()}</span>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-              <div className="bg-green-400 px-5 py-3">
-                <h3 className="font-bold text-white">Promo Code</h3>
-              </div>
-              <div className="p-5">
-                <div className="flex gap-2 mb-4">
-                  <input type="text" placeholder="Enter promocode"
-                    className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
-                  <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
-                    Apply
-                  </button>
-                </div>
-                <p className="text-xs text-gray-500 font-medium mb-3">Choose from the offers below</p>
-                <div className="space-y-3">
-                  {[
-                    { code: 'ZEROFEE',     save: 650, desc: '#NoConvenienceFee. Choose this promo to get a discount of £650' },
-                    { code: 'UNITEDMARCH', save: 400, desc: '#UnitedSpecial - Choose this promo to enjoy a discount of £400' },
-                  ].map(promo => (
-                    <label key={promo.code} className="flex items-start gap-3 cursor-pointer">
-                      <input type="radio" name="promo" className="mt-0.5 accent-blue-600" />
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-bold text-gray-900">{promo.code}</span>
-                          <span className="text-xs text-green-600 font-semibold">Save {promo.save}</span>
-                        </div>
-                        <p className="text-xs text-gray-500 mt-0.5">{promo.desc}</p>
-                      </div>
-                    </label>
-                  ))}
-                </div>
               </div>
             </div>
 
