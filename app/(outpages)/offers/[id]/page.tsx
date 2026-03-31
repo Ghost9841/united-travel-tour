@@ -22,8 +22,8 @@ export default async function FlightDetailPage({ params }: { params: Promise<{ i
   const total = route.baseFare + route.tax + route.insurance;
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-24 pb-16">
-      <div className="max-w-5xl mx-auto px-4">
+<div className="min-h-screen bg-gradient-to-b from-orange-400 via-orange-500 to-orange-600">   
+      <div className="max-w-7xl mx-auto px-4 mt-16">
 
         <Link href="/" className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 mb-6">
           <ChevronLeft className="w-4 h-4" /> Back to Search

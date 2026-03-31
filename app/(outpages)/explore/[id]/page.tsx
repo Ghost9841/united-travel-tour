@@ -108,7 +108,7 @@ export default async function ExploreDetailPage({ params }: ExploreDetailPagePro
   const descriptionParagraphs = explore.description ? explore.description.split('\n\n') : ['No description available.'];
 
   return (
-<div className="min-h-screen bg-gradient-to-b from-orange-400 via-orange-500 to-orange-600">      {/* Header Section */}
+<div className="min-h-screen bg-gradient-to-b from-orange-400 via-orange-500 to-orange-600">   
       {/* Header Section */}
       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
