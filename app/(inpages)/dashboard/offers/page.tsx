@@ -32,7 +32,7 @@ export default function TrendingRoutesDashboard() {
   const fetchRoutes = async () => {
     try {
       setLoading(true);
-      const res  = await fetch('/api/offer');
+      const res  = await fetch('/api/offers');
       const data = await res.json();
       if (data.success) setRoutes(data.data);
       else setRoutes([]);

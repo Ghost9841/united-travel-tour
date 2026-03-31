@@ -21,7 +21,7 @@ export default function TrendingRoutes() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/offer')
+    fetch('/api/offers')
       .then(r => r.json())
       .then(d => { if (d.success) setRoutes(d.data); })
       .catch(err => console.error('Failed to fetch trending routes', err))
