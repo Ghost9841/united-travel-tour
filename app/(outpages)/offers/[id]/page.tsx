@@ -1,7 +1,9 @@
+import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ChevronLeft, Info, PlaneTakeoff } from 'lucide-react';
 import prisma from '@/app/lib/prisma';
+import ShareButtons from '@/components/manual-ui/ShareButtons';
 
 async function getRoute(id: string) {
   try {
@@ -10,6 +12,73 @@ async function getRoute(id: string) {
     return await prisma.trendingRoute.findUnique({ where: { id: routeId } });
   } catch {
     return null;
+  }
+}
+// Generate metadata for SEO and social sharing
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+
+  try {
+    const routeId = Number(id);
+    if (isNaN(routeId)) {
+      return {
+        title: 'Flight Not Found | United Travel & Tours',
+        description: 'The flight you are looking for could not be found.',
+      };
+    }
+
+    const route = await prisma.trendingRoute.findUnique({
+      where: { id: routeId },
+    });
+
+    if (!route) {
+      return {
+        title: 'Flight Not Found | United Travel & Tours',
+        description: 'The flight you are looking for could not be found.',
+      };
+    }
+
+    // Create description from flight data
+    const description = `Book your flight from ${route.from} to ${route.to} on ${route.date} with ${route.airline}. ${route.travelClass} class with ${route.checkinBaggage} check-in baggage. Flight ${route.flightNo} departing at ${route.departure} and arriving at ${route.arrival}.`;
+
+    // For image, you might want to use a default flight-related image or create a dynamic one
+    const imageUrl = (route.image && route.image.length > 0 ? route.image[0] : '/') || '/unitedtravellogo300x300pxfull-01.svg';
+
+    return {
+      title: `${route.from} to ${route.to} Flight | ${route.airline} | United Travel & Tours`,
+      description,
+      openGraph: {
+        title: `${route.from} to ${route.to} Flight - ${route.airline}`,
+        description,
+        url: `https://www.unitedtravels.co.uk/flights/${route.id}`,
+        siteName: 'United Travel & Tours',
+        images: [
+          {
+            url: imageUrl,
+            width: 1200,
+            height: 630,
+            alt: `${route.airline} flight from ${route.from} to ${route.to}`,
+          },
+        ],
+        locale: 'en_US',
+        type: 'website',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: `${route.from} to ${route.to} Flight - ${route.airline}`,
+        description,
+        images: [imageUrl],
+      },
+      alternates: {
+        canonical: `https://www.unitedtravels.co.uk/flights/${route.id}`,
+      },
+    };
+  } catch (error) {
+    console.error('Error generating metadata:', error);
+    return {
+      title: 'United Travel & Tours - Book Flights Online',
+      description: 'Book your flights with United Travel & Tours. Best deals on domestic and international flights.',
+    };
   }
 }
 
@@ -29,8 +98,10 @@ export default async function FlightDetailPage({ params }: { params: Promise<{ i
           <ChevronLeft className="w-4 h-4" /> Back to Search
         </Link>
 
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Review your flight details</h1>
-
+<div className="flex items-center justify-between mb-6">
+  <h1 className="text-2xl font-bold text-gray-900">Review your flight details</h1>
+  <ShareButtons />
+</div>
         <div className="flex flex-col lg:flex-row gap-6">
 
           {/* ── Left ── */}
