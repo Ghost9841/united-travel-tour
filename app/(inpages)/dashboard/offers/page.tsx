@@ -43,7 +43,7 @@ export default function TrendingRoutesDashboard() {
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this route?')) return;
     try {
-      const res  = await fetch(`/api/offer/${id}`, { method: 'DELETE' });
+      const res  = await fetch(`/api/offers/${id}`, { method: 'DELETE' });
       const data = await res.json();
       if (data.success) setRoutes(prev => prev.filter(r => r.id !== id));
       else alert(data.error || 'Failed to delete');

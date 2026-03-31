@@ -56,7 +56,7 @@ export default function TrendingRouteFormPage() {
     if (creating) return;
     (async () => {
       try {
-        const res  = await fetch(`/api/offer/${id}`);
+        const res  = await fetch(`/api/offers/${id}`);
         const data = await res.json();
         if (data.success && data.data) {
           const d = data.data;
@@ -119,7 +119,7 @@ export default function TrendingRouteFormPage() {
         order:     Number(form.order)     || 0,
       };
       const res = await fetch(
-        creating ? '/api/offer' : `/api/offer/${id}`,
+        creating ? '/api/offers' : `/api/offers/${id}`,
         { method: creating ? 'POST' : 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
       );
       const data = await res.json();
@@ -134,7 +134,7 @@ export default function TrendingRouteFormPage() {
   const handleDelete = async () => {
     setDeleting(true);
     try {
-      const res  = await fetch(`/api/offer/${id}`, { method: 'DELETE' });
+      const res  = await fetch(`/api/offers/${id}`, { method: 'DELETE' });
       const data = await res.json();
       if (data.success) {
         toast.success('Route deleted.');
