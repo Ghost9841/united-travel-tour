@@ -109,7 +109,7 @@ export default function TrendingRoutesDashboard() {
               value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
               className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent shadow-sm" />
           </div>
-          <Link href="/dashboard/offers/trending/new"
+          <Link href="/dashboard/offers/new"
             className="flex items-center gap-2 bg-orange-500 text-white px-6 py-3 rounded-xl hover:bg-orange-600 transition-all shadow-md font-medium">
             <Plus className="w-5 h-5" /> Add Route
           </Link>
@@ -145,7 +145,7 @@ export default function TrendingRoutesDashboard() {
               {searchQuery ? 'No routes match your search.' : 'Add your first trending route.'}
             </p>
             {!searchQuery && (
-              <Link href="/dashboard/offers/trending/new"
+              <Link href="/dashboard/offers/new"
                 className="inline-flex items-center gap-2 bg-orange-500 text-white px-8 py-3 rounded-xl hover:bg-orange-600 transition-all shadow-lg font-medium">
                 <Plus className="w-5 h-5" /> Add First Route
               </Link>
