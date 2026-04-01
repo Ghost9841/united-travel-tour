@@ -88,7 +88,7 @@ export default async function FlightDetailPage({ params }: { params: Promise<{ i
 
   if (!route) notFound();
 
-  const total = route.baseFare;
+  const total = route.price;
 
   return (
 <div className="min-h-screen bg-gradient-to-b from-orange-400 via-orange-500 to-orange-600 pt-24 pb-16">   
@@ -186,7 +186,7 @@ export default async function FlightDetailPage({ params }: { params: Promise<{ i
               </div>
               <div className="space-y-3 text-sm">
                 {[
-                  { label: 'Base Fare',     value: route.baseFare },
+                  { label: 'Base Fare',     value: route.price },
                 ].map(item => (
                   <div key={item.label} className="flex items-center justify-between text-gray-600">
                     <div className="flex items-center gap-1">
