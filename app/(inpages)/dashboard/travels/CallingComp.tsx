@@ -90,10 +90,10 @@ export function TravelCard({
         <div className="flex items-center justify-between mt-3">
           <div className="flex items-baseline gap-2">
             <span className="text-2xl font-bold text-primary">
-              ${travel.price}
+              £{travel.price}
             </span>
             <span className="text-sm text-muted-foreground line-through">
-              ${travel.originalPrice}
+              £{travel.originalPrice}
             </span>
           </div>
           

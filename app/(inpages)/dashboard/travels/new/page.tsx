@@ -6,10 +6,8 @@ import Link from "next/link";
 import {
   ArrowLeft,
   Save,
-  Upload,
   X,
   MapPin,
-  DollarSign,
   Clock,
   Users,
   Tag,
@@ -25,7 +23,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
