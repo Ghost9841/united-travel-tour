@@ -5,7 +5,7 @@ import Link from 'next/link';
 import {
   Search, Plus, MoreVertical, Eye, Heart, Star, MapPin,
   Trash2, Edit, Globe2, Mountain, Umbrella, Camera,
-  TrendingUp, DollarSign, Clock, Users, FileText,
+  TrendingUp, PoundSterling, Clock, Users, FileText,
 } from 'lucide-react';
 
 interface Destination {
@@ -136,7 +136,7 @@ function DestinationCard({ dest, onDelete }: { dest: Destination; onDelete: () =
         </div>
         <p className="text-sm text-gray-600 line-clamp-2 mb-4">{dest.description}</p>
         <div className="flex items-center gap-3 text-xs text-gray-500 mb-4">
-          <span className="flex items-center gap-1"><DollarSign className="w-3.5 h-3.5" />
+          <span className="flex items-center gap-1"><PoundSterling className="w-3.5 h-3.5" />
             <span className="font-semibold text-gray-800">${dest.price.toLocaleString()}</span>
           </span>
           <span className="w-px h-3 bg-gray-200" />

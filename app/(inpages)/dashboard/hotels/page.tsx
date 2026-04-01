@@ -5,7 +5,7 @@ import Link from 'next/link';
 import {
   Search, Plus, MoreVertical, Eye, Heart, Star, MapPin,
   Trash2, Edit, Wifi, Coffee, Car, Dumbbell, Users,
-  Hotel, DollarSign, FileText, Check,
+  Hotel, PoundSterling, FileText, Check,
 } from 'lucide-react';
 
 interface HotelItem {

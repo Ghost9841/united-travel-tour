@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import {
-  ArrowLeft, Save, X, MapPin, DollarSign, BedDouble,
+  ArrowLeft, Save, X, MapPin, PoundSterling, BedDouble,
   Users, Image as ImageIcon, Hotel, Star, Trash2, Check,
 } from 'lucide-react';
 import {

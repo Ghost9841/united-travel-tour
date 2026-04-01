@@ -8,7 +8,7 @@ import {
   Save,
   X,
   MapPin,
-  DollarSign,
+  PoundSterling,
   Clock,
   Users,
   Tag,
@@ -373,7 +373,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   <div className="space-y-2">
                     <Label htmlFor="price">Price (GBP) *</Label>
                     <div className="relative">
-                      <DollarSign className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                      <PoundSterling className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="price"
                         name="price"

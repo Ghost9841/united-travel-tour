@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import {
-  ArrowLeft, Save, X, MapPin, DollarSign, Clock, Users,
+  ArrowLeft, Save, X, MapPin, PoundSterling, Clock, Users,
   Tag, Image as ImageIcon, Globe2, Star, Trash2,
 } from 'lucide-react';
 import {
@@ -237,7 +237,7 @@ export default function DestinationFormPage() {
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">Price (GBP) *</label>
                 <div className="relative">
-                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <PoundSterling className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input type="number" min="0" value={form.price} onChange={e => set('price', e.target.value)} required
                     placeholder="1200"
                     className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm" />
@@ -246,7 +246,7 @@ export default function DestinationFormPage() {
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">Original Price (GBP)</label>
                 <div className="relative">
-                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <PoundSterling className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input type="number" min="0" value={form.originalPrice} onChange={e => set('originalPrice', e.target.value)}
                     placeholder="1500"
                     className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm" />

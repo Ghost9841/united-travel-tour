@@ -1,5 +1,5 @@
 'use client'
-import { Search, MapPin, Calendar, Users, DollarSign, Star, Loader2 } from 'lucide-react';
+import { Search, MapPin, Calendar, Users, PoundSterling, Star, Loader2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 

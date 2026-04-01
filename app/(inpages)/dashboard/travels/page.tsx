@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   MapPin,
-  DollarSign,
+  PoundSterling,
   Search,
   Plus,
   Globe2,
@@ -134,7 +134,7 @@ export default function TravelsAdminPage() {
           <StatCard
             label="Total Revenue"
             value={totalRevenue}
-            icon={DollarSign}
+            icon={PoundSterling}
           />
           <StatCard
             label="Active Tours"
