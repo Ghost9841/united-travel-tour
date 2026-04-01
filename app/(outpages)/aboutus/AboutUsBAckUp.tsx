@@ -460,7 +460,7 @@ useEffect(() => {
                 <div className="absolute inset-0 bg-gradient-to-r from-orange-600 to-red-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </button>
             </a>
-            <a href="/contact">
+            <a href="/contactus">
               <button className="group relative bg-white hover:bg-gray-50 text-gray-900 px-10 py-4 rounded-full font-bold text-lg border-2 border-gray-300 transition-all duration-300 hover:scale-105 hover:shadow-xl">
                 <span className="relative z-10">Contact Us</span>
                 <div className="absolute inset-0 bg-gray-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>

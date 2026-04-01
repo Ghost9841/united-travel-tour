@@ -39,7 +39,7 @@ export default function NotFound() {
 
         <p className="text-sm text-muted-foreground">
           If you believe this is an error, please{" "}
-          <Link href="/contact" className="underline underline-offset-4 hover:text-primary">
+          <Link href="/contactus" className="underline underline-offset-4 hover:text-primary">
             contact support
           </Link>
           .

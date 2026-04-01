@@ -233,7 +233,7 @@ export default function TicketRefund() {
               <div className="mt-8 p-5 bg-gray-50 rounded-xl border border-gray-200 text-center">
                 <p className="text-gray-600 text-sm">
                   For any questions regarding our refund and cancellation policy, please{' '}
-                  <a href="/contact" className="text-orange-500 font-semibold hover:underline">contact our team</a>.
+                  <a href="/contactus" className="text-orange-500 font-semibold hover:underline">contact our team</a>.
                 </p>
               </div>
             </div>
