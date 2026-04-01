@@ -107,17 +107,15 @@ export default async function FlightDetailPage({ params }: { params: Promise<{ i
   if (!route) notFound();
 
   const total = route.price;
-  const savings = route.baseFare - route.price; // Calculate potential savings
-  const hasSavings = savings > 0;
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-24 pb-16">
+<div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-orange-50/30 pt-24 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Back Navigation */}
         <Link 
           href="/" 
-          className="inline-flex items-center gap-2 text-gray-600 hover:text-orange-600 mb-6 transition-colors group"
+          className="inline-flex items-center gap-2 text-gray-600 hover:text-orange-600 mb-6 mt-8 transition-colors group"
         >
           <ChevronLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" /> 
           Back to Search
@@ -128,12 +126,6 @@ export default async function FlightDetailPage({ params }: { params: Promise<{ i
           <div>
             <div className="flex items-center gap-3 mb-2">
               <h1 className="text-3xl font-bold text-gray-900">Review Your Flight</h1>
-              {hasSavings && (
-                <span className="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1">
-                  <Star className="w-3 h-3" />
-                  Save {route.currency}{savings.toLocaleString()}
-                </span>
-              )}
             </div>
             <p className="text-gray-600">Complete your booking with the best available fare</p>
           </div>
@@ -261,23 +253,10 @@ export default async function FlightDetailPage({ params }: { params: Promise<{ i
               <div className="p-6 space-y-4">
                 <div className="flex items-center justify-between text-gray-600">
                   <span>Base Fare</span>
-                  <span className="font-medium">{route.currency} {route.baseFare.toLocaleString()}</span>
+                  <span className="font-medium">{route.currency} {total.toLocaleString()}</span>
                 </div>
                 
-                {hasSavings && (
-                  <div className="flex items-center justify-between text-green-600 bg-green-50 p-3 rounded-lg">
-                    <span className="flex items-center gap-1">
-                      <Star className="w-4 h-4" />
-                      Special Discount
-                    </span>
-                    <span className="font-semibold">-{route.currency} {savings.toLocaleString()}</span>
-                  </div>
-                )}
-                
-                <div className="flex items-center justify-between text-gray-600">
-                  <span>Taxes & Fees</span>
-                  <span>Included</span>
-                </div>
+
                 
                 <div className="border-t border-gray-200 pt-4">
                   <div className="flex items-center justify-between">
