@@ -7,10 +7,7 @@ import { Plane } from 'lucide-react';
 interface TrendingRoute {
   id: number;
   from: string;
-  fromCode: string;
   to: string;
-  toCode: string;
-  date: string;
   price: number;
   currency: string;
   image: string;
@@ -61,13 +58,7 @@ export default function TrendingRoutes() {
                   <Plane className="w-3.5 h-3.5 text-blue-500 flex-shrink-0" />
                   <span className="truncate">{route.to}</span>
                 </div>
-                <div className="flex items-center gap-1 text-xs text-blue-600 font-medium mb-1.5">
-                  <span>{route.fromCode}</span>
-                  <span>→</span>
-                  <span>{route.toCode}</span>
-                </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-400">{route.date}</span>
                   <span className="text-sm font-bold text-gray-900">{route.currency}{route.price.toLocaleString()}</span>
                 </div>
               </div>

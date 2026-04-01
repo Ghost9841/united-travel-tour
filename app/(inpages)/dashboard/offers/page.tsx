@@ -7,20 +7,19 @@ import Link from 'next/link';
 interface TrendingRoute {
   id: number;
   from: string;
-  fromCode: string;
   to: string;
-  toCode: string;
-  date: string;
   price: number;
   currency: string;
   image: string;
   airline: string;
-  flightNo: string;
-  duration: string;
-  stops: string;
+  travelClass: string;
+  checkinBaggage: string;
+  cabinBaggage: string;
+  baseFare: number;
   status: 'active' | 'draft';
   order: number;
   createdAt: string;
+  updatedAt: string;
 }
 
 export default function TrendingRoutesDashboard() {
@@ -58,9 +57,7 @@ export default function TrendingRoutesDashboard() {
   const filtered = routes.filter(r =>
     r.from.toLowerCase().includes(searchQuery.toLowerCase()) ||
     r.to.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    r.airline.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    r.fromCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    r.toCode.toLowerCase().includes(searchQuery.toLowerCase())
+    r.airline.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   if (loading) return (
@@ -207,19 +204,8 @@ export default function TrendingRoutesDashboard() {
                     <Plane className="w-4 h-4 text-blue-500 flex-shrink-0" />
                     <span className="text-base font-bold text-gray-900">{route.to}</span>
                   </div>
-                  <div className="flex items-center gap-1 text-xs text-blue-600 font-medium mb-3">
-                    <span>{route.fromCode}</span>
-                    <span>→</span>
-                    <span>{route.toCode}</span>
-                  </div>
-
-                  <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
-                    <span>{route.airline} · {route.flightNo}</span>
-                    <span>{route.duration}</span>
-                  </div>
 
                   <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                    <span className="text-xs text-gray-400">{route.date}</span>
                     <span className="text-lg font-bold text-orange-500">{route.currency}{route.price.toLocaleString()}</span>
                   </div>
                 </div>

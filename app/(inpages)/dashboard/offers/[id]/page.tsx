@@ -23,34 +23,20 @@ export default function TrendingRouteFormPage() {
   const [deleting, setDeleting] = useState(false);
   const [preview,  setPreview]  = useState('');
 
-  const [form, setForm] = useState({
-    from:           '',
-    fromCode:       '',
-    to:             '',
-    toCode:         '',
-    date:           '',
-    price:          '',
-    currency:       '£',
-    image:          '',
-    airline:        '',
-    flightNo:       '',
-    duration:       '',
-    stops:          'Non Stop',
-    departure:      '',
-    arrival:        '',
-    fromFull:       '',
-    toFull:         '',
-    fromTerminal:   '',
-    toTerminal:     '',
-    travelClass:    'Economy',
-    checkinBaggage: '',
-    cabinBaggage:   '',
-    baseFare:       '',
-    tax:            '',
-    insurance:      '',
-    status:         'active' as 'active' | 'draft',
-    order:          '0',
-  });
+const [form, setForm] = useState({
+  from:           '',
+  to:             '',
+  price:          '',
+  currency:       '£',
+  image:          '',
+  airline:        '',
+  travelClass:    'Economy',
+  checkinBaggage: '',
+  cabinBaggage:   '',
+  baseFare:       '',
+  status:         'active' as 'active' | 'draft',
+  order:          '0',
+});
 
   useEffect(() => {
     if (creating) return;
@@ -62,29 +48,15 @@ export default function TrendingRouteFormPage() {
           const d = data.data;
           setForm({
             from:           d.from           ?? '',
-            fromCode:       d.fromCode       ?? '',
             to:             d.to             ?? '',
-            toCode:         d.toCode         ?? '',
-            date:           d.date           ?? '',
             price:          d.price?.toString()     ?? '',
             currency:       d.currency       ?? '£',
             image:          d.image          ?? '',
             airline:        d.airline        ?? '',
-            flightNo:       d.flightNo       ?? '',
-            duration:       d.duration       ?? '',
-            stops:          d.stops          ?? 'Non Stop',
-            departure:      d.departure      ?? '',
-            arrival:        d.arrival        ?? '',
-            fromFull:       d.fromFull       ?? '',
-            toFull:         d.toFull         ?? '',
-            fromTerminal:   d.fromTerminal   ?? '',
-            toTerminal:     d.toTerminal     ?? '',
             travelClass:    d.travelClass    ?? 'Economy',
             checkinBaggage: d.checkinBaggage ?? '',
             cabinBaggage:   d.cabinBaggage   ?? '',
             baseFare:       d.baseFare?.toString()  ?? '',
-            tax:            d.tax?.toString()       ?? '',
-            insurance:      d.insurance?.toString() ?? '',
             status:         d.status         ?? 'active',
             order:          d.order?.toString()     ?? '0',
           });
@@ -114,9 +86,6 @@ export default function TrendingRouteFormPage() {
         ...form,
         price:     Number(form.price)     || 0,
         baseFare:  Number(form.baseFare)  || 0,
-        tax:       Number(form.tax)       || 0,
-        insurance: Number(form.insurance) || 0,
-        order:     Number(form.order)     || 0,
       };
       const res = await fetch(
         creating ? '/api/offers' : `/api/offers/${id}`,
@@ -247,15 +216,7 @@ export default function TrendingRouteFormPage() {
                 </div>
               ))}
 
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Stops</label>
-                <select value={form.stops} onChange={e => set('stops', e.target.value)}
-                  className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 text-sm bg-white">
-                  <option>Non Stop</option>
-                  <option>1 Stop</option>
-                  <option>2 Stops</option>
-                </select>
-              </div>
+
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">Travel Class</label>
@@ -277,9 +238,6 @@ export default function TrendingRouteFormPage() {
               {[
                 { label: 'Display Price',  k: 'price',     placeholder: '900' },
                 { label: 'Currency',       k: 'currency',  placeholder: '£' },
-                { label: 'Base Fare',      k: 'baseFare',  placeholder: '800' },
-                { label: 'Tax & Charges',  k: 'tax',       placeholder: '80' },
-                { label: 'Insurance',      k: 'insurance', placeholder: '20' },
               ].map(({ label, k, placeholder }) => (
                 <div key={k}>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">{label}</label>

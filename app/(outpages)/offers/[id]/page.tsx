@@ -39,10 +39,10 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     }
 
     // Create description from flight data
-    const description = `Book your flight from ${route.from} to ${route.to} on ${route.date} with ${route.airline}. ${route.travelClass} class with ${route.checkinBaggage} check-in baggage. Flight ${route.flightNo} departing at ${route.departure} and arriving at ${route.arrival}.`;
+    const description = `Book your flight from ${route.from} to ${route.to} with ${route.airline}. ${route.travelClass} class with ${route.checkinBaggage} check-in baggage. Enjoy a comfortable ${route.travelClass} flight with ${route.checkinBaggage} check-in baggage.`;
 
     // For image, you might want to use a default flight-related image or create a dynamic one
-    const imageUrl = (route.image && route.image.length > 0 ? route.image[0] : '/') || '/unitedtravellogo300x300pxfull-01.svg';
+    const imageUrl = (route.image && route.image.length > 0 ? route.image : '/') || '/unitedtravellogo300x300pxfull-01.svg';
 
     return {
       title: `${route.from} to ${route.to} Flight | ${route.airline} | United Travel & Tours`,
@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       openGraph: {
         title: `${route.from} to ${route.to} Flight - ${route.airline}`,
         description,
-        url: `https://www.unitedtravels.co.uk/flights/${route.id}`,
+        url: `https://www.unitedtravels.co.uk/offers/${route.id}`,
         siteName: 'United Travel & Tours',
         images: [
           {
@@ -70,7 +70,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         images: [imageUrl],
       },
       alternates: {
-        canonical: `https://www.unitedtravels.co.uk/flights/${route.id}`,
+        canonical: `https://www.unitedtravels.co.uk/offers/${route.id}`,
       },
     };
   } catch (error) {
@@ -88,7 +88,7 @@ export default async function FlightDetailPage({ params }: { params: Promise<{ i
 
   if (!route) notFound();
 
-  const total = route.baseFare + route.tax + route.insurance;
+  const total = route.baseFare;
 
   return (
 <div className="min-h-screen bg-gradient-to-b from-orange-400 via-orange-500 to-orange-600 pt-24 pb-16">   
@@ -115,15 +115,10 @@ export default async function FlightDetailPage({ params }: { params: Promise<{ i
                     <span className="text-gray-400">⟶</span>
                     {route.to}
                   </h2>
-                  <div className="flex items-center gap-3 text-sm text-gray-500 mt-1">
-                    <span>• {route.date}</span>
-                    <span>• Duration {route.duration}</span>
-                    <span>• {route.stops}</span>
-                  </div>
                 </div>
-                <span className="text-xs border border-gray-300 text-gray-600 px-3 py-1.5 rounded-full">
+                {/* <span className="text-xs border border-gray-300 text-gray-600 px-3 py-1.5 rounded-full">
                   Non Refundable
-                </span>
+                </span> */}
               </div>
 
               <hr className="border-gray-100 mb-5" />
@@ -132,10 +127,6 @@ export default async function FlightDetailPage({ params }: { params: Promise<{ i
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
                     <PlaneTakeoff className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-gray-900">{route.airline}</p>
-                    <p className="text-xs text-gray-400">{route.flightNo}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-6 text-sm">
@@ -162,9 +153,6 @@ export default async function FlightDetailPage({ params }: { params: Promise<{ i
                   <p className="text-xs text-gray-400">{route.fromTerminal}</p>
                 </div>
                 <div className="flex-1 flex flex-col items-center">
-                  <p className="text-xs text-gray-400 mb-1">
-                    {route.duration.replace('h ', ' Hr. ').replace('m', ' Min.')}
-                  </p>
                   <div className="flex items-center w-full">
                     <div className="flex-1 border-t-2 border-dashed border-gray-300" />
                     <PlaneTakeoff className="w-5 h-5 text-gray-400 mx-2" />
