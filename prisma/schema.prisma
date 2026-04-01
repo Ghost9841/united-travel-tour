@@ -110,7 +110,7 @@ model Destination {
 
   @@map("destinations")
 }
-
+// back route is needed
 model TrendingRoute {
   id             Int      @id @default(autoincrement())
   from           String

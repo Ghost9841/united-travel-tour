@@ -130,7 +130,7 @@ export default function TrendingRoutes() {
                 {/* Price */}
                 <div className="mb-4">
                   <span className="text-3xl font-bold text-orange-400">
-                    {route.currency}{route.price.toLocaleString()}
+                    {route.currency}
                   </span>
                   <p className="text-xs text-gray-300 mt-1">Starting from</p>
                 </div>
@@ -150,7 +150,7 @@ export default function TrendingRoutes() {
                     <span>{route.from} → {route.to}</span>
                   </div>
                   <span className="text-lg font-bold text-orange-400 drop-shadow-lg">
-                    {route.currency}{route.price.toLocaleString()}
+                    {route.currency}
                   </span>
                 </div>
               </div>
