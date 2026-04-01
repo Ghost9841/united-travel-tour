@@ -186,7 +186,7 @@ export default function TrendingRoutesDashboard() {
                     </button>
                     {showMenu === route.id && (
                       <div className="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-10">
-                        <Link href={`/dashboard/offers/trending/${route.id}`}
+                        <Link href={`/dashboard/offers/${route.id}`}
                           className="w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
                           Edit
                         </Link>
