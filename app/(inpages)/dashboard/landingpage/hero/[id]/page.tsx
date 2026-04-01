@@ -168,7 +168,7 @@ export default function HeroCarouselImagesPage() {
                       </button>
                       {showMenu === img.id && (
                         <div className="absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-10">
-                          <Link href={`/dashboard/hero/${img.id}`}
+                          <Link href={`/dashboard/landingpage/hero/${img.id}`}
                             className="w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
                             <Edit className="w-4 h-4" /> Edit
                           </Link>
@@ -192,7 +192,7 @@ export default function HeroCarouselImagesPage() {
                       <span className="text-xs text-gray-400">
                         {new Date(img.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                       </span>
-                      <Link href={`/dashboard/hero/${img.id}`}
+                      <Link href={`/dashboard/landingpage/hero/${img.id}`}
                         className="text-xs text-orange-500 hover:text-orange-600 font-semibold">
                         Edit →
                       </Link>
