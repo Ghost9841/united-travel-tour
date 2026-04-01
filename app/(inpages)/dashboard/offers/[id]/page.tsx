@@ -175,13 +175,7 @@ const [form, setForm] = useState({
             <div className="grid grid-cols-2 gap-4">
               {[
                 { label: 'From City *',     k: 'from',     placeholder: 'e.g., London' },
-                { label: 'From Code *',     k: 'fromCode', placeholder: 'e.g., LHR' },
                 { label: 'To City *',       k: 'to',       placeholder: 'e.g., Kathmandu' },
-                { label: 'To Code *',       k: 'toCode',   placeholder: 'e.g., KTM' },
-                { label: 'From Full',       k: 'fromFull', placeholder: 'London [LHR]' },
-                { label: 'To Full',         k: 'toFull',   placeholder: 'Kathmandu [KTM]' },
-                { label: 'From Terminal',   k: 'fromTerminal', placeholder: 'Terminal 5' },
-                { label: 'To Terminal',     k: 'toTerminal',   placeholder: 'Terminal 1' },
               ].map(({ label, k, placeholder }) => (
                 <div key={k}>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">{label}</label>
@@ -200,11 +194,6 @@ const [form, setForm] = useState({
             <div className="grid grid-cols-2 gap-4">
               {[
                 { label: 'Airline *',         k: 'airline',        placeholder: 'Qatar Airways' },
-                { label: 'Flight No',         k: 'flightNo',       placeholder: 'QR-006' },
-                { label: 'Departure',         k: 'departure',      placeholder: '06:30' },
-                { label: 'Arrival',           k: 'arrival',        placeholder: '22:45' },
-                { label: 'Duration',          k: 'duration',       placeholder: '7h 30m' },
-                { label: 'Date',              k: 'date',           placeholder: '10/04/2026' },
                 { label: 'Check-in Baggage',  k: 'checkinBaggage', placeholder: 'Adult - 30 KG' },
                 { label: 'Cabin Baggage',     k: 'cabinBaggage',   placeholder: 'Adult - 7 KG' },
               ].map(({ label, k, placeholder }) => (
