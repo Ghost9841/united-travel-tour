@@ -86,6 +86,7 @@ const [form, setForm] = useState({
         ...form,
         price:     Number(form.price)     || 0,
         baseFare:  Number(form.baseFare)  || 0,
+        order:    Number(form.order)    || 0,
       };
       const res = await fetch(
         creating ? '/api/offers' : `/api/offers/${id}`,
