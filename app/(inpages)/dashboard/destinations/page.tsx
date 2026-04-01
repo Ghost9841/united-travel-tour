@@ -144,10 +144,6 @@ function DestinationCard({ dest, onDelete }: { dest: Destination; onDelete: () =
           <span className="w-px h-3 bg-gray-200" />
         </div>
         <div className="flex items-center justify-between pt-3 border-t border-gray-100 text-sm text-gray-400">
-          <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1"><Eye className="w-4 h-4" />{formatNumber(dest.views ?? 0)}</span>
-            <span className="flex items-center gap-1"><Heart className="w-4 h-4" />{formatNumber(dest.likes ?? 0)}</span>
-          </div>
           <span className="text-xs">{formatRelativeTime(new Date(dest.createdAt))}</span>
         </div>
       </div>
@@ -221,7 +217,6 @@ export default function DestinationsPage() {
   const active = destinations.filter(d => d.status === 'active').length;
   const drafts = destinations.filter(d => d.status === 'draft').length;
   const featured = destinations.filter(d => d.featured).length;
-  const totalLikes = destinations.reduce((s, d) => s + (d.likes ?? 0), 0);
 
   const filtered = destinations.filter(d => {
     const q = searchQuery.toLowerCase();
@@ -270,7 +265,6 @@ export default function DestinationsPage() {
           <StatCard label="Active" value={active} icon={Globe2} accent="bg-orange-50 text-orange-600" />
           <StatCard label="Drafts" value={drafts} icon={FileText} accent="bg-amber-50 text-amber-600" />
           <StatCard label="Featured" value={featured} icon={Star} accent="bg-yellow-50 text-yellow-600" />
-          <StatCard label="Total Likes" value={formatNumber(totalLikes)} icon={Heart} accent="bg-red-50 text-red-500" />
         </div>
 
         {/* Filter tabs */}

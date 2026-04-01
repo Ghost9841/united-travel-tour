@@ -145,10 +145,6 @@ function OfferCard({ offer, onDelete }: { offer: SpecialOffer; onDelete: () => v
         </div>
 
         <div className="flex items-center justify-between pt-3 mt-2 border-t border-gray-100 text-sm text-gray-400">
-          <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1"><Eye className="w-3.5 h-3.5" />{formatNumber(offer.views)}</span>
-            <span className="flex items-center gap-1"><Heart className="w-3.5 h-3.5" />{formatNumber(offer.likes)}</span>
-          </div>
           <span className="text-xs">{formatRelativeTime(new Date(offer.createdAt))}</span>
         </div>
       </div>
@@ -189,8 +185,6 @@ export default function SpecialOffersPage() {
 
   const active = offers.filter(o => o.status === 'active').length;
   const drafts  = offers.filter(o => o.status === 'draft').length;
-  const totalLikes    = offers.reduce((s, o) => s + (o.likes  ?? 0), 0);
-  const totalSavings  = offers.reduce((s, o) => s + Math.max(0, o.price - o.discountedPrice), 0);
 
   const filtered = offers.filter(o => {
     const q = searchQuery.toLowerCase();
@@ -239,8 +233,6 @@ export default function SpecialOffersPage() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard label="Active Offers" value={active}               icon={Ticket}   accent="bg-orange-50 text-orange-600" />
           <StatCard label="Drafts"        value={drafts}               icon={FileText} accent="bg-amber-50 text-amber-600" />
-          <StatCard label="Total Savings" value={`£${totalSavings}`}  icon={Percent}  accent="bg-green-50 text-green-600" />
-          <StatCard label="Total Likes"   value={formatNumber(totalLikes)} icon={Heart} accent="bg-red-50 text-red-500" />
         </div>
 
         {/* Filter tabs */}

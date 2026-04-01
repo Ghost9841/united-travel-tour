@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
-  Search, Plus, MoreVertical, Eye, Heart, Star, MapPin,
+  Search, Plus, MoreVertical, Star, MapPin,
   Trash2, Edit, Wifi, Coffee, Car, Dumbbell, Users,
-  Hotel, PoundSterling, FileText, Check,
+  Hotel, FileText, Check,
 } from 'lucide-react';
 
 interface HotelItem {
@@ -85,14 +85,6 @@ function HotelCard({ hotel, onDelete }: { hotel: HotelItem; onDelete: () => void
             {hotel.roomType}
           </span>
         </div>
-        {/* Discount */}
-        {discount > 0 && (
-          <div className="absolute top-3 right-12">
-            <span className="bg-green-500 text-white px-2.5 py-1 rounded-full text-xs font-bold shadow-sm">
-              Save £{discount}
-            </span>
-          </div>
-        )}
         {/* Status */}
         <div className="absolute bottom-3 left-3">
           <span className={`px-2.5 py-1 rounded-full text-xs font-semibold shadow-sm ${
@@ -171,10 +163,6 @@ function HotelCard({ hotel, onDelete }: { hotel: HotelItem; onDelete: () => void
         </div>
 
         <div className="flex items-center justify-between pt-3 mt-2 border-t border-gray-100 text-sm text-gray-400">
-          <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1"><Eye className="w-3.5 h-3.5" />{formatNumber(hotel.views ?? 0)}</span>
-            <span className="flex items-center gap-1"><Heart className="w-3.5 h-3.5" />{formatNumber(hotel.likes ?? 0)}</span>
-          </div>
           <span className="text-xs">{formatRelativeTime(new Date(hotel.createdAt))}</span>
         </div>
       </div>
@@ -233,9 +221,6 @@ export default function HotelsPage() {
 
   const active = hotels.filter(h => h.status === 'active').length;
   const drafts = hotels.filter(h => h.status === 'draft').length;
-  const totalLikes = hotels.reduce((s, h) => s + (h.likes ?? 0), 0);
-  const avgRating = hotels.length
-    ? (hotels.reduce((s, h) => s + h.rating, 0) / hotels.length).toFixed(1) : '0';
 
   const filtered = hotels.filter(h => {
     const q = searchQuery.toLowerCase();
@@ -281,8 +266,6 @@ export default function HotelsPage() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard label="Active Hotels" value={active} icon={Hotel} accent="bg-orange-50 text-orange-600" />
           <StatCard label="Drafts" value={drafts} icon={FileText} accent="bg-amber-50 text-amber-600" />
-          <StatCard label="Avg Rating" value={avgRating} icon={Star} accent="bg-yellow-50 text-yellow-600" />
-          <StatCard label="Total Likes" value={formatNumber(totalLikes)} icon={Heart} accent="bg-red-50 text-red-500" />
         </div>
 
         {/* Filter tabs */}

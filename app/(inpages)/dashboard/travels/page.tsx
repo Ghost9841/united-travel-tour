@@ -75,8 +75,6 @@ export default function TravelsAdminPage() {
 
   // Calculate stats
   const totalTravels = travels.length;
-  const avgRating = travels.reduce((sum, t) => sum + t.rating, 0) / totalTravels || 0;
-  const totalRevenue = travels.reduce((sum, t) => sum + t.price, 0);
 
   if (loading) {
     return (
@@ -125,21 +123,6 @@ export default function TravelsAdminPage() {
             label="Total Packages"
             value={totalTravels}
             icon={Globe2}
-          />
-          <StatCard
-            label="Average Rating"
-            value={Number(avgRating.toFixed(1))}
-            icon={Star}
-          />
-          <StatCard
-            label="Total Revenue"
-            value={totalRevenue}
-            icon={PoundSterling}
-          />
-          <StatCard
-            label="Active Tours"
-            value={travels.filter(t => t.rating > 4).length}
-            icon={MapPin}
           />
         </div>
 

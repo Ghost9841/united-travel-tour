@@ -10,14 +10,12 @@ import {
   MapPin,
   Clock,
   Users,
-  Heart,
   Plus,
   Edit3,
   Trash2,
   MoreHorizontal,
   Globe2,
   Star,
-  Eye,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -125,15 +123,6 @@ export function TravelCard({
       </CardContent>
 
       <CardFooter className="p-4 pt-0 flex items-center justify-between border-t mt-2">
-        <div className="flex items-center gap-3 text-xs text-muted-foreground">
-          <span className="flex items-center gap-1">
-            <Eye className="h-3.5 w-3.5" /> 1.2k
-          </span>
-          <span className="flex items-center gap-1">
-            <Heart className="h-3.5 w-3.5" /> 345
-          </span>
-        </div>
-
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button size="icon" variant="ghost" className="h-8 w-8">

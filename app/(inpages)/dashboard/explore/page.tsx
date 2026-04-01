@@ -76,13 +76,6 @@ function ExploreCard({ item, onDelete, categories }: { item: ExploreItem; onDele
         <img src={item.image} alt={item.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
 
-        {saving > 0 && (
-          <div className="absolute top-3 left-3 flex gap-1.5">
-            <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-sm">Save £{saving}</span>
-            <span className="bg-green-500 text-white px-2.5 py-1 rounded-full text-xs font-bold shadow-sm">{discountPct}% OFF</span>
-          </div>
-        )}
-
         <div className="absolute bottom-3 left-3">
           <span className={`px-2.5 py-1 rounded-full text-xs font-semibold shadow-sm ${
             item.status === 'active' ? 'bg-gray-900 text-white' : 'bg-white/90 text-gray-600 border border-gray-200'
@@ -143,10 +136,6 @@ function ExploreCard({ item, onDelete, categories }: { item: ExploreItem; onDele
                 <span className="text-xs text-gray-400 line-through">£{item.price}</span>
               )}
             </div>
-          </div>
-          <div className="flex items-center gap-3 text-sm text-gray-400">
-            <span className="flex items-center gap-1"><Eye className="w-3.5 h-3.5" />{formatNumber(item.views ?? 0)}</span>
-            <span className="flex items-center gap-1"><Heart className="w-3.5 h-3.5" />{formatNumber(item.likes ?? 0)}</span>
           </div>
         </div>
         <div className="mt-2 pt-2 border-t border-gray-100 text-right">
@@ -222,9 +211,6 @@ export default function ExploreAdminPage() {
 
   const active = items.filter(i => i.status === 'active').length;
   const drafts = items.filter(i => i.status === 'draft').length;
-  const totalLikes = items.reduce((s, i) => s + (i.likes ?? 0), 0);
-  const avgRating = items.length
-    ? (items.reduce((s, i) => s + i.rating, 0) / items.length).toFixed(1) : '0';
 
   const filtered = items.filter(i => {
     const q = searchQuery.toLowerCase();
@@ -274,8 +260,6 @@ export default function ExploreAdminPage() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard label="Active"      value={active}                   icon={Globe2}   accent="bg-orange-50 text-orange-600" />
           <StatCard label="Drafts"      value={drafts}                   icon={FileText} accent="bg-amber-50 text-amber-600" />
-          <StatCard label="Avg Rating"  value={avgRating}                icon={Star}     accent="bg-yellow-50 text-yellow-600" />
-          <StatCard label="Total Likes" value={formatNumber(totalLikes)} icon={Heart}    accent="bg-red-50 text-red-500" />
         </div>
 
         {/* Status tabs */}
