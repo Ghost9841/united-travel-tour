@@ -147,10 +147,7 @@ export default async function FlightDetailPage({ params }: { params: Promise<{ i
 
               <div className="flex items-center gap-4">
                 <div className="min-w-[100px]">
-                  <p className="text-3xl font-bold text-gray-900">{route.departure}</p>
-                  <p className="text-sm text-gray-500 mt-1">{route.fromFull}</p>
                   <p className="text-xs text-gray-400">{route.from}</p>
-                  <p className="text-xs text-gray-400">{route.fromTerminal}</p>
                 </div>
                 <div className="flex-1 flex flex-col items-center">
                   <div className="flex items-center w-full">
@@ -159,10 +156,7 @@ export default async function FlightDetailPage({ params }: { params: Promise<{ i
                   </div>
                 </div>
                 <div className="min-w-[100px] text-right">
-                  <p className="text-3xl font-bold text-gray-900">{route.arrival}</p>
-                  <p className="text-sm text-gray-500 mt-1">{route.toFull}</p>
                   <p className="text-xs text-gray-400">{route.to}</p>
-                  <p className="text-xs text-gray-400">{route.toTerminal}</p>
                 </div>
               </div>
 
@@ -193,8 +187,6 @@ export default async function FlightDetailPage({ params }: { params: Promise<{ i
               <div className="space-y-3 text-sm">
                 {[
                   { label: 'Base Fare',     value: route.baseFare },
-                  { label: 'Tax & Charges', value: route.tax },
-                  { label: 'Insurance',     value: route.insurance },
                 ].map(item => (
                   <div key={item.label} className="flex items-center justify-between text-gray-600">
                     <div className="flex items-center gap-1">
