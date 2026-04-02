@@ -39,6 +39,11 @@ function InnerForm({ amount }: { amount: number }) {
     }
     // On success Stripe redirects to return_url automatically
   };
+  if (!name || !email) {
+  setError('Please fill in all fields');
+  setLoading(false);
+  return;
+}
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
@@ -68,7 +73,7 @@ function InnerForm({ amount }: { amount: number }) {
 
       {error && <p className="text-sm text-red-600">{error}</p>}
 
-      <button type="submit" disabled={!stripe || loading}
+      <button type="submit" disabled={!stripe || !elements || loading}
         className="w-full bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white font-bold py-4 rounded-xl transition-colors shadow-md text-lg">
         {loading ? 'Processing...' : `Pay £${amount}`}
       </button>
@@ -86,24 +91,32 @@ export default function CheckoutForm({ amount, currency, outPageTitle ,type ,id}
 }) {
   const [clientSecret, setClientSecret] = useState('');
 
-  useEffect(() => {
-    fetch('/api/create-payment-intent', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amount, currency, outPageTitle,type,id }),
+useEffect(() => {
+  fetch('/api/create-payment-intent', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ amount, currency, outPageTitle, type, id }),
+  })
+    .then(async (r) => {
+      const data = await r.json();
+      if (!r.ok) throw new Error(data.error || 'Something went wrong');
+      setClientSecret(data.clientSecret);
     })
-      .then(r => r.json())
-      .then(d => setClientSecret(d.clientSecret));
-  }, [amount, currency, outPageTitle]);
+    .catch((err) => {
+      console.error(err);
+    });
+}, [amount, currency, outPageTitle, type, id]);
 
   if (!clientSecret) return (
-    <div className="bg-muted rounded-2xl border border-gray-200 p-8 flex items-center justify-center">
+    <div className="bg-white rounded-2xl border border-gray-200 p-8 flex items-center justify-center">
       <div className="w-10 h-10 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin" />
     </div>
   );
 
   return (
-    <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'night' } }}>
+    <Elements stripe={stripePromise} options={{ clientSecret, appearance: {
+  theme: 'stripe',
+} }}>
       <InnerForm amount={amount} />
     </Elements>
   );
