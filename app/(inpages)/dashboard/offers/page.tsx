@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Search, Plus, MoreVertical, Plane, Trash2, X, Images, Route } from 'lucide-react';
+import { Search, Plus, MoreVertical, Plane, Trash2, X, Images, Route, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 interface TrendingRoute {
@@ -200,13 +200,14 @@ export default function TrendingRoutesDashboard() {
                 <div className="p-5">
                   {/* Route */}
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-base font-bold text-gray-900">{route.from}</span>
                     <Plane className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                    <span className="text-base font-bold text-gray-900">{route.from}</span>
+                    <ArrowRight className="w-4 h-4 text-gray-400 flex-shrink-0" />
                     <span className="text-base font-bold text-gray-900">{route.to}</span>
                     {/* Optional back route */}
                     {route.back && (
                       <>
-                        <Plane className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                        <ArrowRight className="w-4 h-4 text-gray-400 flex-shrink-0" />
                         <span className="text-base font-bold text-gray-900">{route.back}</span>
                       </>
                     )}
