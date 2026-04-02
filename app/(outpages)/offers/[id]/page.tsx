@@ -336,6 +336,5 @@ export default async function FlightDetailPage({ params }: { params: Promise<{ i
         </div>
       </div>
     </div>
-    </div >
   );
 }
