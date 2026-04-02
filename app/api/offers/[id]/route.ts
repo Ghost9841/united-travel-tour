@@ -36,6 +36,7 @@ export async function PUT(req: Request, { params }: Params) {
     const data: Record<string, unknown> = {};
     if (body.from !== undefined) data.from = body.from.trim();
     if (body.to !== undefined) data.to = body.to.trim();
+    if (body.back !== undefined) data.back = body.back.trim();
     if (body.price !== undefined) data.price = Number(body.price);
     if (body.currency !== undefined) data.currency = body.currency;
     if (body.image !== undefined) data.image = body.image.trim();

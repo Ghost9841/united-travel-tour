@@ -8,6 +8,7 @@ interface TrendingRoute {
   id: number;
   from: string;
   to: string;
+  back?: string;
   price: number;
   currency: string;
   image: string;
@@ -121,9 +122,16 @@ export default function TrendingRoutes() {
                 {/* Route */}
                 <div className="flex items-center gap-2 mb-3">
                   <div className="flex items-center gap-1 text-sm bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full">
-                    <span className="font-semibold">{route.from}</span>
                     <Plane className="w-3.5 h-3.5 text-orange-400" />
+                    <span className="font-semibold">{route.from}</span>
+                     <ArrowRight className="w-4 h-4 text-orange-400" />
                     <span className="font-semibold">{route.to}</span>
+                    {route.back && (
+                      <>
+                        <ArrowRight className="w-4 h-4 text-orange-400" />
+                        <span className="font-semibold">{route.back}</span>
+                      </>
+                    )}
                   </div>
                 </div>
 
@@ -147,7 +155,7 @@ export default function TrendingRoutes() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1 text-xs bg-black/50 backdrop-blur-sm px-2 py-1 rounded-full">
                     <Plane className="w-3 h-3" />
-                    <span>{route.from} → {route.to}</span>
+                    <span>{route.from} → {route.to}   {route?.back && ` → ${route.back}`}</span>
                   </div>
                   <span className="text-lg font-bold text-orange-400 drop-shadow-lg">
                     {route.currency}{route.price.toLocaleString()}

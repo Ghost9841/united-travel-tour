@@ -26,6 +26,7 @@ export default function TrendingRouteFormPage() {
 const [form, setForm] = useState({
   from:           '',
   to:             '',
+  back:           '',
   price:          '',
   currency:       '£',
   image:          '',
@@ -49,6 +50,7 @@ const [form, setForm] = useState({
           setForm({
             from:           d.from           ?? '',
             to:             d.to             ?? '',
+            back:           d.back           ?? '',
             price:          d.price?.toString()     ?? '',
             currency:       d.currency       ?? '£',
             image:          d.image          ?? '',
@@ -177,6 +179,8 @@ const [form, setForm] = useState({
               {[
                 { label: 'From City *',     k: 'from',     placeholder: 'e.g., London' },
                 { label: 'To City *',       k: 'to',       placeholder: 'e.g., Kathmandu' },
+                { label: 'Back City (Optional/ For two way only)',       k: 'back',       placeholder: 'e.g., London' },
+
               ].map(({ label, k, placeholder }) => (
                 <div key={k}>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">{label}</label>

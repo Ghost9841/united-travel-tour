@@ -32,6 +32,7 @@ export async function POST(req: Request) {
       data: {
         from: body.from.trim(),
         to: body.to.trim(),
+        back: body.back ? body.back.trim() : null,
         price: Number(body.price) || 0,
         currency: body.currency || '£',
         image: body.image?.trim() || '',

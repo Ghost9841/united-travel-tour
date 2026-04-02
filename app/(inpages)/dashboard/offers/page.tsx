@@ -8,6 +8,7 @@ interface TrendingRoute {
   id: number;
   from: string;
   to: string;
+  back?: string;
   price: number;
   currency: string;
   image: string;
@@ -23,15 +24,15 @@ interface TrendingRoute {
 }
 
 export default function TrendingRoutesDashboard() {
-  const [routes, setRoutes]         = useState<TrendingRoute[]>([]);
-  const [loading, setLoading]       = useState(true);
+  const [routes, setRoutes] = useState<TrendingRoute[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [showMenu, setShowMenu]     = useState<number | null>(null);
+  const [showMenu, setShowMenu] = useState<number | null>(null);
 
   const fetchRoutes = async () => {
     try {
       setLoading(true);
-      const res  = await fetch('/api/offers');
+      const res = await fetch('/api/offers');
       const data = await res.json();
       if (data.success) setRoutes(data.data);
       else setRoutes([]);
@@ -42,7 +43,7 @@ export default function TrendingRoutesDashboard() {
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this route?')) return;
     try {
-      const res  = await fetch(`/api/offers/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/offers/${id}`, { method: 'DELETE' });
       const data = await res.json();
       if (data.success) setRoutes(prev => prev.filter(r => r.id !== id));
       else alert(data.error || 'Failed to delete');
@@ -52,14 +53,14 @@ export default function TrendingRoutesDashboard() {
   useEffect(() => { fetchRoutes(); }, []);
 
   const active = routes.filter(r => r.status === 'active').length;
-  const draft  = routes.filter(r => r.status === 'draft').length;
+  const draft = routes.filter(r => r.status === 'draft').length;
 
   const filtered = routes.filter(r =>
     r.from.toLowerCase().includes(searchQuery.toLowerCase()) ||
     r.to.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    r.airline.toLowerCase().includes(searchQuery.toLowerCase())
+    r.airline.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (r.back && r.back.toLowerCase().includes(searchQuery.toLowerCase()))
   );
-
   if (loading) return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 flex items-center justify-center">
       <div className="text-center">
@@ -116,8 +117,8 @@ export default function TrendingRoutesDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {[
             { label: 'Total Routes', value: routes.length, bg: 'bg-orange-50', color: 'text-orange-600' },
-            { label: 'Active',        value: active,        bg: 'bg-green-50',  color: 'text-green-600' },
-            { label: 'Draft',         value: draft,         bg: 'bg-amber-50',  color: 'text-amber-600' },
+            { label: 'Active', value: active, bg: 'bg-green-50', color: 'text-green-600' },
+            { label: 'Draft', value: draft, bg: 'bg-amber-50', color: 'text-amber-600' },
           ].map(({ label, value, bg, color }) => (
             <div key={label} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
               <div className="flex items-center justify-between mb-3">
@@ -169,9 +170,8 @@ export default function TrendingRoutesDashboard() {
                   )}
 
                   <div className="absolute top-3 left-3">
-                    <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
-                      route.status === 'active' ? 'bg-gray-900 text-white' : 'bg-white/90 text-gray-600 border border-gray-200'
-                    }`}>
+                    <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${route.status === 'active' ? 'bg-gray-900 text-white' : 'bg-white/90 text-gray-600 border border-gray-200'
+                      }`}>
                       {route.status === 'active' ? 'Active' : 'Draft'}
                     </span>
                   </div>
@@ -203,6 +203,13 @@ export default function TrendingRoutesDashboard() {
                     <span className="text-base font-bold text-gray-900">{route.from}</span>
                     <Plane className="w-4 h-4 text-blue-500 flex-shrink-0" />
                     <span className="text-base font-bold text-gray-900">{route.to}</span>
+                    {/* Optional back route */}
+                    {route.back && (
+                      <>
+                        <Plane className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                        <span className="text-base font-bold text-gray-900">{route.back}</span>
+                      </>
+                    )}
                   </div>
 
                   <div className="flex items-center justify-between pt-3 border-t border-gray-100">

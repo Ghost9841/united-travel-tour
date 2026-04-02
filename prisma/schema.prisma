@@ -110,11 +110,12 @@ model Destination {
 
   @@map("destinations")
 }
-// back route is needed
+
 model TrendingRoute {
   id             Int      @id @default(autoincrement())
   from           String
   to             String
+  back           String   @default("")
   price          Float
   currency       String   @default("£")
   image          String   @default("")
