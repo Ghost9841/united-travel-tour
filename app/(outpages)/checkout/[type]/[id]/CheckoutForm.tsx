@@ -7,7 +7,6 @@ import {
 } from '@stripe/react-stripe-js';
 import { CreditCard, Smartphone, Building2, Lock, ShieldCheck, Truck, Headphones, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
