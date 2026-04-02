@@ -42,7 +42,7 @@ function InnerForm({ amount }: { amount: number }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+      <div className="bg-muted rounded-2xl border border-gray-200 shadow-sm p-6">
         <h2 className="text-lg font-bold text-gray-900 mb-4">Your details</h2>
         <div className="space-y-4">
           <div>
@@ -97,7 +97,7 @@ export default function CheckoutForm({ amount, currency, outPageTitle ,type ,id}
   }, [amount, currency, outPageTitle]);
 
   if (!clientSecret) return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-8 flex items-center justify-center">
+    <div className="bg-muted rounded-2xl border border-gray-200 p-8 flex items-center justify-center">
       <div className="w-10 h-10 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin" />
     </div>
   );
