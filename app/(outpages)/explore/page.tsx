@@ -187,7 +187,7 @@ export default function ExplorePage() {
                         </div>
                       </div>
                       <div onClick={(e) => e.stopPropagation()}>
-                        <Link href="/booknow">
+                        <Link href={`/checkout/explore/${offer.id}`}>
                           <button className="px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors">
                             BOOK NOW
                           </button>

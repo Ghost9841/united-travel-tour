@@ -177,7 +177,7 @@ export default function HotelsListingPage() {
 
                 {/* Price & Button */}
                 <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                  <a href="/booknow">
+                  <a href={`/checkout/hotel/${hotel.id}`}>
                     <button className="px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors">
                       BOOK NOW
                     </button>

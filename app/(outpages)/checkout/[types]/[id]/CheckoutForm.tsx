@@ -77,10 +77,12 @@ function InnerForm({ amount }: { amount: number }) {
 }
 
 // Outer wrapper — fetches clientSecret and sets up Elements provider
-export default function CheckoutForm({ amount, currency, outPageTitle }: {
+export default function CheckoutForm({ amount, currency, outPageTitle ,type ,id}: {
   amount: number;
   currency: string;
   outPageTitle: string;
+  type: string;
+  id: string;
 }) {
   const [clientSecret, setClientSecret] = useState('');
 
@@ -88,7 +90,7 @@ export default function CheckoutForm({ amount, currency, outPageTitle }: {
     fetch('/api/create-payment-intent', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amount, currency, outPageTitle }),
+      body: JSON.stringify({ amount, currency, outPageTitle,type,id }),
     })
       .then(r => r.json())
       .then(d => setClientSecret(d.clientSecret));

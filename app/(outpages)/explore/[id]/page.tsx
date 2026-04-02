@@ -420,7 +420,7 @@ export default async function ExploreDetailPage({ params }: ExploreDetailPagePro
                 </div>
               </div>
 
-              <Link href="/booknow">
+              <Link href={`/checkout/explore/${explore.id}`}>
                 <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 rounded-xl transition-colors mb-4 text-lg">
                   BOOK NOW
                 </button>

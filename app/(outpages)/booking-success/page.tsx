@@ -3,7 +3,7 @@ import { CheckCircle } from 'lucide-react';
 
 export default function BookingSuccessPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-orange-500 py-12 px-4">
       <div className="bg-white rounded-2xl shadow-md p-12 text-center max-w-md">
         <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Booking Confirmed!</h1>
