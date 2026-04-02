@@ -108,7 +108,7 @@ useEffect(() => {
 }, [amount, currency, outPageTitle, type, id]);
 
   if (!clientSecret) return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-8 flex items-center justify-center">
+    <div className="bg-muted rounded-2xl border border-gray-200 p-8 flex items-center justify-center">
       <div className="w-10 h-10 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin" />
     </div>
   );
@@ -116,6 +116,9 @@ useEffect(() => {
   return (
     <Elements stripe={stripePromise} options={{ clientSecret, appearance: {
   theme: 'stripe',
+  variables: {
+    colorPrimary: '#f97316', // orange
+  },
 } }}>
       <InnerForm amount={amount} />
     </Elements>
