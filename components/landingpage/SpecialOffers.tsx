@@ -7,15 +7,15 @@ import ViewMoreButton from '@/components/ViewMoreButton';
 import { useState, useEffect } from 'react';
 
 export default function SpecialOffers() {
-  const [offers,     setOffers]     = useState<SpecialOffer[]>([]);
-  const [loading,    setLoading]    = useState(true);
+  const [offers, setOffers] = useState<SpecialOffer[]>([]);
+  const [loading, setLoading] = useState(true);
   const [startIndex, setStartIndex] = useState(0);
   const itemsToShow = 4;
 
   useEffect(() => {
     (async () => {
       try {
-        const res  = await fetch('/api/special-offers?status=active');
+        const res = await fetch('/api/special-offers?status=active');
         const data = await res.json();
         if (data.success) setOffers(data.data);
       } catch (err) {
@@ -38,7 +38,7 @@ export default function SpecialOffers() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft')  prev();
+      if (e.key === 'ArrowLeft') prev();
       if (e.key === 'ArrowRight') next();
     };
     window.addEventListener('keydown', onKey);
@@ -149,17 +149,17 @@ export default function SpecialOffers() {
                   )}
                 </div>
                 <Link
-  href={`/offers/special-offers/${offer.id}`}
-  className="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors text-sm"
->
-  VIEW DETAILS
-</Link>
-<Link
-  href="/booknow"
-  className="px-5 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg font-medium transition-colors text-sm border border-white/40"
->
-  BOOK NOW
-</Link>
+                  href={`/offers/special-offers/${offer.id}`}
+                  className="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors text-sm"
+                >
+                  VIEW DETAILS
+                </Link>
+                <Link
+                  href="/booknow"
+                  className="px-5 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg font-medium transition-colors text-sm border border-white/40"
+                >
+                  BOOK NOW
+                </Link>
               </div>
             </div>
 
@@ -189,7 +189,7 @@ export default function SpecialOffers() {
       </div>
 
       <div className="mt-8 flex justify-center">
-        <ViewMoreButton href="/special-offers" label="View More Special Offers" />
+        <ViewMoreButton href="/offers" label="View More Offers" />
       </div>
     </section>
   );
