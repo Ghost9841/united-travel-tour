@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Search, Plus, MoreVertical, Plane, Trash2, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 type OngoingFare = {
   id: number;
@@ -24,6 +25,8 @@ export default function OngoingFareDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [showMenu, setShowMenu] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const searchParams = useSearchParams();
 
   const fetchFares = async () => {
     try {
@@ -47,6 +50,13 @@ export default function OngoingFareDashboardPage() {
   };
 
   useEffect(() => { fetchFares(); }, []);
+
+  useEffect(() => {
+    const errorParam = searchParams.get('error');
+    if (errorParam) {
+      setError(errorParam);
+    }
+  }, [searchParams]);
 
   const active = fares.filter(f => f.status === 'active').length;
   const draft = fares.filter(f => f.status === 'draft').length;
@@ -74,6 +84,8 @@ export default function OngoingFareDashboardPage() {
           <h1 className="text-4xl font-bold text-gray-900 mb-2">Ongoing Fares</h1>
           <p className="text-gray-600">Manage ongoing fare campaigns shown on the homepage</p>
         </div>
+
+        {error && <div className="rounded-lg bg-red-100 border border-red-200 text-red-700 p-3 mb-6">{error}</div>}
 
         {/* Search + Add */}
         <div className="flex items-center gap-4 mb-6">

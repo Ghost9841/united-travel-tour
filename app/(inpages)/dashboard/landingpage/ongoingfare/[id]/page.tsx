@@ -56,8 +56,7 @@ export default function OngoingFareDetailPage({ params }: OngoingFarePageProps) 
 
     const idNum = Number(id);
     if (Number.isNaN(idNum)) {
-      setError('Invalid fare ID');
-      setLoading(false);
+      router.push('/dashboard/landingpage/ongoingfare?error=Invalid fare ID');
       return;
     }
 
