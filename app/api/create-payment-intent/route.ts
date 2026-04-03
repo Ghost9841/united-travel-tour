@@ -9,15 +9,15 @@ export async function POST(req: NextRequest) {
       amount: Math.round(amount * 100), // Stripe uses pence/cents
       currency: currency || 'gbp',
       receipt_email: customerEmail,
-metadata: {
-        itemTitle:     outPageTitle,
-        itemType:      type,
-        itemId:        id,
-        customerName:  customerName  ?? '',
+      metadata: {
+        itemTitle: outPageTitle,
+        itemType: type,
+        itemId: id,
+        customerName: customerName ?? '',
         customerEmail: customerEmail ?? '',
-        amount:        String(amount),
+        amount: String(amount),
       },
-        });
+    });
 
     return NextResponse.json({ clientSecret: paymentIntent.client_secret });
   } catch (error: any) {
