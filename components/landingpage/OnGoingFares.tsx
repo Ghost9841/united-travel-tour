@@ -120,7 +120,7 @@ export default function CompactFaresBanner() {
       setIsLoading(true);
       setError(null);
       try {
-        const res = await fetch('/api/(landingpage)/ongoingfare?status=active');
+        const res = await fetch('/api/ongoingfare?status=active');
         const json = await res.json();
 
         if (!res.ok) {
