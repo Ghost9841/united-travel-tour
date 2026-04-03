@@ -63,6 +63,11 @@ export default async function CheckoutPage({
           };
         }
         break;
+        case 'trending-offer':
+          item = await prisma.trendingRoute.findUnique({
+            where: { id: Number(id) },
+          });
+        break;
     default:
       notFound();
   }
