@@ -176,3 +176,23 @@ model LandingHeroCarouselImage {
 
   @@map("herocarousel_images")
 }
+
+model OngoingFare {
+  id              Int      @id @default(autoincrement())
+  title           String
+  description     String
+  originalPrice   String
+  discountedPrice String
+  discount        String
+  image           String
+  alt             String
+  departure       String
+  arrival         String
+  expires         String
+  status          String   @default("active")
+
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@map("ongoing_fares")
+}

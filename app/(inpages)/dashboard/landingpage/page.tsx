@@ -18,6 +18,12 @@ export default function LandingPage() {
           href="/dashboard/landingpage/popular-destinations"
           icon={<Images className="w-8 h-8 text-orange-500" />}
         />
+         <LandingPageActionCard
+          title="Ongoing Fares"
+          description="Manage the ongoing fares displayed on the homepage"
+          href="/dashboard/landingpage/ongoingfare"
+          icon={<Images className="w-8 h-8 text-orange-500" />}
+        />
       </div>
     </div>
   );

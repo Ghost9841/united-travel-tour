@@ -1,0 +1,7 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "landingpage": true,
+        "/ongoingfare/route.ts": true,
+        "/ongoingfare/[id]/route.ts": true
+    }
+}

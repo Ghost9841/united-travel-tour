@@ -2,50 +2,21 @@
 import { ChevronLeft, ChevronRight, Plane, Clock, Tag } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 
-const ONGOING_FARES = [
-  {
-    id: 1,
-    title: "Kathmandu to London",
-    description: "Qatar Airways",
-    originalPrice: "£450",
-    discountedPrice: "£400",
-    discount: "5% OFF",
-    duration: "5h 30m",
-    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&h=400&fit=crop",
-    alt: "Dubai skyline",
-    departure: "Kathmandu",
-    arrival: "London",
-    expires: "Ends in 2 days"
-  },
-  {
-    id: 3,
-    title: "London to Kathmandu (Two Way)",
-    description: "Turkish Airlines",
-    originalPrice: "£800",
-    discountedPrice: "£700",
-    discount: "5% OFF",
-    duration: "1h 50m",
-    image: "/2026/ongoingfares/kathmandu.jpeg",
-    alt: "Delhi architecture",
-    departure: "London",
-    arrival: "Kathmandu",
-    expires: "Ends tomorrow"
-  },
-  {
-    id: 5,
-    title: "Kathmandu to London",
-    description: "Emirates Airways",
-    originalPrice: "£520",
-    discountedPrice: "£360",
-    discount: "33% OFF",
-    duration: "4h 45m",
-    image: "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=800&h=400&fit=crop",
-    alt: "Kuala Lumpur",
-    departure: "Kathmandu",
-    arrival: "London",
-    expires: "Ends in 4 days"
-  }
-];
+interface OngoingFareItem {
+  id: number;
+  title: string;
+  description: string;
+  originalPrice: string;
+  discountedPrice: string;
+  discount: string;
+  image: string;
+  alt: string;
+  departure: string;
+  arrival: string;
+  expires: string;
+  status?: string;
+}
+
 
 export default function CompactFaresBanner() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -53,14 +24,21 @@ export default function CompactFaresBanner() {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [currentTranslate, setCurrentTranslate] = useState(0);
+  const [ongoingFares, setOngoingFares] = useState<OngoingFareItem[]>(ONGOING_FARES);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const dragThreshold = 50; // minimum pixels to drag before switching slide
+
+  const activeFares = ongoingFares.length ? ongoingFares : ONGOING_FARES;
+  const totalSlides = activeFares.length;
 
   const handleNavClick = (direction: 'next' | 'prev') => {
     setCurrentIndex((prev) => {
+      if (totalSlides === 0) return 0;
       if (direction === 'next') {
-        return (prev + 1) % ONGOING_FARES.length;
+        return (prev + 1) % totalSlides;
       } else {
-        return (prev - 1 + ONGOING_FARES.length) % ONGOING_FARES.length;
+        return (prev - 1 + totalSlides) % totalSlides;
       }
     });
     setIsAutoPlaying(false);
@@ -135,30 +113,87 @@ export default function CompactFaresBanner() {
     handleDragEnd();
   };
 
+  useEffect(() => {
+    let didCancel = false;
+
+    const loadFares = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const res = await fetch('/api/(landingpage)/ongoingfare?status=active');
+        const json = await res.json();
+
+        if (!res.ok) {
+          throw new Error(json?.error || 'Failed to fetch ongoing fares');
+        }
+
+        const data: OngoingFareItem[] = json.data || [];
+
+        if (!didCancel) {
+          setOngoingFares(data.length ? data : ONGOING_FARES);
+          if (data.length && currentIndex >= data.length) {
+            setCurrentIndex(0);
+          }
+        }
+      } catch (fetchError) {
+        console.error('Error loading ongoing fares:', fetchError);
+        if (!didCancel) {
+          setError('Unable to load fare banners.');
+          setOngoingFares(ONGOING_FARES);
+        }
+      } finally {
+        if (!didCancel) setIsLoading(false);
+      }
+    };
+
+    loadFares();
+
+    return () => {
+      didCancel = true;
+    };
+  }, [currentIndex]);
+
   // Auto-play functionality
   useEffect(() => {
-    if (!isAutoPlaying) return;
+    if (!isAutoPlaying || totalSlides === 0) return;
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % ONGOING_FARES.length);
+      setCurrentIndex((prev) => (prev + 1) % totalSlides);
     }, 5000);
     return () => clearInterval(interval);
-  }, [isAutoPlaying]);
+  }, [isAutoPlaying, totalSlides]);
 
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (totalSlides === 0) return;
       if (e.key === 'ArrowLeft') {
-        setCurrentIndex((prev) => (prev - 1 + ONGOING_FARES.length) % ONGOING_FARES.length);
+        setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
       }
       if (e.key === 'ArrowRight') {
-        setCurrentIndex((prev) => (prev + 1) % ONGOING_FARES.length);
+        setCurrentIndex((prev) => (prev + 1) % totalSlides);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [totalSlides]);
 
-  const currentFare = ONGOING_FARES[currentIndex];
+  const currentFare = activeFares[currentIndex] || activeFares[0];
+
+  if (isLoading) {
+    return (
+      <section className="relative w-full bg-gray-900 overflow-hidden rounded-2xl mx-auto max-w-7xl mt-4 mb-6 h-[280px] sm:h-[320px] flex items-center justify-center">
+        <div className="text-white text-sm">Loading ongoing fares...</div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="relative w-full bg-gray-900 overflow-hidden rounded-2xl mx-auto max-w-7xl mt-4 mb-6 h-[280px] sm:h-[320px] flex items-center justify-center">
+        <div className="text-red-300 text-sm">{error}</div>
+      </section>
+    );
+  }
 
   return (
     <section 
@@ -176,7 +211,7 @@ export default function CompactFaresBanner() {
       <div 
         className="absolute inset-0 transition-transform duration-200"
         style={{ 
-          transform: `translateX(£{currentTranslate}px)`,
+          transform: `translateX(${currentTranslate}px)`,
           transition: isDragging ? 'none' : 'transform 0.3s ease-out'
         }}
       >
@@ -192,7 +227,7 @@ export default function CompactFaresBanner() {
       <div 
         className="relative h-full flex items-center px-6 sm:px-10 transition-transform duration-200"
         style={{ 
-          transform: `translateX(£{currentTranslate}px)`,
+          transform: `translateX(${currentTranslate}px)`,
           transition: isDragging ? 'none' : 'transform 0.3s ease-out'
         }}
       >
@@ -234,10 +269,6 @@ export default function CompactFaresBanner() {
                 <Plane className="w-4 h-4" />
                 <span className="text-white font-medium">{currentFare.departure} → {currentFare.arrival}</span>
               </div>
-              {/* <div className="flex items-center gap-2 text-gray-300">
-                <Clock className="w-4 h-4" />
-                <span className="text-white font-medium">{currentFare.duration}</span>
-              </div> */}
             </div>
           </div>
 
@@ -256,7 +287,7 @@ export default function CompactFaresBanner() {
 
         {/* Slide Counter */}
         <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-sm rounded-full px-3 py-1 text-white text-xs font-medium">
-          {currentIndex + 1} / {ONGOING_FARES.length}
+          {totalSlides === 0 ? 0 : currentIndex + 1} / {totalSlides}
         </div>
       </div>
 
@@ -270,12 +301,12 @@ export default function CompactFaresBanner() {
           <ChevronLeft className="w-4 h-4" />
         </button>
         <div className="flex gap-1.5">
-          {ONGOING_FARES.map((_, index) => (
+          {activeFares.map((_, index) => (
             <button
               key={index}
               onClick={(e) => { e.stopPropagation(); handleDotClick(index); }}
-              className={`h-1.5 rounded-full transition-all £{index === currentIndex ? 'bg-orange-500 w-4' : 'bg-white/50 w-1.5 hover:bg-white'}`}
-              aria-label={`Go to slide £{index + 1}`}
+              className={`h-1.5 rounded-full transition-all ${index === currentIndex ? 'bg-orange-500 w-4' : 'bg-white/50 w-1.5 hover:bg-white'}`}
+              aria-label={`Go to slide ${index + 1}`}
             />
           ))}
         </div>
