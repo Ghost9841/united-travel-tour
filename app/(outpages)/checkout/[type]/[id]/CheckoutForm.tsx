@@ -91,8 +91,6 @@ export default function CheckoutForm({ amount, currency, outPageTitle, type, id 
   const [customerEmail,  setCustomerEmail]  = useState('');
 
 useEffect(() => {
-  if (!customerName || !customerEmail) return;
-
   fetch('/api/create-payment-intent', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -102,13 +100,12 @@ useEffect(() => {
       outPageTitle,
       type,
       id,
-      customerName,
-      customerEmail,
     }),
   })
     .then(r => r.json())
     .then(d => setClientSecret(d.clientSecret));
-}, [amount, currency, outPageTitle, type, id, customerName, customerEmail]);
+}, [amount, currency, outPageTitle, type, id]);
+
   const handleDetailsChange = (name: string, email: string) => {
     setCustomerName(name);
     setCustomerEmail(email);
