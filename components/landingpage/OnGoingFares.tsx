@@ -1,6 +1,6 @@
 'use client';
 import { ChevronLeft, ChevronRight, Plane, Clock, Tag } from 'lucide-react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 interface OngoingFareItem {
   id: number;
@@ -24,12 +24,12 @@ export default function CompactFaresBanner() {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [currentTranslate, setCurrentTranslate] = useState(0);
-  const [ongoingFares, setOngoingFares] = useState<OngoingFareItem[]>(ONGOING_FARES);
+  const [ongoingFares, setOngoingFares] = useState<OngoingFareItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const dragThreshold = 50; // minimum pixels to drag before switching slide
 
-  const activeFares = ongoingFares.length ? ongoingFares : ONGOING_FARES;
+  const activeFares = ongoingFares;
   const totalSlides = activeFares.length;
 
   const handleNavClick = (direction: 'next' | 'prev') => {
@@ -130,7 +130,7 @@ export default function CompactFaresBanner() {
         const data: OngoingFareItem[] = json.data || [];
 
         if (!didCancel) {
-          setOngoingFares(data.length ? data : ONGOING_FARES);
+          setOngoingFares(data);
           if (data.length && currentIndex >= data.length) {
             setCurrentIndex(0);
           }
@@ -139,7 +139,7 @@ export default function CompactFaresBanner() {
         console.error('Error loading ongoing fares:', fetchError);
         if (!didCancel) {
           setError('Unable to load fare banners.');
-          setOngoingFares(ONGOING_FARES);
+          setOngoingFares([]);
         }
       } finally {
         if (!didCancel) setIsLoading(false);
@@ -176,6 +176,14 @@ export default function CompactFaresBanner() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [totalSlides]);
+
+  if (totalSlides === 0 && !isLoading) {
+    return (
+      <section className="relative w-full bg-gray-900 overflow-hidden rounded-2xl mx-auto max-w-7xl mt-4 mb-6 h-[280px] sm:h-[320px] flex items-center justify-center">
+        <div className="text-white text-sm">No ongoing fares found.</div>
+      </section>
+    );
+  }
 
   const currentFare = activeFares[currentIndex] || activeFares[0];
 

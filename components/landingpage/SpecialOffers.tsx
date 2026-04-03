@@ -3,6 +3,7 @@
 import SpecialOffer from '@/app/api/special-offers/types';
 import { ChevronLeft, ChevronRight, MapPin, Star } from 'lucide-react';
 import Link from 'next/link';
+import ViewMoreButton from '@/components/ViewMoreButton';
 import { useState, useEffect } from 'react';
 
 export default function SpecialOffers() {
@@ -185,6 +186,10 @@ export default function SpecialOffers() {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="mt-8 flex justify-center">
+        <ViewMoreButton href="/special-offers" label="View More Special Offers" />
       </div>
     </section>
   );

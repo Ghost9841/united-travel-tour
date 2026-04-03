@@ -1,6 +1,7 @@
 'use client';
 import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import ViewMoreButton from '../ViewMoreButton';
 
 const DESTINATIONS = [
   {
@@ -138,6 +139,9 @@ export default function PopularDestinations() {
             </div>
           </div>
         ))}
+      </div>
+            <div className="mt-8 flex justify-center">
+        <ViewMoreButton href="/destinations" label="View More Destinations" />
       </div>
     </section>
   );

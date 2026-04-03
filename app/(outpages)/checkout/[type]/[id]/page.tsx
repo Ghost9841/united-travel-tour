@@ -51,7 +51,18 @@ export default async function CheckoutPage({
         };
       }
       break;
-      
+      case 'promofare':
+        const promofare = await prisma.ongoingFare.findUnique({
+          where: { id: Number(id) },
+        });
+        if (promofare) {
+          item = {
+            title: promofare.title,
+            image: promofare.image,
+            price: Number(promofare.discountedPrice),
+          };
+        }
+        break;
     default:
       notFound();
   }

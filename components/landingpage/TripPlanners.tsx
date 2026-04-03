@@ -1,4 +1,5 @@
 import { Star } from 'lucide-react';
+import ViewMoreButton from '../ViewMoreButton';
 
 const tripPlanners = [
   {
@@ -40,9 +41,9 @@ export default function TripPlanners() {
             20 years from now you will be more disappointed by the things that you didn't do. Stop regretting and start travelling, start throwing off the bowlines.
           </p>
           
-          <button className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-md transition-colors text-sm">
-            View all trip plans
-          </button>
+              <div className="mt-8 flex justify-center">
+                <ViewMoreButton href="/explore" label="View all trip plans" />
+              </div>
         </div>
 
         {/* Right Column - Cards */}
