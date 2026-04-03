@@ -31,7 +31,7 @@ export default function OngoingFareDashboardPage() {
   const fetchFares = async () => {
     try {
       setLoading(true);
-      const res = await fetch('/api/(landingpage)/ongoingfare');
+      const res = await fetch('/api/ongoingfare');
       const data = await res.json();
       if (data.success) setFares(data.data);
       else setFares([]);
@@ -42,7 +42,7 @@ export default function OngoingFareDashboardPage() {
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this fare?')) return;
     try {
-      const res = await fetch(`/api/(landingpage)/ongoingfare/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/ongoingfare/${id}`, { method: 'DELETE' });
       const data = await res.json();
       if (data.success) setFares(prev => prev.filter(f => f.id !== id));
       else alert(data.error || 'Failed to delete');
