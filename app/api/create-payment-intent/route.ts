@@ -8,8 +8,8 @@ export async function POST(req: NextRequest) {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount * 100), // Stripe uses pence/cents
       currency: currency || 'gbp',
-      receipt_email: customerEmail,
-      metadata: {
+  ...(customerEmail && { receipt_email: customerEmail }),
+        metadata: {
         itemTitle: outPageTitle,
         itemType: type,
         itemId: id,
