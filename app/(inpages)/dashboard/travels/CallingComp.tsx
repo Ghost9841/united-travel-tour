@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { Travel } from "@prisma/client";
+import CheckoutLinkButton from "@/components/manual-ui/CheckoutButton";
 
 
 
@@ -134,6 +135,7 @@ export function TravelCard({
               <Link href={`/dashboard/travels/${travel.id}`} className="flex items-center gap-2">
                 <Edit3 className="h-3.5 w-3.5" /> Edit
               </Link>
+              <CheckoutLinkButton type="travel" id={travel.id} />
             </DropdownMenuItem>
             <DropdownMenuItem 
               onClick={onDelete} 

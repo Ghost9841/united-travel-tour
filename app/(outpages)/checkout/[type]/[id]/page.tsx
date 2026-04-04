@@ -68,6 +68,11 @@ export default async function CheckoutPage({
             where: { id: Number(id) },
           });
         break;
+        case 'special-offer':
+          item = await prisma.specialOffer.findUnique({
+            where: { id: Number(id) },
+          });
+        break;
     default:
       notFound();
   }
@@ -85,7 +90,7 @@ export default async function CheckoutPage({
   return (
     <div className="min-h-screen bg-primary pt-24 pb-16">
       <div className="max-w-6xl mx-auto px-4">
-        <h1 className="text-2xl font-bold text-gray-900 mb-8 mt-8">Complete your booking</h1>
+        <h1 className="text-2xl font-bold text-white mb-8 mt-8">Complete your booking</h1>
         <div className="flex flex-col lg:flex-row gap-8">
 
           {/* Left — order summary */}

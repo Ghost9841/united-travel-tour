@@ -6,6 +6,7 @@ import {
   Search, Plus, MoreVertical, Eye, Heart, Star, MapPin,
   Trash2, Edit, Globe2, FileText, Calendar,
 } from 'lucide-react';
+import CheckoutLinkButton from '@/components/manual-ui/CheckoutButton';
 
 interface ExploreItem {
   id: number;
@@ -99,6 +100,7 @@ function ExploreCard({ item, onDelete, categories }: { item: ExploreItem; onDele
                   className="w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
                   <Edit className="w-4 h-4" /> Edit
                 </Link>
+                <CheckoutLinkButton type="explore" id={item.id} />
                 <button onClick={() => { onDelete(); setMenuOpen(false); }}
                   className="w-full px-4 py-2.5 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2">
                   <Trash2 className="w-4 h-4" /> Delete

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Search, Plus, MoreVertical, Plane, Trash2, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import CheckoutLinkButton from '@/components/manual-ui/CheckoutButton';
 
 type OngoingFare = {
   id: number;
@@ -175,6 +176,7 @@ export default function OngoingFareDashboardPage() {
                           className="w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
                           Edit
                         </Link>
+                        <CheckoutLinkButton type="promofare" id={fare.id} />
                         <button onClick={() => { handleDelete(fare.id); setShowMenu(null); }}
                           className="w-full px-4 py-2.5 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2">
                           <Trash2 className="w-4 h-4" /> Delete

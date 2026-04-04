@@ -7,6 +7,7 @@ import {
   Trash2, Edit, FileText, Percent, Ticket,
 } from 'lucide-react';
 import SpecialOffer from '@/app/api/special-offers/types';
+import CheckoutLinkButton from '@/components/manual-ui/CheckoutButton';
 
 
 function formatRelativeTime(date: Date) {
@@ -103,6 +104,7 @@ function OfferCard({ offer, onDelete }: { offer: SpecialOffer; onDelete: () => v
                   className="w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
                   <Edit className="w-4 h-4" /> Edit
                 </Link>
+                <CheckoutLinkButton type="special-offer" id={offer.id} />
                 <button onClick={() => { onDelete(); setMenuOpen(false); }}
                   className="w-full px-4 py-2.5 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2">
                   <Trash2 className="w-4 h-4" /> Delete

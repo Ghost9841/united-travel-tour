@@ -7,6 +7,7 @@ import {
   Trash2, Edit, Wifi, Coffee, Car, Dumbbell, Users,
   Hotel, FileText, Check,
 } from 'lucide-react';
+import CheckoutLinkButton from '@/components/manual-ui/CheckoutButton';
 
 interface HotelItem {
   id: number;
@@ -110,6 +111,7 @@ function HotelCard({ hotel, onDelete }: { hotel: HotelItem; onDelete: () => void
                   className="w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
                   <Edit className="w-4 h-4" /> Edit
                 </Link>
+                <CheckoutLinkButton type="hotel" id={hotel.id} />
                 <button onClick={() => { onDelete(); setMenuOpen(false); }}
                   className="w-full px-4 py-2.5 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2">
                   <Trash2 className="w-4 h-4" /> Delete
