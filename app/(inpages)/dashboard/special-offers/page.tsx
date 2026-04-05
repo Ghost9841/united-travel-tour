@@ -86,11 +86,6 @@ function OfferCard({ offer, onDelete }: { offer: SpecialOffer; onDelete: () => v
           }`}>{offer.status === 'active' ? 'Active' : 'Draft'}</span>
         </div>
 
-        <div className="absolute bottom-3 right-3 flex items-center gap-0.5 bg-white/95 backdrop-blur-sm rounded-full px-2.5 py-1 shadow-sm">
-          {[...Array(Math.round(offer.rating))].map((_, i) => (
-            <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-          ))}
-        </div>
 
         <div className="absolute top-3 right-3">
           <div className="relative">

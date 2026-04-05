@@ -24,7 +24,6 @@ interface Destination {
   status: 'active' | 'draft';
   views: number;
   likes: number;
-  featured: boolean;
   createdAt: string;
   updatedAt?: string;
 }
@@ -92,9 +91,6 @@ function DestinationCard({ dest, onDelete }: { dest: Destination; onDelete: () =
           <span className={`px-3 py-1 rounded-full text-xs font-semibold shadow-sm ${
             dest.status === 'active' ? 'bg-gray-900 text-white' : 'bg-white/90 text-gray-600 border border-gray-200'
           }`}>{dest.status === 'active' ? 'Active' : 'Draft'}</span>
-          {dest.featured && (
-            <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-400 text-amber-900 shadow-sm">⭐ Featured</span>
-          )}
         </div>
         <div className="absolute top-3 right-3">
           <div className="relative">
@@ -213,7 +209,6 @@ export default function DestinationsPage() {
 
   const active = destinations.filter(d => d.status === 'active').length;
   const drafts = destinations.filter(d => d.status === 'draft').length;
-  const featured = destinations.filter(d => d.featured).length;
 
   const filtered = destinations.filter(d => {
     const q = searchQuery.toLowerCase();
@@ -261,7 +256,6 @@ export default function DestinationsPage() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard label="Active" value={active} icon={Globe2} accent="bg-orange-50 text-orange-600" />
           <StatCard label="Drafts" value={drafts} icon={FileText} accent="bg-amber-50 text-amber-600" />
-          <StatCard label="Featured" value={featured} icon={Star} accent="bg-yellow-50 text-yellow-600" />
         </div>
 
         {/* Filter tabs */}

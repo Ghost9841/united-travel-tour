@@ -40,7 +40,6 @@ export default function DestinationFormPage() {
     duration: '3-5 days',
     groupSize: '2-4',
     status: 'active' as 'active' | 'draft',
-    featured: false,
     reviews: 0,
   });
 
@@ -63,7 +62,6 @@ export default function DestinationFormPage() {
             duration: d.duration ?? '3-5 days',
             groupSize: d.groupSize ?? '2-4',
             status: d.status ?? 'active',
-            featured: d.featured ?? false,
             reviews: d.reviews ?? 0,
           });
           setImagePreview(d.image ?? '');
@@ -310,16 +308,7 @@ export default function DestinationFormPage() {
                   <option value="draft">Draft</option>
                 </select>
               </div>
-              <div className="flex items-center justify-between p-4 bg-amber-50 rounded-xl border border-amber-100">
-                <div>
-                  <p className="text-sm font-semibold text-gray-800">Featured Destination</p>
-                  <p className="text-xs text-gray-500">Show on homepage highlights</p>
-                </div>
-                <button type="button" onClick={() => set('featured', !form.featured)}
-                  className={`relative w-11 h-6 rounded-full transition-colors ${form.featured ? 'bg-orange-500' : 'bg-gray-200'}`}>
-                  <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${form.featured ? 'translate-x-5' : ''}`} />
-                </button>
-              </div>
+
             </div>
           </div>
 

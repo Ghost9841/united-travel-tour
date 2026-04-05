@@ -272,19 +272,7 @@ export default function SpecialOfferFormPage() {
             )}
           </div>
 
-          {/* Rating */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-1">Rating</h2>
-            <p className="text-sm text-gray-500 mb-5">Star rating shown on the offer card</p>
-            <div className="flex items-center gap-3 mb-3">
-              {[1, 2, 3, 4, 5].map(s => (
-                <button key={s} type="button" onClick={() => set('rating', s)}>
-                  <Star className={`w-8 h-8 transition-colors ${s <= form.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-200'}`} />
-                </button>
-              ))}
-              <span className="text-sm text-gray-500 ml-2">{form.rating} / 5 stars</span>
-            </div>
-          </div>
+
 
           {/* Image */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
