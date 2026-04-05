@@ -16,7 +16,6 @@ interface Destination {
   description: string;
   image: string;
   category: string;
-  rating: number;
   price: number;
   originalPrice: number;
   reviews: number;
@@ -96,10 +95,6 @@ function DestinationCard({ dest, onDelete }: { dest: Destination; onDelete: () =
           {dest.featured && (
             <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-400 text-amber-900 shadow-sm">⭐ Featured</span>
           )}
-        </div>
-        <div className="absolute bottom-3 right-3 flex items-center gap-1 bg-white/95 backdrop-blur-sm rounded-full px-2.5 py-1 shadow-sm">
-          <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
-          <span className="text-xs font-bold text-gray-800">{dest.rating}</span>
         </div>
         <div className="absolute top-3 right-3">
           <div className="relative">
