@@ -3,7 +3,16 @@ import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import ViewMoreButton from '../ViewMoreButton';
 
-const DESTINATIONS = [
+interface PopularDestination {
+  id: number;
+  name: string;
+  location: string;
+  description: string;
+  src: string;
+  alt: string;
+}
+
+const FALLBACK_DESTINATIONS: PopularDestination[] = [
   {
     id: 1,
     name: "Pasupati Nath",
@@ -47,18 +56,38 @@ const DESTINATIONS = [
 ];
 
 export default function PopularDestinations() {
+  const [destinations, setDestinations] = useState<PopularDestination[]>(FALLBACK_DESTINATIONS);
   const [startIndex, setStartIndex] = useState(0);
   const itemsToShow = 4;
 
+  useEffect(() => {
+    const fetchPopularDestinations = async () => {
+      try {
+        const res = await fetch('/api/popular-destinations');
+        const data = await res.json();
+        if (data?.success && Array.isArray(data.data)) {
+          setDestinations(data.data);
+          setStartIndex(0);
+        } else {
+          console.error('Failed to fetch popular destinations:', data?.error);
+        }
+      } catch (error) {
+        console.error('Error fetching popular destinations:', error);
+      }
+    };
+
+    fetchPopularDestinations();
+  }, []);
+
   const next = () => {
     setStartIndex((prev) => 
-      prev + itemsToShow >= DESTINATIONS.length ? 0 : prev + 1
+      prev + itemsToShow >= destinations.length ? 0 : prev + 1
     );
   };
 
   const prev = () => {
     setStartIndex((prev) => 
-      prev === 0 ? Math.max(0, DESTINATIONS.length - itemsToShow) : prev - 1
+      prev === 0 ? Math.max(0, destinations.length - itemsToShow) : prev - 1
     );
   };
 
@@ -72,7 +101,7 @@ export default function PopularDestinations() {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  const visibleDestinations = DESTINATIONS.slice(startIndex, startIndex + itemsToShow);
+  const visibleDestinations = destinations.slice(startIndex, startIndex + itemsToShow);
 
   return (
     <section className="max-w-8xl mx-auto px-6 py-10">

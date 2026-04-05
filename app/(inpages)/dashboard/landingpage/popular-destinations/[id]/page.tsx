@@ -41,7 +41,7 @@ export default function PopularDestinationFormPage() {
         const res = await fetch(`/api/popular-destinations/${id}`);
         const data = await res.json();
         if (data.success && data.data) {
-          const d = data.data.destination ?? data.data;
+          const d = data.data;
           setForm({
             name: d.name ?? '',
             location: d.location ?? '',

@@ -3,58 +3,62 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
-  Search, Plus, MoreVertical, Eye, Heart, MapPin,
+  Search, Plus, MoreVertical, MapPin,
   Trash2, Edit, Globe2, FileText, Image as ImageIcon,
 } from 'lucide-react';
 
 interface PopularDestination {
-  id: string;
+  id: number;
   name: string;
   location: string;
   description: string;
   src: string;
   alt: string;
   status: 'active' | 'draft';
-  views?: number;
-  likes?: number;
   createdAt: string;
+  updatedAt: string;
 }
 
 const MOCK: PopularDestination[] = [
   {
-    id: '1', name: 'Pasupati Nath', location: 'Kathmandu, Nepal',
+    id: 1, name: 'Pasupati Nath', location: 'Kathmandu, Nepal',
     description: 'Pashupatinath Temple is one of the most sacred Hindu temples in the world, dedicated to Lord Shiva in his form as Pashupati.',
     src: '/2026/pasupati_nath.jpeg', alt: 'Pasupati Nath Temple',
-    status: 'active', views: 5400, likes: 1230,
+    status: 'active',
     createdAt: new Date(Date.now() - 86400000 * 90).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 90).toISOString(),
   },
   {
-    id: '2', name: 'Millennium Bridge', location: 'London, United Kingdom',
+    id: 2, name: 'Millennium Bridge', location: 'London, United Kingdom',
     description: 'A modern pedestrian bridge offering stunning views of the Thames and London\'s iconic skyline.',
     src: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1200&h=800&fit=crop', alt: 'Millennium Bridge London',
-    status: 'active', views: 8200, likes: 2100,
+    status: 'active',
     createdAt: new Date(Date.now() - 86400000 * 60).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 60).toISOString(),
   },
   {
-    id: '3', name: 'Rara Lake', location: 'Mugu & Jumla, Nepal',
+    id: 3, name: 'Rara Lake', location: 'Mugu & Jumla, Nepal',
     description: 'Rara Lake, also known as Mahendra Lake, is the largest fresh water lake in the Nepalese Himalayas.',
     src: '/2026/rara_lake.jpeg', alt: 'Rara Lake Nepal',
-    status: 'active', views: 4100, likes: 980,
+    status: 'active',
     createdAt: new Date(Date.now() - 86400000 * 45).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 45).toISOString(),
   },
   {
-    id: '4', name: 'Phewa Lake', location: 'Pokhara Valley',
+    id: 4, name: 'Phewa Lake', location: 'Pokhara Valley',
     description: 'Phewa Lake is the third largest lake in Nepal and the largest in Gandaki Province.',
     src: '/2026/phewa_lake.jpeg', alt: 'Phewa Lake Pokhara',
-    status: 'active', views: 6700, likes: 1780,
+    status: 'active',
     createdAt: new Date(Date.now() - 86400000 * 30).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 30).toISOString(),
   },
   {
-    id: '5', name: 'Patan Durbar Square', location: 'Patan, Nepal',
+    id: 5, name: 'Patan Durbar Square', location: 'Patan, Nepal',
     description: 'An ancient royal square showcasing some of the finest examples of Newari architecture and craftsmanship.',
     src: 'https://images.unsplash.com/photo-1552832860-cfde47f1dda5?w=1200&h=800&fit=crop', alt: 'Patan Durbar Square',
-    status: 'draft', views: 2900, likes: 640,
+    status: 'draft',
     createdAt: new Date(Date.now() - 86400000 * 10).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000 * 10).toISOString(),
   },
 ];
 
@@ -154,10 +158,6 @@ function DestCard({ dest, onDelete }: { dest: PopularDestination; onDelete: () =
 
         {/* Stats footer */}
         <div className="flex items-center justify-between pt-3 border-t border-gray-100 text-sm text-gray-400">
-          <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1"><Eye className="w-3.5 h-3.5" />{formatNumber(dest.views ?? 0)}</span>
-            <span className="flex items-center gap-1"><Heart className="w-3.5 h-3.5" />{formatNumber(dest.likes ?? 0)}</span>
-          </div>
           <span className="text-xs">{formatRelativeTime(new Date(dest.createdAt))}</span>
         </div>
       </div>
@@ -172,19 +172,44 @@ export default function PopularDestinationsPage() {
   const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'draft'>('all');
 
   useEffect(() => {
-    // Replace with: const res = await fetch('/api/popular-destinations'); const data = await res.json(); setDestinations(data);
-    setTimeout(() => { setDestinations(MOCK); setLoading(false); }, 600);
+    const fetchDestinations = async () => {
+      try {
+        const res = await fetch('/api/popular-destinations');
+        const data = await res.json();
+        if (data.success) {
+          setDestinations(data.data);
+        } else {
+          console.error('Failed to fetch popular destinations:', data.error);
+        }
+      } catch (error) {
+        console.error('Error fetching popular destinations:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDestinations();
   }, []);
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: number) => {
     if (!confirm('Delete this destination?')) return;
-    // Replace with: await fetch(`/api/popular-destinations/${id}`, { method: 'DELETE' });
-    setDestinations(prev => prev.filter(d => d.id !== id));
+    try {
+      const res = await fetch(`/api/popular-destinations/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        setDestinations(prev => prev.filter(d => d.id !== id));
+      } else {
+        console.error('Failed to delete popular destination:', data.error);
+        alert('Failed to delete destination: ' + data.error);
+      }
+    } catch (error) {
+      console.error('Error deleting popular destination:', error);
+      alert('Error deleting destination');
+    }
   };
 
   const active = destinations.filter(d => d.status === 'active').length;
   const drafts = destinations.filter(d => d.status === 'draft').length;
-  const totalLikes = destinations.reduce((s, d) => s + (d.likes ?? 0), 0);
 
   const filtered = destinations.filter(d => {
     const q = searchQuery.toLowerCase();
@@ -234,7 +259,6 @@ export default function PopularDestinationsPage() {
           <StatCard label="Total" value={destinations.length} icon={Globe2} accent="bg-orange-50 text-orange-600" />
           <StatCard label="Active" value={active} icon={MapPin} accent="bg-amber-50 text-amber-600" />
           <StatCard label="Drafts" value={drafts} icon={FileText} accent="bg-yellow-50 text-yellow-600" />
-          <StatCard label="Total Likes" value={formatNumber(totalLikes)} icon={Heart} accent="bg-red-50 text-red-500" />
         </div>
 
         {/* Filter tabs */}
