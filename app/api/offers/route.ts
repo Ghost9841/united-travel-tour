@@ -43,6 +43,7 @@ export async function POST(req: Request) {
         baseFare: Number(body.baseFare) || 0,
         status: body.status || 'active',
         order: Number(body.order) || 0,
+        importantNotices: body.importantNotices || [],
       },
     });
 

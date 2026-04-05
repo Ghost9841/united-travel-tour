@@ -126,6 +126,7 @@ model TrendingRoute {
   baseFare       Float    @map("base_fare")
   status         String   @default("active") // 'active' or 'draft'
   order          Int      @default(0)
+  importantNotices String[] @default([]) // Array of important information notices
 
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt      @map("updated_at")

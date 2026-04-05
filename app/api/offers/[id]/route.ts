@@ -47,6 +47,7 @@ export async function PUT(req: Request, { params }: Params) {
     if (body.baseFare !== undefined) data.baseFare = Number(body.baseFare);
     if (body.status !== undefined) data.status = body.status;
     if (body.order !== undefined) data.order = Number(body.order);
+    if (body.importantNotices !== undefined) data.importantNotices = body.importantNotices;
 
     const route = await prisma.trendingRoute.update({ where: { id }, data });
     return NextResponse.json({ success: true, data: route });

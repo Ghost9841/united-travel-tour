@@ -239,12 +239,7 @@ export default async function FlightDetailPage({ params }: { params: Promise<{ i
                     <AlertCircle className="w-4 h-4 text-orange-500" />
                     Important Information
                   </h3>
-                  {[
-                    'Business/Visit/Tourist Visa Holders must book a single return ticket on the same airline only.',
-                    'Airport/terminal changes may require a transit visa. Please verify requirements.',
-                    'Visa requirements are subject to change. Travelers must verify entry requirements before booking.',
-                    'United Travel & Tours recommends travel insurance for all bookings.',
-                  ].map((notice, i) => (
+                  {route.importantNotices.map((notice, i) => (
                     <div key={i} className="flex items-start gap-3 bg-blue-50 border border-blue-100 rounded-xl px-4 py-3 hover:bg-blue-100 transition-colors">
                       <Info className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
                       <p className="text-sm text-blue-700 leading-relaxed">{notice}</p>

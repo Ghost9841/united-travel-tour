@@ -128,6 +128,8 @@ export function TravelCard({
               <Link href={`/dashboard/travels/${travel.id}`} className="flex items-center gap-2">
                 <Edit3 className="h-3.5 w-3.5" /> Edit
               </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem >
               <CheckoutLinkButton type="travel" id={travel.id} />
             </DropdownMenuItem>
             <DropdownMenuItem 

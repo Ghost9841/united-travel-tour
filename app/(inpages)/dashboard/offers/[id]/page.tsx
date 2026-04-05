@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Save, Trash2, Plane, Image as ImageIcon, X } from 'lucide-react';
+import { ArrowLeft, Save, Trash2, Plane, Image as ImageIcon, X, Plus } from 'lucide-react';
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
@@ -37,6 +37,7 @@ const [form, setForm] = useState({
   baseFare:       '',
   status:         'active' as 'active' | 'draft',
   order:          '0',
+  importantNotices: [] as string[],
 });
 
   useEffect(() => {
@@ -61,6 +62,7 @@ const [form, setForm] = useState({
             baseFare:       d.baseFare?.toString()  ?? '',
             status:         d.status         ?? 'active',
             order:          d.order?.toString()     ?? '0',
+            importantNotices: d.importantNotices ?? [],
           });
           setPreview(d.image ?? '');
         } else {
@@ -77,6 +79,22 @@ const [form, setForm] = useState({
 
   const set = (k: string, v: string) => setForm(p => ({ ...p, [k]: v }));
 
+  const addNotice = () => setForm(p => ({ ...p, importantNotices: [...p.importantNotices, ''] }));
+
+  const updateNotice = (index: number, value: string) => {
+    setForm(p => ({
+      ...p,
+      importantNotices: p.importantNotices.map((n, i) => i === index ? value : n)
+    }));
+  };
+
+  const removeNotice = (index: number) => {
+    setForm(p => ({
+      ...p,
+      importantNotices: p.importantNotices.filter((_, i) => i !== index)
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.from || !form.to || !form.airline) {
@@ -89,6 +107,7 @@ const [form, setForm] = useState({
         price:     Number(form.price)     || 0,
         baseFare:  Number(form.baseFare)  || 0,
         order:    Number(form.order)    || 0,
+        importantNotices: form.importantNotices,
       };
       const res = await fetch(
         creating ? '/api/offers' : `/api/offers/${id}`,
@@ -287,8 +306,41 @@ const [form, setForm] = useState({
                 <p className="text-xs text-gray-500 mb-2">Lower = appears first</p>
                 <input type="number" min="0" value={form.order} onChange={e => set('order', e.target.value)}
                   className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 text-sm" />
-              </div>
+          </div>
             </div>
+
+          {/* Important Notices */}
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <h2 className="text-lg font-bold text-gray-900">Important Notices</h2>
+                <p className="text-sm text-gray-500">Add important information displayed on the route detail page</p>
+              </div>
+              <button type="button" onClick={addNotice}
+                className="flex items-center gap-2 bg-orange-500 text-white px-4 py-2 rounded-xl hover:bg-orange-600 text-sm font-medium">
+                <Plus className="w-4 h-4" /> Add Notice
+              </button>
+            </div>
+            <div className="space-y-3">
+              {form.importantNotices.map((notice, index) => (
+                <div key={index} className="flex items-center gap-3">
+                  <input
+                    value={notice}
+                    onChange={e => updateNotice(index, e.target.value)}
+                    placeholder="Enter important notice..."
+                    className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+                  />
+                  <button type="button" onClick={() => removeNotice(index)}
+                    className="p-2 bg-red-50 text-red-500 rounded-lg hover:bg-red-100">
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+              {form.importantNotices.length === 0 && (
+                <p className="text-sm text-gray-400 italic">No important notices added yet.</p>
+              )}
+            </div>
+          </div>
           </div>
 
           {/* Actions */}
