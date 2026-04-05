@@ -16,7 +16,6 @@ interface HotelItem {
   description: string;
   pricePerNight: number;
   originalPrice: number;
-  rating: number;
   reviews: number;
   images: string[];
   amenities: string[];
@@ -91,12 +90,6 @@ function HotelCard({ hotel, onDelete }: { hotel: HotelItem; onDelete: () => void
           <span className={`px-2.5 py-1 rounded-full text-xs font-semibold shadow-sm ${
             hotel.status === 'active' ? 'bg-gray-900 text-white' : 'bg-white/90 text-gray-600 border border-gray-200'
           }`}>{hotel.status === 'active' ? 'Active' : 'Draft'}</span>
-        </div>
-        {/* Rating */}
-        <div className="absolute bottom-3 right-3 flex items-center gap-1 bg-white/95 backdrop-blur-sm rounded-full px-2.5 py-1 shadow-sm">
-          <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
-          <span className="text-xs font-bold text-gray-800">{hotel.rating}</span>
-          <span className="text-xs text-gray-500">({hotel.reviews})</span>
         </div>
         {/* Menu */}
         <div className="absolute top-3 right-3">

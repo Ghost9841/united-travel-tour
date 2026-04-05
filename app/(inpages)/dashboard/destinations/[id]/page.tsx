@@ -35,7 +35,6 @@ export default function DestinationFormPage() {
     description: '',
     image: '',
     category: 'Beach',
-    rating: 4.5,
     price: '',
     originalPrice: '',
     duration: '3-5 days',
@@ -59,7 +58,6 @@ export default function DestinationFormPage() {
             description: d.description ?? '',
             image: d.image ?? '',
             category: d.category ?? 'Beach',
-            rating: d.rating ?? 4.5,
             price: d.price?.toString() ?? '',
             originalPrice: d.originalPrice?.toString() ?? '',
             duration: d.duration ?? '3-5 days',
@@ -271,17 +269,6 @@ export default function DestinationFormPage() {
                     className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm" />
                 </div>
               </div>
-            </div>
-
-            {/* Rating */}
-            <div className="mt-4">
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                Rating: <span className="text-orange-500">{form.rating} ★</span>
-              </label>
-              <input type="range" min="1" max="5" step="0.1" value={form.rating}
-                onChange={e => set('rating', Number(e.target.value))}
-                className="w-full accent-orange-500" />
-              <div className="flex justify-between text-xs text-gray-400 mt-1"><span>1.0</span><span>5.0</span></div>
             </div>
           </div>
 

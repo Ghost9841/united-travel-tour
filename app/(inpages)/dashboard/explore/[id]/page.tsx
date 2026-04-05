@@ -318,28 +318,6 @@ export default function ExploreFormPage() {
             )}
           </div>
 
-          {/* Rating */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-1">Rating</h2>
-            <p className="text-sm text-gray-500 mb-4">Shown as filled stars on the frontend card (supports 4, 4.5, 5)</p>
-            <div className="flex items-center gap-2 mb-2">
-              {[1, 2, 3, 4, 5].map(s => (
-                <button key={s} type="button" onClick={() => set('rating', s)}>
-                  <Star className={`w-8 h-8 transition-colors ${s <= form.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-200'}`} />
-                </button>
-              ))}
-              <span className="text-sm text-gray-500 ml-2">{form.rating} / 5</span>
-            </div>
-            {/* Half star for 4.5 */}
-            <div className="flex gap-2 mt-2">
-              {[4, 4.5, 5].map(v => (
-                <button key={v} type="button" onClick={() => set('rating', v)}
-                  className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${
-                    form.rating === v ? 'bg-orange-500 text-white border-orange-500' : 'bg-white text-gray-500 border-gray-200 hover:border-orange-300'
-                  }`}>{v}★</button>
-              ))}
-            </div>
-          </div>
 
           {/* Image */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">

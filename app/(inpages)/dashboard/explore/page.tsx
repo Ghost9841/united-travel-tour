@@ -16,7 +16,6 @@ interface ExploreItem {
   price: number;
   discountedPrice: number;
   image: string;
-  rating: number;
   category: string;
   duration?: string;
   status?: 'active' | 'draft';
@@ -83,10 +82,7 @@ function ExploreCard({ item, onDelete, categories }: { item: ExploreItem; onDele
           }`}>{item.status === 'active' ? 'Active' : 'Draft'}</span>
         </div>
 
-        <div className="absolute bottom-3 right-3 flex items-center gap-1 bg-white/95 backdrop-blur-sm rounded-full px-2.5 py-1 shadow-sm">
-          <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
-          <span className="text-xs font-bold text-gray-800">{item.rating}</span>
-        </div>
+
 
         <div className="absolute top-3 right-3">
           <div className="relative">
