@@ -124,7 +124,7 @@ function DestCard({ dest, onDelete }: { dest: PopularDestination; onDelete: () =
             </button>
             {menuOpen && (
               <div className="absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-10">
-                <Link href={`/dashboard/popular-destinations/${dest.id}`}
+                <Link href={`/dashboard/landingpage/popular-destinations/${dest.id}`}
                   className="w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
                   <Edit className="w-4 h-4" /> Edit
                 </Link>
@@ -291,7 +291,7 @@ export default function PopularDestinationsPage() {
               {searchQuery ? 'Try a different search term.' : 'Add your first popular destination.'}
             </p>
             {!searchQuery && (
-              <Link href="/dashboard/popular-destinations/new"
+              <Link href="/dashboard/landingpage/popular-destinations/new"
                 className="inline-flex items-center gap-2 bg-orange-500 text-white px-6 py-2.5 rounded-full hover:bg-orange-600 transition-all font-semibold text-sm shadow-md">
                 <Plus className="w-4 h-4" /> Add Destination
               </Link>
