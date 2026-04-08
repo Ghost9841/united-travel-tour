@@ -6,10 +6,9 @@ import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
-// Inner form
-function InnerForm({ amount, onDetailsChange }: {
+function InnerForm({ amount, paymentIntentId }: {
   amount: number;
-  onDetailsChange: (name: string, email: string) => void;
+  paymentIntentId: string;
 }) {
   const stripe   = useStripe();
   const elements = useElements();
@@ -24,19 +23,30 @@ function InnerForm({ amount, onDetailsChange }: {
     setLoading(true);
     setError('');
 
-    // Pass billing details so Stripe attaches them to the PaymentIntent
-    const { error: submitError } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: `${window.location.origin}/booking-success`,
-        payment_method_data: {
-          billing_details: { name, email },
-        },
-      },
-    });
+    try {
+      // Push name + email into PI metadata BEFORE confirming
+      await fetch('/api/update-payment-intent', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentIntentId, customerName: name, customerEmail: email }),
+      });
 
-    if (submitError) {
-      setError(submitError.message ?? 'Payment failed');
+      const { error: submitError } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: `${window.location.origin}/booking-success`,
+          payment_method_data: {
+            billing_details: { name, email },
+          },
+        },
+      });
+
+      if (submitError) {
+        setError(submitError.message ?? 'Payment failed');
+        setLoading(false);
+      }
+    } catch {
+      setError('Something went wrong. Please try again.');
       setLoading(false);
     }
   };
@@ -48,16 +58,14 @@ function InnerForm({ amount, onDetailsChange }: {
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Full name</label>
-            <input value={name}
-              onChange={e => { setName(e.target.value); onDetailsChange(e.target.value, email); }}
-              required placeholder="Aakash Subedi"
+            <input value={name} onChange={e => setName(e.target.value)} required
+              placeholder="Aakash Subedi"
               className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input type="email" value={email}
-              onChange={e => { setEmail(e.target.value); onDetailsChange(name, e.target.value); }}
-              required placeholder="aakash@example.com"
+            <input type="email" value={email} onChange={e => setEmail(e.target.value)} required
+              placeholder="aakash@example.com"
               className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent" />
           </div>
         </div>
@@ -68,7 +76,9 @@ function InnerForm({ amount, onDetailsChange }: {
         <PaymentElement />
       </div>
 
-      {error && <p className="text-sm text-red-600 bg-red-50 px-4 py-3 rounded-xl">{error}</p>}
+      {error && (
+        <p className="text-sm text-red-600 bg-red-50 px-4 py-3 rounded-xl">{error}</p>
+      )}
 
       <button type="submit" disabled={!stripe || loading}
         className="w-full bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white font-bold py-4 rounded-xl transition-colors shadow-md text-lg">
@@ -78,7 +88,6 @@ function InnerForm({ amount, onDetailsChange }: {
   );
 }
 
-// Outer wrapper
 export default function CheckoutForm({ amount, currency, outPageTitle, type, id }: {
   amount: number;
   currency: string;
@@ -86,40 +95,32 @@ export default function CheckoutForm({ amount, currency, outPageTitle, type, id 
   type: string;
   id: string;
 }) {
-  const [clientSecret,   setClientSecret]   = useState('');
-  const [customerName,   setCustomerName]   = useState('');
-  const [customerEmail,  setCustomerEmail]  = useState('');
+  const [clientSecret,    setClientSecret]    = useState('');
+  const [paymentIntentId, setPaymentIntentId] = useState('');
 
-useEffect(() => {
-  fetch('/api/create-payment-intent', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      amount,
-      currency,
-      outPageTitle,
-      type,
-      id,
-    }),
-  })
-    .then(r => r.json())
-    .then(d => setClientSecret(d.clientSecret));
-}, [amount, currency, outPageTitle, type, id]);
-
-  const handleDetailsChange = (name: string, email: string) => {
-    setCustomerName(name);
-    setCustomerEmail(email);
-  };
+  useEffect(() => {
+    fetch('/api/create-payment-intent', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ amount, currency, outPageTitle, type, id }),
+    })
+      .then(r => r.json())
+      .then(d => {
+        setClientSecret(d.clientSecret);
+        // clientSecret is  pi_XXXX_secret_YYYY  — extract just the PI id
+        setPaymentIntentId(d.clientSecret.split('_secret_')[0]);
+      });
+  }, [amount, currency, outPageTitle, type, id]);
 
   if (!clientSecret) return (
-    <div className="bg-muted rounded-2xl border border-gray-200 p-8 flex items-center justify-center">
+    <div className="bg-white rounded-2xl border border-gray-200 p-8 flex items-center justify-center">
       <div className="w-10 h-10 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin" />
     </div>
   );
 
   return (
     <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe' } }}>
-      <InnerForm amount={amount} onDetailsChange={handleDetailsChange} />
+      <InnerForm amount={amount} paymentIntentId={paymentIntentId} />
     </Elements>
   );
 }
