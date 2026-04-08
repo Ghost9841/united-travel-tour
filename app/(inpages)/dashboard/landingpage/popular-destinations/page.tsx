@@ -247,7 +247,7 @@ export default function PopularDestinationsPage() {
                 value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
                 className="w-56 pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-full text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent shadow-sm" />
             </div>
-            <Link href="/dashboard/popular-destinations/new"
+            <Link href="/dashboard/landingpage/popular-destinations/new"
               className="flex items-center gap-2 bg-orange-500 text-white px-5 py-2.5 rounded-full hover:bg-orange-600 transition-all shadow-md hover:shadow-lg font-semibold text-sm">
               <Plus className="w-4 h-4" /> Add Destination
             </Link>
