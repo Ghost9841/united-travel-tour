@@ -53,7 +53,7 @@ export default function PopularDestinationFormPage() {
           setImagePreview(d.src ?? '');
         } else {
           toast('Error', { description: 'Destination not found' });
-          router.push('/dashboard/popular-destinations');
+          router.push('/dashboard/landingpage/popular-destinations');
         }
       } catch {
         toast('Error', { description: 'Failed to load destination' });
@@ -86,7 +86,7 @@ export default function PopularDestinationFormPage() {
       const data = await res.json();
       if (data.success) {
         toast('Success!', { description: creating ? 'Destination created.' : 'Destination updated.' });
-        router.push('/dashboard/popular-destinations');
+        router.push('/dashboard/landingpage/popular-destinations');
       } else {
         toast('Error', { description: data.error ?? 'Something went wrong.' });
       }
@@ -104,7 +104,7 @@ export default function PopularDestinationFormPage() {
       const data = await res.json();
       if (data.success) {
         toast('Success!', { description: 'Destination deleted.' });
-        router.push('/dashboard/popular-destinations');
+        router.push('/dashboard/landingpage/popular-destinations');
       } else {
         toast('Error', { description: data.error ?? 'Failed to delete.' });
       }
@@ -128,7 +128,7 @@ export default function PopularDestinationFormPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
-            <Link href="/dashboard/popular-destinations"
+            <Link href="/dashboard/landingpage/popular-destinations"
               className="p-2 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors shadow-sm">
               <ArrowLeft className="w-5 h-5 text-gray-600" />
             </Link>
@@ -279,7 +279,7 @@ export default function PopularDestinationFormPage() {
 
           {/* Actions */}
           <div className="flex justify-end gap-4">
-            <Link href="/dashboard/popular-destinations"
+            <Link href="/dashboard/landingpage/popular-destinations"
               className="px-6 py-3 border-2 border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors font-medium text-sm">
               Cancel
             </Link>
