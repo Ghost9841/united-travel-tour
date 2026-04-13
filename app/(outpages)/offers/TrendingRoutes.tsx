@@ -12,6 +12,7 @@ interface TrendingRoute {
   price: number;
   currency: string;
   image: string;
+  status: 'active' | 'draft';
 }
 
 export default function TrendingRoutes() {
@@ -23,7 +24,7 @@ export default function TrendingRoutes() {
   useEffect(() => {
     fetch('/api/offers')
       .then(r => r.json())
-      .then(d => { if (d.success) setRoutes(d.data); })
+      .then(d => { if (d.success) setRoutes(d.data.filter((route: TrendingRoute) => route.status === 'active')); })
       .catch(err => console.error('Failed to fetch trending routes', err))
       .finally(() => setLoading(false));
   }, []);
