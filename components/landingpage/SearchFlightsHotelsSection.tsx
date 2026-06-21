@@ -1,545 +1,248 @@
 'use client';
-import React, { useState } from 'react';
-import { Calendar, MapPin, Users, Plane, Hotel, ArrowLeftRight } from 'lucide-react';
 
-type TabType = 'flights' | 'hotels';
+import React, { useState } from 'react';
+import { Plane, Building2, Hotel, Luggage, ArrowLeftRight } from 'lucide-react';
+import { useRouter } from 'next/router';
+
+type TabType = 'flights' | 'holidays' | 'hotels' | 'flightHotel';
 type TripType = 'return' | 'oneWay' | 'multicity';
+
+const TABS: { id: TabType; label: string; icon: React.ElementType }[] = [
+  { id: 'flights', label: 'Flights', icon: Plane },
+  { id: 'holidays', label: 'Holidays', icon: Building2 },
+  { id: 'hotels', label: 'Hotels', icon: Hotel },
+  { id: 'flightHotel', label: 'Flight + Hotel', icon: Luggage },
+];
 
 const SearchFlightHotelsSection: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('flights');
-  
-  // Flight states
   const [tripType, setTripType] = useState<TripType>('return');
-  const [from, setFrom] = useState('');
-  const [to, setTo] = useState('');
-  const [departureDate, setDepartureDate] = useState('');
-  const [returnDate, setReturnDate] = useState('');
-  const [adults, setAdults] = useState(1);
-  const [youth, setYouth] = useState(0);
-  const [children, setChildren] = useState(0);
-  const [infants, setInfants] = useState(0);
-  const [travelClass, setTravelClass] = useState('Economy Class');
-  const [airline, setAirline] = useState('All Airlines');
-  const [directFlights, setDirectFlights] = useState(false);
-  const [flexibleDates, setFlexibleDates] = useState(false);
-  
-  // Hotel states
-  const [destination, setDestination] = useState('');
-  const [checkIn, setCheckIn] = useState('');
-  const [checkOut, setCheckOut] = useState('');
-  const [rooms, setRooms] = useState(1);
-  const [hotelAdults, setHotelAdults] = useState(2);
-  const [hotelChildren, setHotelChildren] = useState(0);
-  const [showGuestDropdown, setShowGuestDropdown] = useState(false);
 
-  const handleSearch = () => {
-    if (activeTab === 'flights') {
-      console.log('Searching flights:', { 
-        tripType, from, to, departureDate, returnDate, 
-        passengers: { adults, youth, children, infants },
-        travelClass, airline, directFlights, flexibleDates
-      });
-    } else {
-      console.log('Searching hotels:', { destination, checkIn, checkOut, rooms, hotelAdults, hotelChildren });
-    }
-  };
+  const [from, setFrom] = useState('London (LON)');
+  const [to, setTo] = useState('Kathmandu (KTM)');
+  const [departDate, setDepartDate] = useState('');
+  const [returnDate, setReturnDate] = useState('');
+  const [passengers, setPassengers] = useState(1);
+  const [travelClass, setTravelClass] = useState('Economy');
+  const [showPassengers, setShowPassengers] = useState(false);
+  const router = useRouter();
 
   const swapLocations = () => {
-    const temp = from;
     setFrom(to);
-    setTo(temp);
+    setTo(from);
+  };
+
+  const handleSearch = () => {
+    router.push("/explore");
   };
 
   return (
-    <div className="w-full max-w-7xl">
-      <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden">
-        {/* Tabs */}
-        <div className="flex border-b border-gray-200">
-          <button
-            onClick={() => setActiveTab('flights')}
-            className={`flex items-center justify-center gap-2 px-10 py-4 font-medium text-base transition-all ${
-              activeTab === 'flights'
-                ? 'text-orange-500 border-b-2 border-orange-500 bg-orange-50'
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-            }`}
-          >
-            <Plane className="w-5 h-5" />
-            <span>Flights</span>
-          </button>
-          <button
-            onClick={() => setActiveTab('hotels')}
-            className={`flex items-center justify-center gap-2 px-10 py-4 font-medium text-base transition-all ${
-              activeTab === 'hotels'
-                ? 'text-orange-500 border-b-2 border-orange-500 bg-orange-50'
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-            }`}
-          >
-            <Hotel className="w-5 h-5" />
-            <span>Hotels</span>
-          </button>
+    <div className="w-full max-w-6xl mx-auto font-sans">
+      {/* Header / Tab bar on dark navy banner */}
+      <div className="relative rounded-t-2xl overflow-hidden bg-[#0b2545]">
+        {/* background image layer */}
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-40"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1558005530-a7958896ec60?q=80&w=1600&auto=format&fit=crop')",
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0b2545] via-[#0b2545]/80 to-transparent" />
+
+        <div className="relative flex items-stretch">
+          {TABS.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2 px-6 py-4 text-sm font-medium transition-colors ${
+                  isActive
+                    ? 'bg-white text-[#0b2545] rounded-tr-2xl'
+                    : 'text-white/85 hover:text-white'
+                }`}
+              >
+                <Icon className="w-4 h-4" strokeWidth={2} />
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Search card */}
+      <div className="bg-white rounded-b-2xl rounded-tr-2xl shadow-xl px-6 pt-5 pb-6">
+        {/* Trip type radios */}
+        <div className="flex items-center gap-8 mb-5">
+          {(
+            [
+              { id: 'return', label: 'Return' },
+              { id: 'oneWay', label: 'One Way' },
+              { id: 'multicity', label: 'Multi-city' },
+            ] as { id: TripType; label: string }[]
+          ).map((opt) => (
+            <label key={opt.id} className="flex items-center gap-2 cursor-pointer select-none">
+              <span
+                className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${
+                  tripType === opt.id ? 'border-orange-500' : 'border-gray-300'
+                }`}
+              >
+                {tripType === opt.id && <span className="w-2 h-2 rounded-full bg-orange-500" />}
+              </span>
+              <input
+                type="radio"
+                name="tripType"
+                className="hidden"
+                checked={tripType === opt.id}
+                onChange={() => setTripType(opt.id)}
+              />
+              <span className="text-sm text-gray-700">{opt.label}</span>
+            </label>
+          ))}
         </div>
 
-        {/* Content */}
-        <div className="p-6">
-          {activeTab === 'flights' ? (
-            <>
-              {/* Trip Type & Options */}
-              <div className="flex items-center gap-6 mb-5">
-                {/* Trip Type Radio Buttons */}
-                <div className="flex items-center gap-6">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="tripType"
-                      checked={tripType === 'return'}
-                      onChange={() => setTripType('return')}
-                      className="w-4 h-4 text-orange-500 focus:ring-orange-500"
-                    />
-                    <span className="text-sm font-medium text-gray-700">Return</span>
-                  </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="tripType"
-                      checked={tripType === 'oneWay'}
-                      onChange={() => setTripType('oneWay')}
-                      className="w-4 h-4 text-orange-500 focus:ring-orange-500"
-                    />
-                    <span className="text-sm font-medium text-gray-700">One Way</span>
-                  </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="tripType"
-                      checked={tripType === 'multicity'}
-                      onChange={() => setTripType('multicity')}
-                      className="w-4 h-4 text-orange-500 focus:ring-orange-500"
-                    />
-                    <span className="text-sm font-medium text-gray-700">Multicity</span>
-                  </label>
-                </div>
+        {/* Form row */}
+        <div className="flex flex-col lg:flex-row lg:items-end gap-4">
+          {/* From */}
+          <div className="flex-1 min-w-0">
+            <label className="block text-xs text-gray-500 mb-1">From</label>
+            <input
+              type="text"
+              value={from}
+              onChange={(e) => setFrom(e.target.value)}
+              className="w-full text-sm font-semibold text-gray-900 bg-transparent border-b border-gray-200 pb-2 focus:outline-none focus:border-orange-500"
+            />
+          </div>
 
-                {/* Checkboxes */}
-                <div className="flex items-center gap-6 ml-auto">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={directFlights}
-                      onChange={(e) => setDirectFlights(e.target.checked)}
-                      className="w-4 h-4 text-orange-500 rounded focus:ring-orange-500"
-                    />
-                    <span className="text-sm font-medium text-gray-700">Direct Flights Only</span>
-                  </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={flexibleDates}
-                      onChange={(e) => setFlexibleDates(e.target.checked)}
-                      className="w-4 h-4 text-orange-500 rounded focus:ring-orange-500"
-                    />
-                    <span className="text-sm font-medium text-gray-700">Flexi (+/- 3 Days)</span>
-                  </label>
-                </div>
-              </div>
+          {/* Swap */}
+          <div className="hidden lg:flex items-center justify-center pb-2">
+            <button
+              type="button"
+              onClick={swapLocations}
+              aria-label="Swap locations"
+              className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-[#0b2545] hover:bg-gray-50 transition-colors"
+            >
+              <ArrowLeftRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
 
-              {/* Flight Search Form - Row 1 */}
-              <div className="grid grid-cols-5 gap-4 mb-4">
-                {/* Leaving From */}
-                <div className="col-span-1">
-                  <label className="block text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
-                    Leaving From
-                  </label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <input
-                      type="text"
-                      value={from}
-                      onChange={(e) => setFrom(e.target.value)}
-                      placeholder="London, London Heathrow Arpt [LHR], United"
-                      className="w-full pl-10 pr-3 py-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                    />
-                  </div>
-                </div>
+          {/* To */}
+          <div className="flex-1 min-w-0">
+            <label className="block text-xs text-gray-500 mb-1">To</label>
+            <input
+              type="text"
+              value={to}
+              onChange={(e) => setTo(e.target.value)}
+              className="w-full text-sm font-semibold text-gray-900 bg-transparent border-b border-gray-200 pb-2 focus:outline-none focus:border-orange-500"
+            />
+          </div>
 
-                {/* Swap Button */}
-                <section className="flex items-end justify-center pb-3">
-                  <button
-                    onClick={swapLocations}
-                    className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-                    aria-label="Swap locations"
-                  >
-                    <ArrowLeftRight className="w-5 h-5 text-orange-500" />
-                  </button>
-                </section>
+          {/* Depart */}
+          <div className="flex-1 min-w-0">
+            <label className="block text-xs text-gray-500 mb-1">Depart</label>
+            <input
+              type="date"
+              value={departDate}
+              onChange={(e) => setDepartDate(e.target.value)}
+              className="w-full text-sm font-semibold text-gray-900 bg-transparent border-b border-gray-200 pb-2 focus:outline-none focus:border-orange-500 [color-scheme:light]"
+              placeholder="Select Date"
+            />
+          </div>
 
-                {/* Arrive To */}
-                <div className="col-span-1">
-                  <label className="block text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
-                    Arrive To
-                  </label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <input
-                      type="text"
-                      value={to}
-                      onChange={(e) => setTo(e.target.value)}
-                      placeholder="Dubai, Dubai Intl Arpt [DXB], United Arab Emir"
-                      className="w-full pl-10 pr-3 py-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                    />
-                  </div>
-                </div>
+          {/* Return */}
+          {tripType === 'return' && (
+            <div className="flex-1 min-w-0">
+              <label className="block text-xs text-gray-500 mb-1">Return</label>
+              <input
+                type="date"
+                value={returnDate}
+                onChange={(e) => setReturnDate(e.target.value)}
+                className="w-full text-sm font-semibold text-gray-900 bg-transparent border-b border-gray-200 pb-2 focus:outline-none focus:border-orange-500 [color-scheme:light]"
+                placeholder="Select Date"
+              />
+            </div>
+          )}
 
-                {/* Departure Date */}
-                <div className="col-span-1">
-                  <label className="block text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
-                    Departure Date
-                  </label>
-                  <div className="relative">
-                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <input
-                      type="date"
-                      value={departureDate}
-                      onChange={(e) => setDepartureDate(e.target.value)}
-                      className="w-full pl-10 pr-3 py-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                    />
-                  </div>
-                </div>
+          {/* Passengers & Class */}
+          <div className="flex-1 min-w-0 relative">
+            <label className="block text-xs text-gray-500 mb-1">Passengers &amp; Class</label>
+            <button
+              type="button"
+              onClick={() => setShowPassengers(!showPassengers)}
+              className="w-full text-left text-sm font-semibold text-gray-900 bg-transparent border-b border-gray-200 pb-2 focus:outline-none hover:border-orange-300 transition-colors"
+            >
+              {passengers} Passenger{passengers > 1 ? 's' : ''}, {travelClass}
+            </button>
 
-                {/* Return Date */}
-                {tripType === 'return' && (
-                  <div className="col-span-1">
-                    <label className="block text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
-                      Return Date
-                    </label>
-                    <div className="relative">
-                      <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                      <input
-                        type="date"
-                        value={returnDate}
-                        onChange={(e) => setReturnDate(e.target.value)}
-                        className="w-full pl-10 pr-3 py-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Flight Search Form - Row 2 */}
-              <div className="flex gap-4 items-end">
-                {/* Adult */}
-                <div className="flex-1">
-                  <label className="block text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
-                    Adult (&gt; 15)
-                  </label>
-                  <select
-                    value={adults}
-                    onChange={(e) => setAdults(Number(e.target.value))}
-                    className="w-full px-3 py-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  >
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-                      <option key={num} value={num}>{num}</option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Youth */}
-                <div className="flex-1">
-                  <label className="block text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
-                    Youth (12-15)
-                  </label>
-                  <select
-                    value={youth}
-                    onChange={(e) => setYouth(Number(e.target.value))}
-                    className="w-full px-3 py-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  >
-                    {['Youth', 0, 1, 2, 3, 4, 5].map((num, idx) => (
-                      <option key={idx} value={idx === 0 ? 0 : num}>{num}</option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Children */}
-                <div className="flex-1">
-                  <label className="block text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
-                    Children (2-11)
-                  </label>
-                  <select
-                    value={children}
-                    onChange={(e) => setChildren(Number(e.target.value))}
-                    className="w-full px-3 py-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  >
-                    {['Children', 0, 1, 2, 3, 4, 5].map((num, idx) => (
-                      <option key={idx} value={idx === 0 ? 0 : num}>{num}</option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Infant */}
-                <div className="flex-1">
-                  <label className="block text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
-                    Infant (&lt;2)
-                  </label>
-                  <select
-                    value={infants}
-                    onChange={(e) => setInfants(Number(e.target.value))}
-                    className="w-full px-3 py-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  >
-                    {['Infant', 0, 1, 2].map((num, idx) => (
-                      <option key={idx} value={idx === 0 ? 0 : num}>{num}</option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Travel Class */}
-                <div className="flex-1">
-                  <label className="block text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
-                    Travel Class
-                  </label>
-                  <select
-                    value={travelClass}
-                    onChange={(e) => setTravelClass(e.target.value)}
-                    className="w-full px-3 py-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  >
-                    <option>Economy Class</option>
-                    <option>Premium Economy</option>
-                    <option>Business Class</option>
-                    <option>First Class</option>
-                  </select>
-                </div>
-
-                {/* Airline Preference */}
-                <div className="flex-1">
-                  <label className="block text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
-                    Airline Preference
-                  </label>
-                  <select
-                    value={airline}
-                    onChange={(e) => setAirline(e.target.value)}
-                    className="w-full px-3 py-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  >
-                    <option>All Airlines</option>
-                    <option>Emirates</option>
-                    <option>British Airways</option>
-                    <option>Qatar Airways</option>
-                    <option>Etihad Airways</option>
-                  </select>
-                </div>
-
-                {/* Search Button */}
-                <a href="/booknow">
-                <button
-                  onClick={handleSearch}
-                  className="px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold rounded-lg transition-colors whitespace-nowrap uppercase tracking-wide"
-                >
-                  Search Flights
-                </button>
-                  </a>
-              </div>
-            </>
-          ) : (
-            <>
-              {/* Hotel Search Form - Two Row Layout */}
-              <div className="space-y-4">
-                {/* Row 1: Destination and Guests */}
-                <div className="grid grid-cols-12 gap-4">
-                  {/* Destination */}
-                  <div className="col-span-7">
-                    <label className="block text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
-                      Destination
-                    </label>
-                    <div className="relative">
-                      <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                      <input
-                        type="text"
-                        value={destination}
-                        onChange={(e) => setDestination(e.target.value)}
-                        placeholder="Dubai, United Arab Emirates"
-                        className="w-full pl-11 pr-4 py-3.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Guests and Rooms */}
-                  <div className="col-span-5 relative">
-                    <label className="block text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
-                      Guests and Rooms
-                    </label>
-                    <div className="relative">
-                      <Users className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10 pointer-events-none" />
+            {showPassengers && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setShowPassengers(false)} />
+                <div className="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-xl z-50 p-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-sm text-gray-700">Passengers</span>
+                    <div className="flex items-center gap-3">
                       <button
                         type="button"
-                        onClick={() => setShowGuestDropdown(!showGuestDropdown)}
-                        className="w-full pl-11 pr-10 py-3.5 text-sm text-left border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white hover:border-gray-400 transition-colors"
+                        onClick={() => setPassengers(Math.max(1, passengers - 1))}
+                        className="w-7 h-7 rounded-full border border-gray-300 text-gray-600 hover:border-orange-500 hover:text-orange-500 transition-colors"
                       >
-                        <span className="text-gray-700">Room: {rooms}, Adults: {hotelAdults}, Child: {hotelChildren}</span>
+                        −
                       </button>
-                      
-                      {/* Chevron Icon */}
-                      <svg 
-                        className={`absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none transition-transform ${showGuestDropdown ? 'rotate-180' : ''}`}
-                        fill="none" 
-                        stroke="currentColor" 
-                        viewBox="0 0 24 24"
+                      <span className="w-5 text-center text-sm font-semibold">{passengers}</span>
+                      <button
+                        type="button"
+                        onClick={() => setPassengers(Math.min(9, passengers + 1))}
+                        className="w-7 h-7 rounded-full border border-gray-300 text-gray-600 hover:border-orange-500 hover:text-orange-500 transition-colors"
                       >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-
-                      {/* Dropdown */}
-                      {showGuestDropdown && (
-                        <>
-                          {/* Backdrop to close dropdown when clicking outside */}
-                          <div 
-                            className="fixed inset-0 z-40" 
-                            onClick={() => setShowGuestDropdown(false)}
-                          />
-                          
-                          <div className="absolute top-full left-0 mt-2 w-80 bg-white border border-gray-300 rounded-lg shadow-xl z-50 p-5">
-                            <div className="space-y-4">
-                              {/* Room Header */}
-                              <div>
-                                <h4 className="text-sm font-semibold text-gray-800 mb-4">Rooms - {rooms}</h4>
-                                
-                                {/* Adults */}
-                                <div className="flex items-center justify-between mb-4">
-                                  <span className="text-sm font-medium text-gray-700">Adults:</span>
-                                  <div className="flex items-center gap-4">
-                                    <button
-                                      type="button"
-                                      onClick={() => setHotelAdults(Math.max(1, hotelAdults - 1))}
-                                      className="w-9 h-9 rounded-full border-2 border-gray-300 hover:border-orange-500 hover:text-orange-500 flex items-center justify-center text-gray-600 transition-colors font-medium text-lg"
-                                    >
-                                      −
-                                    </button>
-                                    <span className="w-8 text-center font-semibold text-base">{hotelAdults}</span>
-                                    <button
-                                      type="button"
-                                      onClick={() => setHotelAdults(Math.min(10, hotelAdults + 1))}
-                                      className="w-9 h-9 rounded-full border-2 border-gray-300 hover:border-orange-500 hover:text-orange-500 flex items-center justify-center text-gray-600 transition-colors font-medium text-lg"
-                                    >
-                                      +
-                                    </button>
-                                  </div>
-                                </div>
-
-                                {/* Children */}
-                                <div className="flex items-center justify-between">
-                                  <span className="text-sm font-medium text-gray-700">Children:</span>
-                                  <div className="flex items-center gap-4">
-                                    <button
-                                      type="button"
-                                      onClick={() => setHotelChildren(Math.max(0, hotelChildren - 1))}
-                                      className="w-9 h-9 rounded-full border-2 border-gray-300 hover:border-orange-500 hover:text-orange-500 flex items-center justify-center text-gray-600 transition-colors font-medium text-lg"
-                                    >
-                                      −
-                                    </button>
-                                    <span className="w-8 text-center font-semibold text-base">{hotelChildren}</span>
-                                    <button
-                                      type="button"
-                                      onClick={() => setHotelChildren(Math.min(10, hotelChildren + 1))}
-                                      className="w-9 h-9 rounded-full border-2 border-gray-300 hover:border-orange-500 hover:text-orange-500 flex items-center justify-center text-gray-600 transition-colors font-medium text-lg"
-                                    >
-                                      +
-                                    </button>
-                                  </div>
-                                </div>
-                              </div>
-
-                              {/* Add Another Room */}
-                              <button
-                                type="button"
-                                onClick={() => setRooms(rooms + 1)}
-                                className="text-orange-500 hover:text-orange-600 text-sm font-semibold hover:underline"
-                              >
-                                Add another room
-                              </button>
-
-                              {/* Done Button */}
-                              <div className="flex justify-end pt-2 border-t border-gray-200">
-                                <button
-                                  type="button"
-                                  onClick={() => setShowGuestDropdown(false)}
-                                  className="px-8 py-2.5 bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold rounded-lg transition-colors"
-                                >
-                                  Done
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </>
-                      )}
+                        +
+                      </button>
                     </div>
                   </div>
+
+                  <div className="mb-4">
+                    <span className="block text-sm text-gray-700 mb-2">Class</span>
+                    <div className="flex flex-col gap-1.5">
+                      {['Economy', 'Premium Economy', 'Business', 'First'].map((c) => (
+                        <button
+                          key={c}
+                          type="button"
+                          onClick={() => setTravelClass(c)}
+                          className={`text-left text-sm px-2 py-1.5 rounded-md transition-colors ${
+                            travelClass === c
+                              ? 'bg-orange-50 text-orange-600 font-medium'
+                              : 'text-gray-600 hover:bg-gray-50'
+                          }`}
+                        >
+                          {c}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setShowPassengers(false)}
+                    className="w-full py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold rounded-md transition-colors"
+                  >
+                    Done
+                  </button>
                 </div>
+              </>
+            )}
+          </div>
 
-                {/* Row 2: Check In, Check Out, Rooms, and Search Button */}
-                <div className="grid grid-cols-12 gap-4">
-                  {/* Check In */}
-                  <div className="col-span-3">
-                    <label className="block text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
-                      Check In
-                    </label>
-                    <div className="relative">
-                      <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                      <input
-                        type="date"
-                        value={checkIn}
-                        onChange={(e) => setCheckIn(e.target.value)}
-                        placeholder="mm/dd/yyyy"
-                        className="w-full pl-11 pr-4 py-3.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Check Out */}
-                  <div className="col-span-3">
-                    <label className="block text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
-                      Check Out
-                    </label>
-                    <div className="relative">
-                      <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                      <input
-                        type="date"
-                        value={checkOut}
-                        onChange={(e) => setCheckOut(e.target.value)}
-                        placeholder="mm/dd/yyyy"
-                        className="w-full pl-11 pr-4 py-3.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Room Number Display */}
-                  <div className="col-span-3">
-                    <label className="block text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
-                      Rooms
-                    </label>
-                    <div className="relative">
-                      <Hotel className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                      <input
-                        type="number"
-                        min="1"
-                        max="10"
-                        value={rooms}
-                        onChange={(e) => setRooms(Number(e.target.value))}
-                        className="w-full pl-11 pr-4 py-3.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Search Button */}
-                  <div className="col-span-3 flex items-end">
-                    <a href="/booknow">
-                    <button
-                      onClick={handleSearch}
-                      className="w-full px-6 py-3.5 bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold rounded-lg transition-colors uppercase tracking-wide shadow-lg shadow-orange-500/30"
-                    >
-                      Search Hotels
-                    </button>
-                      </a>
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
+          {/* Search button */}
+          <div className="shrink-0">
+            <button
+              onClick={handleSearch}
+              className="flex items-center justify-center gap-2 px-7 py-3.5 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold rounded-xl transition-colors whitespace-nowrap"
+            >
+              Search Flights
+              <Plane className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
     </div>

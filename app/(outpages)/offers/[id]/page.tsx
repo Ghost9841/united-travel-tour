@@ -278,7 +278,7 @@ export default async function FlightDetailPage({ params }: { params: Promise<{ i
 
               <div className="p-6 pt-0">
                 <Link
-                  href={`/checkout/trending-offer/${route.id}`}
+                  href={`wa.me/447862069791`}
                   className="block w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 rounded-xl text-center transition-all transform hover:scale-[1.02] shadow-md"
                 >
                   Proceed to Book Now
