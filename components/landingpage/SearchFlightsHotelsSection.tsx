@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Plane, Building2, Hotel, Luggage, ArrowLeftRight } from 'lucide-react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 type TabType = 'flights' | 'holidays' | 'hotels' | 'flightHotel';
 type TripType = 'return' | 'oneWay' | 'multicity';
