@@ -119,14 +119,14 @@ export default function HeroCarousel() {
             {/* Content Overlay */}
             <div className="absolute inset-0 flex flex-col justify-between px-8 md:px-16 py-16 z-10">
                 {/* Text Content */}
-                {/* <div className="flex flex-col flex-1 mt-24 md:mt-32">
+                <div className="flex flex-col flex-1 mt-24 md:mt-32">
                     <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold text-white mb-4 drop-shadow-lg max-w-2xl">
                         Start your unforgettable journey with us.
                     </h1>
                     <p className="text-lg md:text-xl text-white drop-shadow-md max-w-xl">
                         The best travel for your journey begins now
                     </p>
-                </div> */}
+                </div>
                 {/* Combined Navigation - Dots and Arrows */}
                 <div className="flex flex-col items-center gap-6">
                     {/*  Vertical nav – centred on the right edge  */}
@@ -199,7 +199,7 @@ export default function HeroCarousel() {
       {/* Content overlay */}
       <div className="absolute inset-0 flex flex-col justify-between px-8 md:px-16 py-16 z-10 pointer-events-none">
 
-        {/* Text */}
+        {/* Text
         <div className="flex flex-col flex-1 mt-24 md:mt-32">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold text-white mb-4 drop-shadow-lg max-w-2xl">
             Start your unforgettable journey with us.
@@ -207,7 +207,7 @@ export default function HeroCarousel() {
           <p className="text-lg md:text-xl text-white drop-shadow-md max-w-xl">
             The best travel for your journey begins now
           </p>
-        </div>
+        </div> */}
 
         {/* Right-side vertical nav — dots + chevrons */}
         <div className="absolute right-6 top-1/2 -translate-y-1/2 z-30 flex flex-col items-center gap-6 pointer-events-auto">
