@@ -12,6 +12,7 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
+import ImageUpload from '@/app/(outpages)/file-upload/UploadImage';
 
 // Dynamic data from database
 const DURATIONS = ['1-3 days', '4 days', '5 days', '6 days', '7 days', '8-10 days', '2 weeks+'];
@@ -321,27 +322,36 @@ export default function ExploreFormPage() {
 
           {/* Image */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-1">Cover Image</h2>
-            <p className="text-sm text-gray-500 mb-5">Image shown on the explore card (h-72 on frontend)</p>
-            <div className="relative">
-              <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input value={form.image}
-                onChange={e => { set('image', e.target.value); setImagePreview(e.target.value); }}
-                placeholder="https://images.unsplash.com/..."
-                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm" />
-            </div>
+            <h2 className="text-lg font-bold text-gray-900 mb-1">
+              Cover Image
+            </h2>
+
+            <p className="text-sm text-gray-500 mb-5">
+              Image shown on the explore card (h-72 on frontend)
+            </p>
+
+            <ImageUpload
+              value={form.image}
+              onChange={(url) => {
+                set("image", url);
+                setImagePreview(url);
+              }}
+            />
+
             {imagePreview && (
-              <div className="relative mt-4 rounded-xl overflow-hidden border border-gray-100">
-                <img src={imagePreview} alt="preview" className="w-full h-48 object-cover"
-                  onError={() => setImagePreview('')} />
-                <button type="button" onClick={() => { setImagePreview(''); set('image', ''); }}
-                  className="absolute top-2 right-2 p-1.5 bg-white rounded-lg shadow hover:bg-red-50">
-                  <X className="w-3.5 h-3.5 text-red-500" />
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  set("image", "");
+                  setImagePreview("");
+                }}
+                className="mt-4 flex items-center gap-2 rounded-lg border border-red-200 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+              >
+                <X className="w-4 h-4" />
+                Remove Image
+              </button>
             )}
           </div>
-
           {/* Settings */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
             <h2 className="text-lg font-bold text-gray-900 mb-5">Settings</h2>

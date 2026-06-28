@@ -12,29 +12,30 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
+import ImageUpload from '@/app/(outpages)/file-upload/UploadImage';
 
 const isNew = (id: string) => id === 'new';
 
 export default function SpecialOfferFormPage() {
-  const router  = useRouter();
-  const params  = useParams();
-  const id      = params.id as string;
+  const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
   const creating = isNew(id);
 
-  const [loading,  setLoading]  = useState(!creating);
-  const [saving,   setSaving]   = useState(false);
+  const [loading, setLoading] = useState(!creating);
+  const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [imagePreview, setImagePreview] = useState('');
 
   const [form, setForm] = useState({
-    title:           '',
-    description:     '',
-    location:        '',
-    price:           '',
+    title: '',
+    description: '',
+    location: '',
+    price: '',
     discountedPrice: '',
-    image:           '',
-    rating:          5,
-    status:          'active' as 'active' | 'draft',
+    image: '',
+    rating: 5,
+    status: 'active' as 'active' | 'draft',
   });
 
   // Load existing offer when editing
@@ -42,19 +43,19 @@ export default function SpecialOfferFormPage() {
     if (creating) return;
     (async () => {
       try {
-        const res  = await fetch(`/api/special-offers/${id}`);
+        const res = await fetch(`/api/special-offers/${id}`);
         const data = await res.json();
         if (data.success && data.data) {
           const o = data.data;
           setForm({
-            title:           o.title           ?? '',
-            description:     o.description     ?? '',
-            location:        o.location        ?? '',
-            price:           o.price?.toString()           ?? '',
+            title: o.title ?? '',
+            description: o.description ?? '',
+            location: o.location ?? '',
+            price: o.price?.toString() ?? '',
             discountedPrice: o.discountedPrice?.toString() ?? '',
-            image:           o.image           ?? '',
-            rating:          o.rating          ?? 5,
-            status:          o.status          ?? 'active',
+            image: o.image ?? '',
+            rating: o.rating ?? 5,
+            status: o.status ?? 'active',
           });
           setImagePreview(o.image ?? '');
         } else {
@@ -71,7 +72,7 @@ export default function SpecialOfferFormPage() {
 
   const set = (k: string, v: unknown) => setForm(p => ({ ...p, [k]: v }));
 
-  const saving$    = Number(form.price) > 0
+  const saving$ = Number(form.price) > 0
     ? Number(form.price) - Number(form.discountedPrice)
     : 0;
   const discountPct = Number(form.price) > 0 && Number(form.discountedPrice) > 0
@@ -84,15 +85,15 @@ export default function SpecialOfferFormPage() {
     try {
       const body = {
         ...form,
-        price:           Number(form.price),
+        price: Number(form.price),
         discountedPrice: Number(form.discountedPrice),
       };
       const res = await fetch(
         creating ? '/api/special-offers' : `/api/special-offers/${id}`,
         {
-          method:  creating ? 'POST' : 'PUT',
+          method: creating ? 'POST' : 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify(body),
+          body: JSON.stringify(body),
         }
       );
       const data = await res.json();
@@ -112,7 +113,7 @@ export default function SpecialOfferFormPage() {
   const handleDelete = async () => {
     setDeleting(true);
     try {
-      const res  = await fetch(`/api/special-offers/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/special-offers/${id}`, { method: 'DELETE' });
       const data = await res.json();
       if (data.success) {
         toast.success('Offer deleted.');
@@ -276,27 +277,28 @@ export default function SpecialOfferFormPage() {
 
           {/* Image */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-1">Offer Image</h2>
+            <h2 className="text-lg font-bold text-gray-900 mb-1">
+              Offer Image
+            </h2>
+
             <p className="text-sm text-gray-500 mb-5">
-              Use a URL or a local path (e.g.{' '}
-              <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs">/2026/populardestination/ktmtolondon.jpeg</code>)
+              Upload the image that will be displayed for this special offer.
             </p>
-            <div className="relative">
-              <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input value={form.image}
-                onChange={e => { set('image', e.target.value); setImagePreview(e.target.value); }}
-                placeholder="https://... or /2026/populardestination/image.jpeg"
-                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm" />
-            </div>
-            {imagePreview && (
-              <div className="relative mt-4 rounded-xl overflow-hidden border border-gray-100">
-                <img src={imagePreview} alt="preview" className="w-full h-48 object-cover"
-                  onError={() => setImagePreview('')} />
-                <button type="button" onClick={() => { setImagePreview(''); set('image', ''); }}
-                  className="absolute top-2 right-2 p-1.5 bg-white rounded-lg shadow hover:bg-red-50">
-                  <X className="w-3.5 h-3.5 text-red-500" />
-                </button>
-              </div>
+
+            <ImageUpload
+              value={form.image}
+              onChange={(url) => set("image", url)}
+            />
+
+            {form.image && (
+              <button
+                type="button"
+                onClick={() => set("image", "")}
+                className="mt-4 flex items-center gap-2 rounded-lg border border-red-200 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"
+              >
+                <X className="w-4 h-4" />
+                Remove Image
+              </button>
             )}
           </div>
 

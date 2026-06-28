@@ -67,7 +67,7 @@ export default function ExplorePage() {
     if (dest.status !== 'active') return false;
 
     const matchesSearch = dest.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         dest.location.toLowerCase().includes(searchQuery.toLowerCase());
+      dest.location.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesLocation = !selectedLocation || dest.location.includes(selectedLocation);
     const matchesCategory = !selectedCategory || dest.category === selectedCategory;
     const matchesPrice = !priceRange ||
@@ -162,7 +162,7 @@ export default function ExplorePage() {
                       <MapPin className="w-4 h-4" />
                       <span className="text-sm">{offer.location}</span>
                     </div>
-                    
+
                     {/* Title */}
                     <h3 className="text-lg font-bold text-gray-900 mb-2">{offer.title}</h3>
 
@@ -173,23 +173,11 @@ export default function ExplorePage() {
 
                     {/* Footer */}
                     <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-gray-500 text-sm">From</p>
-                        <div className="flex items-center gap-2">
-                          <span className="text-2xl font-bold text-orange-500">
-                            £{offer.discountedPrice}
-                          </span>
-                          {offer.price !== offer.discountedPrice && (
-                            <span className="text-gray-400 line-through text-sm">
-                              £{offer.price}
-                            </span>
-                          )}
-                        </div>
-                      </div>
+
                       <div onClick={(e) => e.stopPropagation()}>
-                        <Link  href="https://wa.me/447862069791"
-  target="_blank"
-  rel="noopener noreferrer">
+                        <Link href="https://wa.me/447862069791"
+                          target="_blank"
+                          rel="noopener noreferrer">
                           <button className="px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors">
                             BOOK NOW
                           </button>
