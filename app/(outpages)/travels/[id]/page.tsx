@@ -387,7 +387,9 @@ export default async function TravelDetailPage({ params }: TravelDetailPageProps
                 </div>
               </div>
 
-              <Link href={`wa.me/447862069791`}>
+              <Link  href="https://wa.me/447862069791"
+  target="_blank"
+  rel="noopener noreferrer">
                 <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 rounded-xl transition-colors mb-4 text-lg">
                   BOOK NOW
                 </button>

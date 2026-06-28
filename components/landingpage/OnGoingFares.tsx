@@ -241,7 +241,7 @@ export default function CompactFaresBanner() {
       >
         <div className="flex-1 max-w-2xl pointer-events-none">
           {/* Top Row: Timer & Discount */}
-          <div className="flex flex-wrap items-center gap-3 mb-3">
+          {/* <div className="flex flex-wrap items-center gap-3 mb-3">
             <div className="inline-flex items-center gap-1.5 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-medium">
               <Clock className="w-3 h-3" />
               {currentFare.expires}
@@ -249,7 +249,7 @@ export default function CompactFaresBanner() {
             <span className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">
               {currentFare.discount}
             </span>
-          </div>
+          </div> */}
 
           {/* Title */}
           <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 leading-tight">
@@ -281,7 +281,9 @@ export default function CompactFaresBanner() {
           </div>
 
           {/* CTA */}
-          <a href={`wa.me/447862069791`}>
+          <a  href="https://wa.me/447862069791"
+  target="_blank"
+  rel="noopener noreferrer">
           <button 
             className="px-6 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg text-sm font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg pointer-events-auto"
             onMouseEnter={() => setIsAutoPlaying(false)}

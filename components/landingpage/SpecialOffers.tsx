@@ -155,7 +155,9 @@ export default function SpecialOffers() {
                   VIEW DETAILS
                 </Link>
                 <Link
-                  href={`wa.me/447862069791`}
+                   href="https://wa.me/447862069791"
+  target="_blank"
+  rel="noopener noreferrer"
                   className="px-5 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg font-medium transition-colors text-sm border border-white/40"
                 >
                   BOOK NOW

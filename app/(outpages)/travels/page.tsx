@@ -127,7 +127,9 @@ export default function TravelsPage() {
                     </div>
                   </div> */}
                   
-                   <a href={`wa.me/447862069791`}>
+                   <a  href="https://wa.me/447862069791"
+  target="_blank"
+  rel="noopener noreferrer">
                     <button className="px-6 py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors">
                       BOOK NOW
                     </button>
