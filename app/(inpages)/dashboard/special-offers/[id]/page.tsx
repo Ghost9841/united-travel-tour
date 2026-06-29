@@ -129,13 +129,13 @@ export default function SpecialOfferFormPage() {
   };
 
   if (loading) return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 flex items-center justify-center">
+    <div className="min-h-screen bg-linear-to-br from-orange-50 via-amber-50 to-yellow-50 flex items-center justify-center">
       <div className="w-16 h-16 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin" />
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50">
+    <div className="min-h-screen bg-linear-to-br from-orange-50 via-amber-50 to-yellow-50">
       <div className="max-w-4xl mx-auto p-6">
 
         {/* Header */}

@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ArrowLeft, Trash2, Plus, Edit3 } from 'lucide-react';
+import { ArrowLeft, Trash2, Plus, Edit3, X } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import ImageUpload from '@/app/(outpages)/file-upload/UploadImage';
 
 type OngoingFare = {
   id: number;
@@ -23,7 +24,7 @@ type OngoingFare = {
 export default function OngoingFareDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
 
-  const [id, setId]       = useState<string>('');
+  const [id, setId] = useState<string>('');
   const [ready, setReady] = useState(false);
 
   // Resolve async params first
@@ -37,22 +38,22 @@ export default function OngoingFareDetailPage({ params }: { params: Promise<{ id
   const creating = id === 'new';
 
   const [loading, setLoading] = useState(true);
-  const [saving,  setSaving]  = useState(false);
-  const [error,   setError]   = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
   const [form, setForm] = useState<Partial<OngoingFare>>({
-    title:           '',
-    description:     '',
-    originalPrice:   '',
+    title: '',
+    description: '',
+    originalPrice: '',
     discountedPrice: '',
-    discount:        '',
-    image:           '',
-    alt:             '',
-    departure:       '',
-    arrival:         '',
-    expires:         '',
-    status:          'active',
+    discount: '',
+    image: '',
+    alt: '',
+    departure: '',
+    arrival: '',
+    expires: '',
+    status: 'active',
   });
 
   // Load existing fare when editing
@@ -93,23 +94,23 @@ export default function OngoingFareDetailPage({ params }: { params: Promise<{ id
 
     try {
       const payload = {
-        title:           form.title.trim(),
-        description:     form.description.trim(),
-        originalPrice:   form.originalPrice?.trim()   ?? '',
-        discountedPrice: form.discountedPrice?.trim()  ?? '',
-        discount:        form.discount?.trim()         ?? '',
-        image:           form.image.trim(),
-        alt:             form.alt?.trim()              ?? '',
-        departure:       form.departure?.trim()        ?? '',
-        arrival:         form.arrival?.trim()          ?? '',
-        expires:         form.expires?.trim()          ?? '',
-        status:          (form.status as 'active' | 'draft') || 'active',
+        title: form.title.trim(),
+        description: form.description.trim(),
+        originalPrice: form.originalPrice?.trim() ?? '',
+        discountedPrice: form.discountedPrice?.trim() ?? '',
+        discount: form.discount?.trim() ?? '',
+        image: form.image.trim(),
+        alt: form.alt?.trim() ?? '',
+        departure: form.departure?.trim() ?? '',
+        arrival: form.arrival?.trim() ?? '',
+        expires: form.expires?.trim() ?? '',
+        status: (form.status as 'active' | 'draft') || 'active',
       };
 
-      const url    = creating ? '/api/ongoingfare' : `/api/ongoingfare/${Number(id)}`;
+      const url = creating ? '/api/ongoingfare' : `/api/ongoingfare/${Number(id)}`;
       const method = creating ? 'POST' : 'PUT';
 
-      const res  = await fetch(url, {
+      const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -134,7 +135,7 @@ export default function OngoingFareDetailPage({ params }: { params: Promise<{ id
     setError(null);
 
     try {
-      const res  = await fetch(`/api/ongoingfare/${Number(id)}`, { method: 'DELETE' });
+      const res = await fetch(`/api/ongoingfare/${Number(id)}`, { method: 'DELETE' });
       const data = await res.json();
       if (!res.ok || !data.success) throw new Error(data.error || 'Failed to delete fare');
       router.push('/dashboard/landingpage/ongoingfare');
@@ -147,7 +148,7 @@ export default function OngoingFareDetailPage({ params }: { params: Promise<{ id
 
   // Waiting for params to resolve
   if (!ready || loading) return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 flex items-center justify-center">
+    <div className="min-h-screen bg-linear-to-br from-orange-50 via-amber-50 to-yellow-50 flex items-center justify-center">
       <div className="text-center">
         <div className="w-16 h-16 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin mx-auto mb-4" />
         <p className="text-gray-500">Loading fare...</p>
@@ -156,13 +157,13 @@ export default function OngoingFareDetailPage({ params }: { params: Promise<{ id
   );
 
   if (error && !creating) return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 flex items-center justify-center">
+    <div className="min-h-screen bg-linear-to-br from-orange-50 via-amber-50 to-yellow-50 flex items-center justify-center">
       <div className="text-center text-red-600">{error}</div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50">
+    <div className="min-h-screen bg-linear-to-br from-orange-50 via-amber-50 to-yellow-50">
       <div className="max-w-5xl mx-auto p-6">
 
         <div className="flex items-center justify-between mb-6">
@@ -252,18 +253,37 @@ export default function OngoingFareDetailPage({ params }: { params: Promise<{ id
               </select>
             </label>
 
-            <label className="block md:col-span-2">
-              <span className="text-sm font-medium text-gray-700">Image URL *</span>
-              <input value={form.image || ''}
-                onChange={e => setForm(f => ({ ...f, image: e.target.value }))}
-                placeholder="https://... or /2026/image.jpeg"
-                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-300 text-sm" />
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Image *
+              </label>
+
+              <ImageUpload
+                value={form.image || ""}
+                onChange={(url) =>
+                  setForm((f) => ({
+                    ...f,
+                    image: url,
+                  }))
+                }
+              />
+
               {form.image && (
-                <img src={form.image} alt="preview"
-                  className="mt-3 h-40 w-full object-cover rounded-xl border border-gray-100"
-                  onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setForm((f) => ({
+                      ...f,
+                      image: "",
+                    }))
+                  }
+                  className="mt-4 flex items-center gap-2 rounded-lg border border-red-200 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                >
+                  <X className="w-4 h-4" />
+                  Remove Image
+                </button>
               )}
-            </label>
+            </div>
 
             <label className="block md:col-span-2">
               <span className="text-sm font-medium text-gray-700">Alt Text</span>

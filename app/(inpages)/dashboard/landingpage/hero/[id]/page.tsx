@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Plus, ArrowLeft, Trash2, Edit, Image as ImageIcon, MoreVertical, Eye, EyeOff, X } from 'lucide-react';
 import Link from 'next/link';
+import ImageUpload from '@/app/(outpages)/file-upload/UploadImage';
 
 interface HeroCarouselImage {
   id: number;
@@ -60,10 +61,10 @@ export default function HeroCarouselImagesPage() {
     e.preventDefault();
     if (!form.src.trim()) { alert('Image URL is required'); return; }
     setSaving(true);
-    
+
     try {
       const payload = { ...form, order: Number(form.order) || 0 };
-      
+
       if (editingId) {
         // Update existing image
         const res = await fetch(`/api/hero/${editingId}`, {
@@ -73,7 +74,7 @@ export default function HeroCarouselImagesPage() {
         });
         const data = await res.json();
         if (data.success) {
-          setImages(prev => prev.map(img => 
+          setImages(prev => prev.map(img =>
             img.id === editingId ? { ...img, ...payload, createdAt: img.createdAt } : img
           ).sort((a, b) => a.order - b.order));
           resetForm();
@@ -93,10 +94,10 @@ export default function HeroCarouselImagesPage() {
           setShowModal(false);
         } else alert(data.error || 'Failed to create');
       }
-    } catch { 
-      alert(editingId ? 'Failed to update image' : 'Failed to create image'); 
-    } finally { 
-      setSaving(false); 
+    } catch {
+      alert(editingId ? 'Failed to update image' : 'Failed to create image');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -127,13 +128,13 @@ export default function HeroCarouselImagesPage() {
   const draft = images.filter(i => i.status === 'draft').length;
 
   if (loading) return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 flex items-center justify-center">
+    <div className="min-h-screen bg-linear-to-br from-orange-50 via-amber-50 to-yellow-50 flex items-center justify-center">
       <div className="w-16 h-16 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin" />
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50">
+    <div className="min-h-screen bg-linear-to-br from-orange-50 via-amber-50 to-yellow-50">
       <div className="max-w-7xl mx-auto p-6 space-y-8">
 
         {/* Header */}
@@ -264,31 +265,46 @@ export default function HeroCarouselImagesPage() {
             </div>
             <form onSubmit={handleSubmit} className="p-6 space-y-5">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Image URL *</label>
-                <div className="relative">
-                  <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input 
-                    value={form.src}
-                    onChange={e => { setForm(f => ({ ...f, src: e.target.value })); setPreview(e.target.value); }}
-                    placeholder="https://... or /2026/herosection/image.jpeg"
-                    className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm" 
-                  />
-                </div>
+                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                  Hero Image *
+                </label>
+
+                <ImageUpload
+                  value={form.src}
+                  onChange={(url) => {
+                    setForm((f) => ({
+                      ...f,
+                      src: url,
+                    }));
+                    setPreview(url);
+                  }}
+                />
+
                 {preview && (
-                  <div className="mt-3 rounded-xl overflow-hidden border border-gray-100 h-36">
-                    <img src={preview} alt="preview" className="w-full h-full object-cover"
-                      onError={() => setPreview('')} />
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPreview("");
+                      setForm((f) => ({
+                        ...f,
+                        src: "",
+                      }));
+                    }}
+                    className="mt-4 flex items-center gap-2 rounded-lg border border-red-200 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                  >
+                    <X className="w-4 h-4" />
+                    Remove Image
+                  </button>
                 )}
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">Alt Text</label>
-                <input 
-                  value={form.alt} 
+                <input
+                  value={form.alt}
                   onChange={e => setForm(f => ({ ...f, alt: e.target.value }))}
                   placeholder="e.g., Alpine Village"
-                  className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm" 
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
                 />
                 <p className="text-xs text-gray-400 mt-1">Used for accessibility and shown as slide label</p>
               </div>
@@ -296,20 +312,20 @@ export default function HeroCarouselImagesPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">Order</label>
-                  <input 
-                    type="number" 
-                    min="0" 
+                  <input
+                    type="number"
+                    min="0"
                     value={form.order}
-                    onChange={e => setForm(f => ({ ...f, order: e.target.value }))} 
+                    onChange={e => setForm(f => ({ ...f, order: e.target.value }))}
                     placeholder="0"
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm" 
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
                   />
                   <p className="text-xs text-gray-400 mt-1">Lower = shown first</p>
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">Status</label>
-                  <select 
-                    value={form.status} 
+                  <select
+                    value={form.status}
                     onChange={e => setForm(f => ({ ...f, status: e.target.value as 'active' | 'draft' }))}
                     className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 text-sm bg-white">
                     <option value="active">Active</option>
@@ -323,8 +339,8 @@ export default function HeroCarouselImagesPage() {
                   className="flex-1 bg-orange-500 text-white py-3 rounded-xl hover:bg-orange-600 disabled:opacity-50 font-semibold text-sm shadow-md">
                   {saving ? 'Saving...' : (editingId ? 'Update Image' : 'Add Image')}
                 </button>
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   onClick={() => { setShowModal(false); resetForm(); }}
                   className="px-5 py-3 border-2 border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 font-medium text-sm">
                   Cancel

@@ -12,6 +12,7 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
+import { MultiImageUpload } from '@/app/(outpages)/file-upload/MultipleImageUpload';
 
 const ROOM_TYPES = [
   'Single Room', 'Double Room', 'Twin Room', 'Deluxe Suite',
@@ -159,13 +160,13 @@ export default function HotelFormPage() {
   };
 
   if (loading) return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 flex items-center justify-center">
+    <div className="min-h-screen bg-linear-to-br from-orange-50 via-amber-50 to-yellow-50 flex items-center justify-center">
       <div className="w-16 h-16 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin" />
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50">
+    <div className="min-h-screen bg-linear-to-br from-orange-50 via-amber-50 to-yellow-50">
       <div className="max-w-4xl mx-auto p-6">
 
         {/* Header */}
@@ -331,71 +332,43 @@ export default function HotelFormPage() {
             )}
           </div>
 
-          {/* Images */}
+          {/* Hotel Images */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-1">Hotel Images</h2>
-            <p className="text-sm text-gray-500 mb-5">Add one or more image URLs (first is cover)</p>
+            <h2 className="text-lg font-bold text-gray-900 mb-1">
+              Hotel Images
+            </h2>
 
-            <div className="space-y-4">
-              {form.images.map((value, index) => (
-                <div key={index} className="flex gap-2 items-start">
-                  <div className="flex-1">
-                    <label className="text-sm font-semibold text-gray-700">Image {index + 1}</label>
-                    <input
-                      value={value}
-                      onChange={(e) => {
-                        const newImages = [...form.images];
-                        newImages[index] = e.target.value;
-                        set('images', newImages);
-                        if (index === 0) {
-                          setImagePreview(e.target.value);
-                          set('image', e.target.value);
-                        }
-                      }}
-                      placeholder={`https://example.com/hotel-${index + 1}.jpg`}
-                      className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
-                    />
-                  </div>
-                  {form.images.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const newImages = form.images.filter((_, i) => i !== index);
-                        set('images', newImages);
-                        if (index === 0) {
-                          setImagePreview(newImages[0] ?? '');
-                          set('image', newImages[0] ?? '');
-                        }
-                      }}
-                      className="mt-6 p-2 bg-red-100 rounded-lg hover:bg-red-200 text-red-600"
-                    >
-                      Remove
-                    </button>
-                  )}
-                </div>
-              ))}
+            <p className="text-sm text-gray-500 mb-5">
+              Upload hotel images (the first image will be used as the cover image).
+            </p>
 
+            <MultiImageUpload
+              value={form.images}
+              max={8}
+              onChange={(urls) => {
+                set("images", urls);
+
+                // Keep the cover image in sync with the first uploaded image
+                const cover = urls[0] ?? "";
+                set("image", cover);
+                setImagePreview(cover);
+              }}
+            />
+
+            {form.images.length > 0 && (
               <button
                 type="button"
-                onClick={() => set('images', [...form.images, ''])}
-                className="px-4 py-2 rounded-xl border border-dashed border-orange-300 text-orange-600 hover:bg-orange-50 text-sm"
+                onClick={() => {
+                  set("images", []);
+                  set("image", "");
+                  setImagePreview("");
+                }}
+                className="mt-4 flex items-center gap-2 rounded-lg border border-red-200 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
               >
-                + Add another image
+                <X className="w-4 h-4" />
+                Remove All Images
               </button>
-            </div>
-
-            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {(form.images.filter(Boolean).length > 0 ? form.images.filter(Boolean) : [form.image]).map((url, idx) => (
-                <div key={idx} className="relative rounded-xl overflow-hidden border border-gray-100">
-                  <img
-                    src={url || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop'}
-                    alt={`preview-${idx + 1}`}
-                    className="w-full h-48 object-cover"
-                    onError={(e) => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop'; }}
-                  />
-                </div>
-              ))}
-            </div>
+            )}
           </div>
 
           {/* Settings */}

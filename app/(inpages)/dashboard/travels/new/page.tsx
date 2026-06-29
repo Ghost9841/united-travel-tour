@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner"
+import ImageUpload from "@/app/(outpages)/file-upload/UploadImage";
 // Predefined categories
 const CATEGORIES = [
   "City Tour",
@@ -123,21 +124,22 @@ export default function NewTravelPage() {
       const data = await res.json();
 
       if (data.success) {
-        toast("Success!",{
+        toast("Success!", {
           description: "Travel package created successfully.",
-      });
+        });
         router.push("/dashboard/travels");
       } else {
-        toast("Error",{
+        toast("Error", {
           description: data.error || "Failed to create travel package.",
-          
+
         });
       }
     } catch (error) {
       console.error("Failed to create", error);
-      toast( "Error",
-        {description: "Something went wrong. Please try again.",
-      });
+      toast("Error",
+        {
+          description: "Something went wrong. Please try again.",
+        });
     } finally {
       setLoading(false);
     }
@@ -332,47 +334,35 @@ export default function NewTravelPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                {/* Image URL Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="image">Image URL</Label>
-                  <div className="relative">
-                    <ImageIcon className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="image"
-                      name="image"
-                      placeholder="https://example.com/image.jpg"
-                      className="pl-9"
-                      value={formData.image}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    Leave empty to use a default image
-                  </p>
+                  <Label>Travel Image</Label>
+
+                  <ImageUpload
+                    value={formData.image}
+                    onChange={(url) => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        image: url,
+                      }));
+                    }}
+                  />
                 </div>
 
-                {/* Image Preview */}
-                {imagePreview && (
-                  <div className="relative mt-4 rounded-lg overflow-hidden border">
-                    <img
-                      src={imagePreview}
-                      alt="Preview"
-                      className="w-full h-48 object-cover"
-                      onError={() => setImagePreview("")}
-                    />
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      size="icon"
-                      className="absolute top-2 right-2"
-                      onClick={() => {
-                        setImagePreview("");
-                        setFormData((prev) => ({ ...prev, image: "" }));
-                      }}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
+                {formData.image && (
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    className="flex items-center gap-2"
+                    onClick={() =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        image: "",
+                      }))
+                    }
+                  >
+                    <X className="h-4 w-4" />
+                    Remove Image
+                  </Button>
                 )}
               </CardContent>
             </Card>

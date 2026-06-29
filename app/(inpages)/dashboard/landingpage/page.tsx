@@ -4,7 +4,7 @@ import LandingPageActionCard from "./LandingPageActionCard";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50">
+    <div className="min-h-screen bg-linear-to-br from-orange-50 via-amber-50 to-yellow-50">
       <div className="max-w-7xl mx-auto p-6">
         <LandingPageActionCard
           title="Hero Home Page Carousel Images"

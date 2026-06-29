@@ -12,6 +12,7 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
+import ImageUpload from '@/app/(outpages)/file-upload/UploadImage';
 
 const isNew = (id: string) => id === 'new';
 
@@ -116,13 +117,13 @@ export default function PopularDestinationFormPage() {
   };
 
   if (loading) return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 flex items-center justify-center">
+    <div className="min-h-screen bg-linear-to-br from-orange-50 via-amber-50 to-yellow-50 flex items-center justify-center">
       <div className="w-16 h-16 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin" />
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50">
+    <div className="min-h-screen bg-linear-to-br from-orange-50 via-amber-50 to-yellow-50">
       <div className="max-w-4xl mx-auto p-6">
 
         {/* Header */}
@@ -209,54 +210,87 @@ export default function PopularDestinationFormPage() {
           {/* Image */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
             <h2 className="text-lg font-bold text-gray-900 mb-1">Image</h2>
+
             <p className="text-sm text-gray-500 mb-5">
-              Use a full URL or a local path like{' '}
-              <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs">/2026/pasupati_nath.jpeg</code>
+              Upload the destination cover image.
             </p>
+
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Image Path / URL (src) *</label>
-                <div className="relative">
-                  <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input value={form.src} required
-                    onChange={e => { set('src', e.target.value); setImagePreview(e.target.value); }}
-                    placeholder="https://... or /2026/your-image.jpeg"
-                    className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm" />
-                </div>
+                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                  Cover Image *
+                </label>
+
+                <ImageUpload
+                  value={form.src}
+                  onChange={(url) => {
+                    set("src", url);
+                    setImagePreview(url);
+                  }}
+                />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Alt Text *</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                  Alt Text *
+                </label>
+
                 <div className="relative">
                   <Type className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input value={form.alt} onChange={e => set('alt', e.target.value)} required
-                    placeholder="e.g., Pasupati Nath Temple Kathmandu"
-                    className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm" />
+
+                  <input
+                    value={form.alt}
+                    onChange={(e) => set("alt", e.target.value)}
+                    required
+                    placeholder="e.g., Pashupatinath Temple Kathmandu"
+                    className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+                  />
                 </div>
-                <p className="text-xs text-gray-400 mt-1">Descriptive text for accessibility and SEO. Auto-filled from name.</p>
+
+                <p className="text-xs text-gray-400 mt-1">
+                  Descriptive text for accessibility and SEO.
+                </p>
               </div>
 
-              {/* Preview */}
               {imagePreview && (
-                <div className="relative rounded-xl overflow-hidden border border-gray-100">
-                  <img src={imagePreview} alt="preview" className="w-full h-56 object-cover"
-                    onError={() => setImagePreview('')} />
-                  {/* Hover overlay preview */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <p className="font-bold text-base drop-shadow-lg">{form.name || 'Destination Name'}</p>
-                    <div className="flex items-center gap-1 text-xs mt-0.5 text-gray-200">
-                      <MapPin className="w-3 h-3" />{form.location || 'Location'}
+                <>
+                  <div className="relative rounded-xl overflow-hidden border border-gray-100">
+                    <img
+                      src={imagePreview}
+                      alt="preview"
+                      className="w-full h-56 object-cover"
+                    />
+
+                    <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
+
+                    <div className="absolute bottom-4 left-4 text-white">
+                      <p className="font-bold text-base">
+                        {form.name || "Destination Name"}
+                      </p>
+
+                      <div className="flex items-center gap-1 text-xs mt-1">
+                        <MapPin className="w-3 h-3" />
+                        {form.location || "Location"}
+                      </div>
+                    </div>
+
+                    <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-lg">
+                      Frontend Preview
                     </div>
                   </div>
-                  <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-lg">
-                    Frontend preview
-                  </div>
-                  <button type="button" onClick={() => { setImagePreview(''); set('src', ''); }}
-                    className="absolute top-2 left-2 p-1.5 bg-white rounded-lg shadow hover:bg-red-50">
-                    <X className="w-3.5 h-3.5 text-red-500" />
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      set("src", "");
+                      setImagePreview("");
+                    }}
+                    className="flex items-center gap-2 rounded-lg border border-red-200 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                  >
+                    <X className="w-4 h-4" />
+                    Remove Image
                   </button>
-                </div>
+                </>
               )}
             </div>
           </div>

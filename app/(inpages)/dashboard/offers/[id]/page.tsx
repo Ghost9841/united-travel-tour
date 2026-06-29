@@ -9,59 +9,60 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
+import ImageUpload from '@/app/(outpages)/file-upload/UploadImage';
 
 const isNew = (id: string) => id === 'new';
 
 export default function TrendingRouteFormPage() {
-  const router   = useRouter();
-  const params   = useParams();
-  const id       = params.id as string;
+  const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
   const creating = isNew(id);
 
-  const [loading,  setLoading]  = useState(!creating);
-  const [saving,   setSaving]   = useState(false);
+  const [loading, setLoading] = useState(!creating);
+  const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const [preview,  setPreview]  = useState('');
+  const [preview, setPreview] = useState('');
 
-const [form, setForm] = useState({
-  from:           '',
-  to:             '',
-  back:           '',
-  price:          '',
-  currency:       '£',
-  image:          '',
-  airline:        '',
-  travelClass:    'Economy',
-  checkinBaggage: '',
-  cabinBaggage:   '',
-  baseFare:       '',
-  status:         'active' as 'active' | 'draft',
-  order:          '0',
-  importantNotices: [] as string[],
-});
+  const [form, setForm] = useState({
+    from: '',
+    to: '',
+    back: '',
+    price: '',
+    currency: '£',
+    image: '',
+    airline: '',
+    travelClass: 'Economy',
+    checkinBaggage: '',
+    cabinBaggage: '',
+    baseFare: '',
+    status: 'active' as 'active' | 'draft',
+    order: '0',
+    importantNotices: [] as string[],
+  });
 
   useEffect(() => {
     if (creating) return;
     (async () => {
       try {
-        const res  = await fetch(`/api/offers/${id}`);
+        const res = await fetch(`/api/offers/${id}`);
         const data = await res.json();
         if (data.success && data.data) {
           const d = data.data;
           setForm({
-            from:           d.from           ?? '',
-            to:             d.to             ?? '',
-            back:           d.back           ?? '',
-            price:          d.price?.toString()     ?? '',
-            currency:       d.currency       ?? '£',
-            image:          d.image          ?? '',
-            airline:        d.airline        ?? '',
-            travelClass:    d.travelClass    ?? 'Economy',
+            from: d.from ?? '',
+            to: d.to ?? '',
+            back: d.back ?? '',
+            price: d.price?.toString() ?? '',
+            currency: d.currency ?? '£',
+            image: d.image ?? '',
+            airline: d.airline ?? '',
+            travelClass: d.travelClass ?? 'Economy',
             checkinBaggage: d.checkinBaggage ?? '',
-            cabinBaggage:   d.cabinBaggage   ?? '',
-            baseFare:       d.baseFare?.toString()  ?? '',
-            status:         d.status         ?? 'active',
-            order:          d.order?.toString()     ?? '0',
+            cabinBaggage: d.cabinBaggage ?? '',
+            baseFare: d.baseFare?.toString() ?? '',
+            status: d.status ?? 'active',
+            order: d.order?.toString() ?? '0',
             importantNotices: d.importantNotices ?? [],
           });
           setPreview(d.image ?? '');
@@ -104,9 +105,9 @@ const [form, setForm] = useState({
     try {
       const body = {
         ...form,
-        price:     Number(form.price)     || 0,
-        baseFare:  Number(form.baseFare)  || 0,
-        order:    Number(form.order)    || 0,
+        price: Number(form.price) || 0,
+        baseFare: Number(form.baseFare) || 0,
+        order: Number(form.order) || 0,
         importantNotices: form.importantNotices,
       };
       const res = await fetch(
@@ -125,7 +126,7 @@ const [form, setForm] = useState({
   const handleDelete = async () => {
     setDeleting(true);
     try {
-      const res  = await fetch(`/api/offers/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/offers/${id}`, { method: 'DELETE' });
       const data = await res.json();
       if (data.success) {
         toast.success('Route deleted.');
@@ -136,13 +137,13 @@ const [form, setForm] = useState({
   };
 
   if (loading) return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 flex items-center justify-center">
+    <div className="min-h-screen bg-linear-to-br from-orange-50 via-amber-50 to-yellow-50 flex items-center justify-center">
       <div className="w-16 h-16 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin" />
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50">
+    <div className="min-h-screen bg-linear-to-br from-orange-50 via-amber-50 to-yellow-50">
       <div className="max-w-4xl mx-auto p-6">
 
         {/* Header */}
@@ -196,9 +197,9 @@ const [form, setForm] = useState({
             <p className="text-sm text-gray-500 mb-5">Origin and destination details</p>
             <div className="grid grid-cols-2 gap-4">
               {[
-                { label: 'From City *',     k: 'from',     placeholder: 'e.g., London' },
-                { label: 'To City *',       k: 'to',       placeholder: 'e.g., Kathmandu' },
-                { label: 'Back City (Optional/ For two way only)',       k: 'back',       placeholder: 'e.g., London' },
+                { label: 'From City *', k: 'from', placeholder: 'e.g., London' },
+                { label: 'To City *', k: 'to', placeholder: 'e.g., Kathmandu' },
+                { label: 'Back City (Optional/ For two way only)', k: 'back', placeholder: 'e.g., London' },
 
               ].map(({ label, k, placeholder }) => (
                 <div key={k}>
@@ -217,9 +218,9 @@ const [form, setForm] = useState({
             <p className="text-sm text-gray-500 mb-5">Airline, schedule and baggage</p>
             <div className="grid grid-cols-2 gap-4">
               {[
-                { label: 'Airline *',         k: 'airline',        placeholder: 'Qatar Airways' },
-                { label: 'Check-in Baggage',  k: 'checkinBaggage', placeholder: 'Adult - 30 KG' },
-                { label: 'Cabin Baggage',     k: 'cabinBaggage',   placeholder: 'Adult - 7 KG' },
+                { label: 'Airline *', k: 'airline', placeholder: 'Qatar Airways' },
+                { label: 'Check-in Baggage', k: 'checkinBaggage', placeholder: 'Adult - 30 KG' },
+                { label: 'Cabin Baggage', k: 'cabinBaggage', placeholder: 'Adult - 7 KG' },
               ].map(({ label, k, placeholder }) => (
                 <div key={k}>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">{label}</label>
@@ -249,8 +250,8 @@ const [form, setForm] = useState({
             <p className="text-sm text-gray-500 mb-5">Fare breakdown shown on the detail page</p>
             <div className="grid grid-cols-2 gap-4">
               {[
-                { label: 'Display Price',  k: 'price',     placeholder: '900' },
-                { label: 'Currency',       k: 'currency',  placeholder: '£' },
+                { label: 'Display Price', k: 'price', placeholder: '900' },
+                { label: 'Currency', k: 'currency', placeholder: '£' },
               ].map(({ label, k, placeholder }) => (
                 <div key={k}>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">{label}</label>
@@ -263,26 +264,36 @@ const [form, setForm] = useState({
             </div>
           </div>
 
-          {/* Image */}
+          {/* City Image */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-1">City Image</h2>
-            <p className="text-sm text-gray-500 mb-5">Destination photo shown on the route card</p>
-            <div className="relative">
-              <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input value={form.image}
-                onChange={e => { set('image', e.target.value); setPreview(e.target.value); }}
-                placeholder="https://... or /images/destination.jpeg"
-                className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm" />
-            </div>
+            <h2 className="text-lg font-bold text-gray-900 mb-1">
+              City Image
+            </h2>
+
+            <p className="text-sm text-gray-500 mb-5">
+              Destination photo shown on the route card.
+            </p>
+
+            <ImageUpload
+              value={form.image}
+              onChange={(url) => {
+                set("image", url);
+                setPreview(url);
+              }}
+            />
+
             {preview && (
-              <div className="relative mt-4 rounded-xl overflow-hidden border border-gray-100">
-                <img src={preview} alt="preview" className="w-full h-40 object-cover"
-                  onError={() => setPreview('')} />
-                <button type="button" onClick={() => { setPreview(''); set('image', ''); }}
-                  className="absolute top-2 right-2 p-1.5 bg-white rounded-lg shadow hover:bg-red-50">
-                  <X className="w-3.5 h-3.5 text-red-500" />
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  set("image", "");
+                  setPreview("");
+                }}
+                className="mt-4 flex items-center gap-2 rounded-lg border border-red-200 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+              >
+                <X className="w-4 h-4" />
+                Remove Image
+              </button>
             )}
           </div>
 
@@ -306,41 +317,41 @@ const [form, setForm] = useState({
                 <p className="text-xs text-gray-500 mb-2">Lower = appears first</p>
                 <input type="number" min="0" value={form.order} onChange={e => set('order', e.target.value)}
                   className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 text-sm" />
-          </div>
+              </div>
             </div>
 
-          {/* Important Notices */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <div className="flex items-center justify-between mb-5">
-              <div>
-                <h2 className="text-lg font-bold text-gray-900">Important Notices</h2>
-                <p className="text-sm text-gray-500">Add important information displayed on the route detail page</p>
-              </div>
-              <button type="button" onClick={addNotice}
-                className="flex items-center gap-2 bg-orange-500 text-white px-4 py-2 rounded-xl hover:bg-orange-600 text-sm font-medium">
-                <Plus className="w-4 h-4" /> Add Notice
-              </button>
-            </div>
-            <div className="space-y-3">
-              {form.importantNotices.map((notice, index) => (
-                <div key={index} className="flex items-center gap-3">
-                  <input
-                    value={notice}
-                    onChange={e => updateNotice(index, e.target.value)}
-                    placeholder="Enter important notice..."
-                    className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
-                  />
-                  <button type="button" onClick={() => removeNotice(index)}
-                    className="p-2 bg-red-50 text-red-500 rounded-lg hover:bg-red-100">
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+            {/* Important Notices */}
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+              <div className="flex items-center justify-between mb-5">
+                <div>
+                  <h2 className="text-lg font-bold text-gray-900">Important Notices</h2>
+                  <p className="text-sm text-gray-500">Add important information displayed on the route detail page</p>
                 </div>
-              ))}
-              {form.importantNotices.length === 0 && (
-                <p className="text-sm text-gray-400 italic">No important notices added yet.</p>
-              )}
+                <button type="button" onClick={addNotice}
+                  className="flex items-center gap-2 bg-orange-500 text-white px-4 py-2 rounded-xl hover:bg-orange-600 text-sm font-medium">
+                  <Plus className="w-4 h-4" /> Add Notice
+                </button>
+              </div>
+              <div className="space-y-3">
+                {form.importantNotices.map((notice, index) => (
+                  <div key={index} className="flex items-center gap-3">
+                    <input
+                      value={notice}
+                      onChange={e => updateNotice(index, e.target.value)}
+                      placeholder="Enter important notice..."
+                      className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+                    />
+                    <button type="button" onClick={() => removeNotice(index)}
+                      className="p-2 bg-red-50 text-red-500 rounded-lg hover:bg-red-100">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+                {form.importantNotices.length === 0 && (
+                  <p className="text-sm text-gray-400 italic">No important notices added yet.</p>
+                )}
+              </div>
             </div>
-          </div>
           </div>
 
           {/* Actions */}
