@@ -81,6 +81,7 @@ export async function POST(req: Request): Promise<NextResponse<ApiResponse<Hotel
         roomType: body.roomType,
         capacity: body.capacity,
         status: body.status || "active",
+        showInOffers: Boolean(body.showInOffers),
       },
     });
 

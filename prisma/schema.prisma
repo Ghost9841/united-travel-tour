@@ -78,6 +78,7 @@ model Hotel {
   roomType      String
   capacity      String
   status        String   @default("active") // 'active' or 'draft'
+  showInOffers Boolean @default(false)
 
   // Timestamps
   createdAt     DateTime @default(now()) @map("created_at")
@@ -115,7 +116,7 @@ model TrendingRoute {
   id             Int      @id @default(autoincrement())
   from           String
   to             String
-  back           String   @default("")
+  back           String?   @default("")
   price          Float
   currency       String   @default("£")
   image          String   @default("")

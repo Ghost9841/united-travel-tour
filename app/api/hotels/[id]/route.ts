@@ -111,6 +111,7 @@ export async function PUT(
         roomType: body.roomType,
         capacity: body.capacity,
         status: body.status || "active",
+        showInOffers: Boolean(body.showInOffers),
       },
     });
 

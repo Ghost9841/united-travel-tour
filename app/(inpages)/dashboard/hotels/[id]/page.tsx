@@ -56,6 +56,7 @@ export default function HotelFormPage() {
     roomType: ROOM_TYPES[0],
     capacity: CAPACITIES[3],
     status: 'active' as 'active' | 'draft',
+    showInOffers: false,
   });
 
   useEffect(() => {
@@ -84,6 +85,7 @@ export default function HotelFormPage() {
             roomType: h.roomType ?? ROOM_TYPES[0],
             capacity: h.capacity ?? CAPACITIES[3],
             status: h.status ?? 'active',
+            showInOffers: h.showInOffers ?? false,
           });
           setSelectedAmenities(h.amenities ?? []);
           setImagePreview(imageList[0] ?? '');
@@ -384,6 +386,20 @@ export default function HotelFormPage() {
                 <option value="active">Active</option>
                 <option value="draft">Draft</option>
               </select>
+            </div>
+
+            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl mt-4">
+              <div>
+                <p className="text-sm font-semibold text-gray-800">Add to Offers</p>
+                <p className="text-xs text-gray-500">Show this hotel on the public Offers page</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => set('showInOffers', !form.showInOffers)}
+                className={`relative w-11 h-6 rounded-full transition-colors ${form.showInOffers ? 'bg-orange-500' : 'bg-gray-300'}`}
+              >
+                <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${form.showInOffers ? 'translate-x-5' : ''}`} />
+              </button>
             </div>
           </div>
 
