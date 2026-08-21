@@ -7,9 +7,13 @@ import {
   Loader2,
   ShieldCheck,
   ArrowLeft,
+  PlaneTakeoff,
+  PlaneLanding,
+  CalendarDays,
 } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import Image from "next/image";
 
 interface TermsVersion {
   id: number;
@@ -30,10 +34,12 @@ interface Agreement {
   journeyType: "ONE_WAY" | "TWO_WAY";
   customerSignature: string | null;
   date: string | null;
+  departureDate: string | null;
+  returnDate: string | null;
   acceptTerms: boolean;
   termsVersionId: number;
   termsVersion: TermsVersion;
-  termsSnapshot: string; // JSON string with english/nepali
+  termsSnapshot: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -49,7 +55,9 @@ export default function CustomerTermsAgreementPage() {
   const [error, setError] = useState("");
 
   const [signature, setSignature] = useState("");
-  const [date, setDate] = useState("");
+  const [signatureDate, setSignatureDate] = useState("");
+  const [departureDate, setDepartureDate] = useState("");
+  const [returnDate, setReturnDate] = useState("");
   const [acceptTerms, setAcceptTerms] = useState(false);
 
   useEffect(() => {
@@ -65,7 +73,6 @@ export default function CustomerTermsAgreementPage() {
           throw new Error(data.error || "Agreement not found");
         }
 
-        // Set the agreement directly (data is the agreement object)
         setAgreement(data);
 
         if (data.acceptTerms) {
@@ -73,10 +80,20 @@ export default function CustomerTermsAgreementPage() {
           setSignature(data.customerSignature || "");
 
           if (data.date) {
-            setDate(
-              new Date(data.date)
-                .toISOString()
-                .split("T")[0]
+            setSignatureDate(
+              new Date(data.date).toISOString().split("T")[0]
+            );
+          }
+
+          if (data.departureDate) {
+            setDepartureDate(
+              new Date(data.departureDate).toISOString().split("T")[0]
+            );
+          }
+
+          if (data.returnDate) {
+            setReturnDate(
+              new Date(data.returnDate).toISOString().split("T")[0]
             );
           }
 
@@ -105,9 +122,26 @@ export default function CustomerTermsAgreementPage() {
       return;
     }
 
-    if (!date) {
-      setError("Please select the date.");
+    if (!signatureDate) {
+      setError("Please select the signature date.");
       return;
+    }
+
+    if (!departureDate) {
+      setError("Please select the departure date.");
+      return;
+    }
+
+    // Validate return date for TWO_WAY
+    if (agreement?.journeyType === "TWO_WAY") {
+      if (!returnDate) {
+        setError("Please select the return date for TWO_WAY journey.");
+        return;
+      }
+      if (new Date(returnDate) < new Date(departureDate)) {
+        setError("Return date must be after departure date.");
+        return;
+      }
     }
 
     if (!acceptTerms) {
@@ -118,16 +152,23 @@ export default function CustomerTermsAgreementPage() {
     try {
       setSubmitting(true);
 
+      const payload: any = {
+        customerSignature: signature.trim(),
+        date: new Date(signatureDate).toISOString(),
+        departureDate: new Date(departureDate).toISOString(),
+        acceptTerms: true,
+      };
+
+      if (returnDate) {
+        payload.returnDate = new Date(returnDate).toISOString();
+      }
+
       const response = await fetch(`/api/terms-agreement/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          customerSignature: signature.trim(),
-          date,
-          acceptTerms: true,
-        }),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -157,7 +198,6 @@ export default function CustomerTermsAgreementPage() {
     );
   }
 
-  // Handle error case - if there's an error or no agreement
   if (error || !agreement) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#f5f7fa] p-6">
@@ -180,7 +220,6 @@ export default function CustomerTermsAgreementPage() {
     );
   }
 
-  // Get text from termsVersion or parse from termsSnapshot
   const getEnglishText = () => {
     if (agreement.termsVersion?.englishText) {
       return agreement.termsVersion.englishText;
@@ -216,45 +255,54 @@ export default function CustomerTermsAgreementPage() {
   const versionNumber = agreement.termsVersion?.version || "N/A";
   const versionTitle = agreement.termsVersion?.title || "Terms & Conditions";
 
+  const formatDate = (dateStr: string | null) => {
+    if (!dateStr) return "Not set";
+    return new Date(dateStr).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
   return (
     <div className="min-h-screen bg-[#f1f5f8]">
       {/* Header */}
-      <header className="bg-[#0b3558] text-white">
+      <header className="bg-[#0b3558] text-white rounded-b-2xl">
         <div className="mx-auto max-w-5xl px-6 py-16">
-       
+
         </div>
       </header>
 
       <main className="mx-auto max-w-5xl space-y-4 px-4 py-6 md:px-6">
-        {/* Status Alert - if already submitted */}
-             <header className="bg-[#0b3558] text-white rounded-2xl">
-        <div className="mx-auto max-w-5xl px-6 py-16">
-       
-           <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h1 className="text-2xl font-bold tracking-wide">
-                UNITED
-              </h1>
-              <p className="text-xs tracking-[0.3em] text-gray-300">
-                TRAVEL & TOURS LIMITED
-              </p>
-            </div>
+        <header className="bg-[#0b3558] text-white rounded-2xl">
+          <div className="mx-auto max-w-5xl px-6 py-8">
+            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+              <div className="flex">
 
-            <div className="md:text-right">
-              <h2 className="text-xl font-bold">
-                NON-REFUNDABLE TICKET
-              </h2>
-              <p className="mt-1 text-sm font-semibold text-orange-400">
-                TERMS & CONDITIONS FORM
-              </p>
-              <p className="mt-1 text-xs text-gray-300">
-                ENGLISH + NEPALI
-              </p>
+                <Image
+                  src="/UNITED_Logo-01.svg"
+                  alt="Logo"
+                  width={256}
+                  height={64}
+                />
+               
+              </div>
+
+              <div className="md:text-right">
+                <h2 className="text-xl font-bold">
+                  NON-REFUNDABLE TICKET
+                </h2>
+                <p className="mt-1 text-sm font-semibold text-orange-400">
+                  TERMS & CONDITIONS FORM
+                </p>
+                <p className="mt-1 text-xs text-gray-300">
+                  ENGLISH + NEPALI
+                </p>
+              </div>
             </div>
           </div>
-          
-        </div>
-      </header>
+        </header>
+        {/* Status Alert - if already submitted */}
         {submitted && (
           <div className="flex items-center gap-3 rounded-xl border border-green-200 bg-green-50 p-4">
             <CheckCircle2 className="h-6 w-6 text-green-600" />
@@ -263,8 +311,14 @@ export default function CustomerTermsAgreementPage() {
                 Agreement Already Submitted
               </p>
               <p className="text-sm text-green-700">
-                This agreement was already accepted on {date ? new Date(date).toLocaleDateString() : "N/A"}.
+                This agreement was already accepted on {formatDate(agreement.date)}.
               </p>
+              <div className="mt-1 text-xs text-green-600 space-y-0.5">
+                <p>Departure: {formatDate(agreement.departureDate)}</p>
+                {agreement.returnDate && (
+                  <p>Return: {formatDate(agreement.returnDate)}</p>
+                )}
+              </div>
             </div>
           </div>
         )}
@@ -299,25 +353,55 @@ export default function CustomerTermsAgreementPage() {
               <div className="flex gap-6 text-sm">
                 <span className="flex items-center gap-2">
                   <span
-                    className={`inline-block h-5 w-5 rounded border ${
-                      agreement.journeyType === "TWO_WAY"
+                    className={`inline-block h-5 w-5 rounded border ${agreement.journeyType === "TWO_WAY"
                         ? "border-[#0b3558] bg-[#0b3558]"
                         : "border-gray-400"
-                    }`}
+                      }`}
                   />
                   RETURN / TWO WAY
                 </span>
 
                 <span className="flex items-center gap-2">
                   <span
-                    className={`inline-block h-5 w-5 rounded border ${
-                      agreement.journeyType === "ONE_WAY"
+                    className={`inline-block h-5 w-5 rounded border ${agreement.journeyType === "ONE_WAY"
                         ? "border-[#0b3558] bg-[#0b3558]"
                         : "border-gray-400"
-                    }`}
+                      }`}
                   />
                   ONE WAY
                 </span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Travel Dates */}
+        <section className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+          <h2 className="mb-5 text-sm font-bold uppercase tracking-wide text-[#0b3558] flex items-center gap-2">
+            <CalendarDays className="h-4 w-4" />
+            Travel Dates / यात्रा मितिहरू
+          </h2>
+
+          <div className="grid gap-5 md:grid-cols-2">
+            <div>
+              <p className="mb-2 text-xs font-bold text-gray-700 flex items-center gap-1">
+                <PlaneTakeoff className="h-3.5 w-3.5" />
+                DEPARTURE DATE / प्रस्थान मिति
+              </p>
+              <div className="border-b border-gray-300 pb-2 text-sm text-gray-800">
+                {formatDate(agreement.departureDate)}
+              </div>
+            </div>
+
+            <div>
+              <p className="mb-2 text-xs font-bold text-gray-700 flex items-center gap-1">
+                <PlaneLanding className="h-3.5 w-3.5" />
+                RETURN DATE / फिर्ता मिति
+              </p>
+              <div className="border-b border-gray-300 pb-2 text-sm text-gray-800">
+                {agreement.journeyType === "TWO_WAY"
+                  ? formatDate(agreement.returnDate)
+                  : "N/A (One Way)"}
               </div>
             </div>
           </div>
@@ -394,11 +478,12 @@ export default function CustomerTermsAgreementPage() {
                 </label>
               </div>
 
-              {/* Signature and Date */}
-              <div className="mt-6 grid gap-5 md:grid-cols-2">
+              {/* Signature and Dates */}
+              <div className="mt-6 space-y-5">
+                {/* Signature */}
                 <div>
                   <label className="mb-2 block text-xs font-bold text-gray-700">
-                    CUSTOMER SIGNATURE / NAME
+                    CUSTOMER SIGNATURE / NAME <span className="text-red-500">*</span>
                   </label>
                   <input
                     value={signature}
@@ -408,17 +493,57 @@ export default function CustomerTermsAgreementPage() {
                   />
                 </div>
 
+                {/* Signature Date */}
                 <div>
-                  <label className="mb-2 block text-xs font-bold text-gray-700">
-                    DATE / मिति
+                  <label className="mb-2 block text-xs font-bold text-gray-700 flex items-center gap-1">
+                    <CalendarDays className="h-3.5 w-3.5" />
+                    SIGNATURE DATE / हस्ताक्षर मिति <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
+                    value={signatureDate}
+                    onChange={(e) => setSignatureDate(e.target.value)}
                     className="h-12 w-full border-0 border-b-2 border-gray-300 bg-transparent px-1 text-sm outline-none focus:border-[#0b3558]"
+                    max={new Date().toISOString().split("T")[0]}
                   />
                 </div>
+
+                {/* Departure Date - Readonly (pre-filled by admin) */}
+                <div>
+                  <label className="mb-2 block text-xs font-bold text-gray-700 flex items-center gap-1">
+                    <PlaneTakeoff className="h-3.5 w-3.5" />
+                    DEPARTURE DATE / प्रस्थान मिति <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="date"
+                    value={departureDate}
+                    onChange={(e) => setDepartureDate(e.target.value)}
+                    className="h-12 w-full border-0 border-b-2 border-gray-300 bg-transparent px-1 text-sm outline-none focus:border-[#0b3558]"
+                    min={new Date().toISOString().split("T")[0]}
+                  />
+                </div>
+
+                {/* Return Date - Only for TWO_WAY */}
+                {agreement.journeyType === "TWO_WAY" && (
+                  <div>
+                    <label className="mb-2 block text-xs font-bold text-gray-700 flex items-center gap-1">
+                      <PlaneLanding className="h-3.5 w-3.5" />
+                      RETURN DATE / फिर्ता मिति <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="date"
+                      value={returnDate}
+                      onChange={(e) => setReturnDate(e.target.value)}
+                      className="h-12 w-full border-0 border-b-2 border-gray-300 bg-transparent px-1 text-sm outline-none focus:border-[#0b3558]"
+                      min={departureDate || new Date().toISOString().split("T")[0]}
+                    />
+                    {departureDate && returnDate && new Date(returnDate) < new Date(departureDate) && (
+                      <p className="mt-1 text-xs text-red-500">
+                        Return date must be after departure date
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Submit Button */}
@@ -446,6 +571,13 @@ export default function CustomerTermsAgreementPage() {
                 <p className="text-sm text-green-700">
                   Thank you. Your acceptance has been recorded.
                 </p>
+                <div className="mt-1 text-xs text-green-600 space-y-0.5">
+                  <p>Signed: {formatDate(agreement.date)}</p>
+                  <p>Departure: {formatDate(agreement.departureDate)}</p>
+                  {agreement.returnDate && (
+                    <p>Return: {formatDate(agreement.returnDate)}</p>
+                  )}
+                </div>
               </div>
             </div>
           )}

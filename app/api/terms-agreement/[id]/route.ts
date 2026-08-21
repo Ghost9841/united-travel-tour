@@ -1,23 +1,24 @@
+// app/api/terms-agreement/[id]/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
 
-interface Params {
-  params: Promise<{
-    id: string;
-  }>;
-}
-
 export async function GET(
   req: NextRequest,
-  { params }: Params
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
+    const agreementId = parseInt(id);
+
+    if (isNaN(agreementId)) {
+      return NextResponse.json(
+        { error: "Invalid agreement ID" },
+        { status: 400 }
+      );
+    }
 
     const agreement = await prisma.termsAgreement.findUnique({
-      where: {
-        id: Number(id),
-      },
+      where: { id: agreementId },
       include: {
         termsVersion: true,
       },
@@ -25,9 +26,7 @@ export async function GET(
 
     if (!agreement) {
       return NextResponse.json(
-        {
-          error: "Agreement not found",
-        },
+        { error: "Agreement not found" },
         { status: 404 }
       );
     }
@@ -35,11 +34,8 @@ export async function GET(
     return NextResponse.json(agreement);
   } catch (error) {
     console.error("GET AGREEMENT ERROR:", error);
-
     return NextResponse.json(
-      {
-        error: "Failed to fetch agreement",
-      },
+      { error: "Failed to fetch agreement" },
       { status: 500 }
     );
   }
@@ -47,123 +43,125 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  { params }: Params
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
+    const agreementId = parseInt(id);
 
-    const agreementId = Number(id);
-
-    const existing = await prisma.termsAgreement.findUnique({
-      where: {
-        id: agreementId,
-      },
-    });
-
-    if (!existing) {
+    if (isNaN(agreementId)) {
       return NextResponse.json(
-        {
-          error: "Agreement not found",
-        },
-        { status: 404 }
+        { error: "Invalid agreement ID" },
+        { status: 400 }
       );
     }
 
     const body = await req.json();
 
-    const {
-      name,
-      phoneNumber,
-      sectorRoute,
-      journeyType,
-      date,
-      acceptTerms,
-      customerSignature,
-      termsVersionId,
-    } = body;
+    // Check if agreement exists
+    const existingAgreement = await prisma.termsAgreement.findUnique({
+      where: { id: agreementId },
+    });
+
+    if (!existingAgreement) {
+      return NextResponse.json(
+        { error: "Agreement not found" },
+        { status: 404 }
+      );
+    }
 
     const updateData: any = {};
 
-    if (name !== undefined) updateData.name = name;
-    if (phoneNumber !== undefined) {
-      updateData.phoneNumber = phoneNumber;
+    // Admin fields
+    if (body.name !== undefined) updateData.name = body.name;
+    if (body.phoneNumber !== undefined) updateData.phoneNumber = body.phoneNumber;
+    if (body.sectorRoute !== undefined) updateData.sectorRoute = body.sectorRoute;
+    
+    if (body.journeyType !== undefined) {
+      // When changing journey type, ensure return date is handled
+      if (body.journeyType === "ONE_WAY") {
+        updateData.returnDate = null; // Clear return date for ONE_WAY
+      }
+      updateData.journeyType = body.journeyType;
     }
-
-    if (sectorRoute !== undefined) {
-      updateData.sectorRoute = sectorRoute;
-    }
-
-    if (journeyType !== undefined) {
-      if (!["TWO_WAY", "ONE_WAY"].includes(journeyType)) {
+    
+    // Admin date fields
+    if (body.departureDate !== undefined) {
+      if (!body.departureDate) {
         return NextResponse.json(
-          {
-            error: "Invalid journey type",
-          },
+          { error: "Departure date is required" },
           { status: 400 }
         );
       }
-
-      updateData.journeyType = journeyType;
+      updateData.departureDate = new Date(body.departureDate);
     }
 
-    if (date !== undefined) {
-      updateData.date = date ? new Date(date) : null;
+    if (body.returnDate !== undefined) {
+      // For ONE_WAY, return date should be null
+      if (body.journeyType === "ONE_WAY" || existingAgreement.journeyType === "ONE_WAY") {
+        updateData.returnDate = null;
+      } else if (body.returnDate) {
+        // Validate return date is after departure date
+        const departure = body.departureDate ? new Date(body.departureDate) : existingAgreement.departureDate;
+        if (departure && new Date(body.returnDate) < departure) {
+          return NextResponse.json(
+            { error: "Return date must be after departure date" },
+            { status: 400 }
+          );
+        }
+        updateData.returnDate = new Date(body.returnDate);
+      } else {
+        updateData.returnDate = null;
+      }
     }
-
-    if (acceptTerms !== undefined) {
-      updateData.acceptTerms = Boolean(acceptTerms);
-    }
-
-    if (customerSignature !== undefined) {
-      updateData.customerSignature = customerSignature;
-    }
-
-    // If administrator changes the terms version
-    if (
-      termsVersionId !== undefined &&
-      Number(termsVersionId) !== existing.termsVersionId
-    ) {
-      const newVersion = await prisma.termsVersion.findUnique({
-        where: {
-          id: Number(termsVersionId),
-        },
+    
+    // Terms version update (with snapshot update)
+    if (body.termsVersionId !== undefined) {
+      const termsVersion = await prisma.termsVersion.findUnique({
+        where: { id: Number(body.termsVersionId) },
       });
 
-      if (!newVersion) {
+      if (!termsVersion) {
         return NextResponse.json(
-          {
-            error: "Terms version not found",
-          },
+          { error: "Terms version not found" },
           { status: 404 }
         );
       }
 
-      updateData.termsVersionId = newVersion.id;
-      updateData.englishSnapshot =
-        newVersion.englishText;
-
-      updateData.nepaliSnapshot =
-        newVersion.nepaliText;
+      updateData.termsVersionId = Number(body.termsVersionId);
+      updateData.termsSnapshot = JSON.stringify({
+        english: termsVersion.englishText,
+        nepali: termsVersion.nepaliText,
+      });
     }
 
-    const agreement = await prisma.termsAgreement.update({
-      where: {
-        id: agreementId,
-      },
+    // Customer fields - signature (admin can update these too)
+    if (body.customerSignature !== undefined) {
+      updateData.customerSignature = body.customerSignature;
+    }
+
+    // Customer signature date
+    if (body.date !== undefined) {
+      updateData.date = body.date ? new Date(body.date) : null;
+    }
+
+    if (body.acceptTerms !== undefined) {
+      updateData.acceptTerms = body.acceptTerms;
+    }
+
+    const updatedAgreement = await prisma.termsAgreement.update({
+      where: { id: agreementId },
       data: updateData,
       include: {
         termsVersion: true,
       },
     });
 
-    return NextResponse.json(agreement);
+    return NextResponse.json(updatedAgreement);
   } catch (error) {
     console.error("UPDATE AGREEMENT ERROR:", error);
-
     return NextResponse.json(
-      {
-        error: "Failed to update agreement",
-      },
+      { error: "Failed to update agreement" },
       { status: 500 }
     );
   }
@@ -171,45 +169,42 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: Params
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
+    const agreementId = parseInt(id);
 
-    const agreementId = Number(id);
+    if (isNaN(agreementId)) {
+      return NextResponse.json(
+        { error: "Invalid agreement ID" },
+        { status: 400 }
+      );
+    }
 
-    const existing = await prisma.termsAgreement.findUnique({
-      where: {
-        id: agreementId,
-      },
+    const existingAgreement = await prisma.termsAgreement.findUnique({
+      where: { id: agreementId },
     });
 
-    if (!existing) {
+    if (!existingAgreement) {
       return NextResponse.json(
-        {
-          error: "Agreement not found",
-        },
+        { error: "Agreement not found" },
         { status: 404 }
       );
     }
 
     await prisma.termsAgreement.delete({
-      where: {
-        id: agreementId,
-      },
+      where: { id: agreementId },
     });
-
-    return NextResponse.json({
-      success: true,
-      message: "Agreement deleted successfully",
-    });
-  } catch (error) {
-    console.error("DELETE AGREEMENT ERROR:", error);
 
     return NextResponse.json(
-      {
-        error: "Failed to delete agreement",
-      },
+      { message: "Agreement deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("DELETE AGREEMENT ERROR:", error);
+    return NextResponse.json(
+      { error: "Failed to delete agreement" },
       { status: 500 }
     );
   }

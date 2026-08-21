@@ -15,6 +15,9 @@ import {
   Phone,
   FileText,
   ChevronDown,
+  PlaneTakeoff,
+  PlaneLanding,
+  CalendarDays,
 } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -41,6 +44,8 @@ interface Agreement {
   termsVersion: TermsVersion;
   englishSnapshot: string;
   nepaliSnapshot: string;
+  departureDate: string | null;
+  returnDate: string | null;
   date: string | null;
   acceptTerms: boolean;
   customerSignature: string | null;
@@ -67,6 +72,8 @@ export default function AgreementDetailPage() {
   const [sectorRoute, setSectorRoute] = useState("");
   const [journeyType, setJourneyType] = useState<"TWO_WAY" | "ONE_WAY">("TWO_WAY");
   const [termsVersionId, setTermsVersionId] = useState<number | "">("");
+  const [departureDate, setDepartureDate] = useState("");
+  const [returnDate, setReturnDate] = useState("");
 
   // ==========================================
   // LOAD AGREEMENT & VERSIONS
@@ -106,6 +113,18 @@ export default function AgreementDetailPage() {
       setSectorRoute(agreementData.sectorRoute || "");
       setJourneyType(agreementData.journeyType || "TWO_WAY");
       setTermsVersionId(agreementData.termsVersionId || "");
+      
+      // Populate dates
+      if (agreementData.departureDate) {
+        setDepartureDate(
+          new Date(agreementData.departureDate).toISOString().split("T")[0]
+        );
+      }
+      if (agreementData.returnDate) {
+        setReturnDate(
+          new Date(agreementData.returnDate).toISOString().split("T")[0]
+        );
+      }
     } catch (error) {
       console.error(error);
       setError(
@@ -142,6 +161,25 @@ export default function AgreementDetailPage() {
       setSaving(true);
       setError("");
 
+      // Validate dates
+      if (!departureDate) {
+        setError("Departure date is required.");
+        setSaving(false);
+        return;
+      }
+
+      if (journeyType === "TWO_WAY" && !returnDate) {
+        setError("Return date is required for TWO_WAY journeys.");
+        setSaving(false);
+        return;
+      }
+
+      if (returnDate && new Date(returnDate) < new Date(departureDate)) {
+        setError("Return date must be after departure date.");
+        setSaving(false);
+        return;
+      }
+
       // Get the selected version's text for snapshots
       const version = versions.find((v) => v.id === Number(termsVersionId));
       
@@ -151,6 +189,8 @@ export default function AgreementDetailPage() {
         sectorRoute,
         journeyType,
         termsVersionId: termsVersionId ? Number(termsVersionId) : undefined,
+        departureDate: new Date(departureDate).toISOString(),
+        returnDate: returnDate ? new Date(returnDate).toISOString() : null,
       };
 
       // If a version is selected, include the snapshot texts
@@ -174,11 +214,12 @@ export default function AgreementDetailPage() {
       }
 
       setAgreement(data);
-      alert("Agreement updated successfully.");
+      toast.success("Agreement updated successfully.");
     } catch (error) {
       setError(
         error instanceof Error ? error.message : "Failed to save."
       );
+      toast.error(error instanceof Error ? error.message : "Failed to save.");
     } finally {
       setSaving(false);
     }
@@ -192,13 +233,27 @@ export default function AgreementDetailPage() {
 
   const copyLink = async () => {
     try {
-      await navigator.clipboard.writeText(customerLink);       
-    toast.success('Link copied to clipboard!');
+      await navigator.clipboard.writeText(customerLink);
       setCopySuccess(true);
+      toast.success('Link copied to clipboard!');
       setTimeout(() => setCopySuccess(false), 3000);
     } catch (error) {
       console.error("Failed to copy:", error);
+      toast.error("Failed to copy link.");
     }
+  };
+
+  // ==========================================
+  // FORMAT DATE
+  // ==========================================
+
+  const formatDate = (dateStr: string | null) => {
+    if (!dateStr) return "Not set";
+    return new Date(dateStr).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
   };
 
   // ==========================================
@@ -409,15 +464,59 @@ export default function AgreementDetailPage() {
               <select
                 value={journeyType}
                 disabled={locked}
-                onChange={(e) =>
-                  setJourneyType(e.target.value as "TWO_WAY" | "ONE_WAY")
-                }
+                onChange={(e) => {
+                  const newType = e.target.value as "TWO_WAY" | "ONE_WAY";
+                  setJourneyType(newType);
+                  // Clear return date when switching to ONE_WAY
+                  if (newType === "ONE_WAY") {
+                    setReturnDate("");
+                  }
+                }}
                 className="h-11 w-full rounded-lg border border-gray-200 px-4 text-sm outline-none focus:border-[#0b3558] focus:ring-2 focus:ring-[#0b3558]/10 disabled:bg-gray-100 disabled:text-gray-500"
               >
                 <option value="ONE_WAY">One Way</option>
                 <option value="TWO_WAY">Return / Two Way</option>
               </select>
             </div>
+
+            {/* Departure Date */}
+            <div>
+              <label className="mb-2 block text-sm font-medium text-gray-700 flex items-center gap-2">
+                <PlaneTakeoff className="h-4 w-4" />
+                Departure Date <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="date"
+                value={departureDate}
+                disabled={locked}
+                onChange={(e) => setDepartureDate(e.target.value)}
+                className="h-11 w-full rounded-lg border border-gray-200 px-4 text-sm outline-none focus:border-[#0b3558] focus:ring-2 focus:ring-[#0b3558]/10 disabled:bg-gray-100 disabled:text-gray-500"
+                min={new Date().toISOString().split("T")[0]}
+              />
+            </div>
+
+            {/* Return Date - Only for TWO_WAY */}
+            {journeyType === "TWO_WAY" && (
+              <div>
+                <label className="mb-2 block text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <PlaneLanding className="h-4 w-4" />
+                  Return Date <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="date"
+                  value={returnDate}
+                  disabled={locked}
+                  onChange={(e) => setReturnDate(e.target.value)}
+                  className="h-11 w-full rounded-lg border border-gray-200 px-4 text-sm outline-none focus:border-[#0b3558] focus:ring-2 focus:ring-[#0b3558]/10 disabled:bg-gray-100 disabled:text-gray-500"
+                  min={departureDate || new Date().toISOString().split("T")[0]}
+                />
+                {departureDate && returnDate && new Date(returnDate) < new Date(departureDate) && (
+                  <p className="mt-1 text-xs text-red-500">
+                    Return date must be after departure date
+                  </p>
+                )}
+              </div>
+            )}
 
             {/* Terms Version Selector */}
             <div className="md:col-span-2">
@@ -464,6 +563,33 @@ export default function AgreementDetailPage() {
               </button>
             </div>
           )}
+        </div>
+
+        {/* ==========================================
+            TRAVEL DATES (Read-only display)
+        ========================================== */}
+
+        <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+          <div className="border-b border-gray-200 px-6 py-5">
+            <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+              <CalendarDays className="h-5 w-5 text-[#0b3558]" />
+              Travel Dates
+            </h2>
+          </div>
+
+          <div className="grid gap-5 p-6 md:grid-cols-2">
+            <Info
+              label="Departure Date"
+              value={formatDate(agreement.departureDate)}
+              icon={<PlaneTakeoff className="h-4 w-4" />}
+            />
+
+            <Info
+              label="Return Date"
+              value={agreement.journeyType === "TWO_WAY" ? formatDate(agreement.returnDate) : "N/A (One Way)"}
+              icon={<PlaneLanding className="h-4 w-4" />}
+            />
+          </div>
         </div>
 
         {/* ==========================================
@@ -540,7 +666,7 @@ export default function AgreementDetailPage() {
             />
 
             <Info
-              label="Date"
+              label="Signature Date"
               value={
                 agreement.date
                   ? new Date(agreement.date).toLocaleDateString("en-GB", {
@@ -618,13 +744,16 @@ function Field({
 // INFO COMPONENT
 // ==========================================
 
-function Info({ label, value }: { label: string; value: string }) {
+function Info({ label, value, icon }: { label: string; value: string; icon?: React.ReactNode }) {
   return (
     <div>
       <p className="mb-1 text-xs font-medium uppercase tracking-wide text-gray-400">
         {label}
       </p>
-      <p className="text-sm font-medium text-gray-800">{value || "—"}</p>
+      <div className="flex items-center gap-2 text-sm font-medium text-gray-800">
+        {icon}
+        <span>{value || "—"}</span>
+      </div>
     </div>
   );
 }

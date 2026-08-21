@@ -229,9 +229,14 @@ model TermsAgreement {
   sectorRoute       String      @map("sector_route")
   journeyType       JourneyType @map("journey_type")
 
+    // CUSTOMER FILLS - TWO DATES
+  departureDate     DateTime?    @map("departure_date")  // Required
+  returnDate        DateTime?    @map("return_date")     // Optional (only for TWO_WAY)
+  
   // SELECTED TERMS VERSION
   termsVersionId    Int?         @map("terms_version_id")
   termsVersion      TermsVersion? @relation(fields: [termsVersionId], references: [id])
+
 
   // COPY OF THE TERMS AT CREATION TIME
   termsSnapshot     String?      @map("terms_snapshot")
