@@ -1,11 +1,9 @@
-// prisma/schema.prisma
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql" // or "mysql", "sqlite", "mongodb"
+  provider = "postgresql"
   url      = env("DIRECT_URL")
 }
 
@@ -13,7 +11,7 @@ model Travel {
   id            Int      @id @default(autoincrement())
   title         String
   location      String
-  description   String   @db.Text
+  description   String
   price         Float
   originalPrice Float
   duration      String
@@ -22,8 +20,6 @@ model Travel {
   image         String
   category      String
   groupSize     String   @map("group_size")
-  
-  // Timestamps
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
 
@@ -33,21 +29,19 @@ model Travel {
 model ExplorePage {
   id              Int      @id @default(autoincrement())
   title           String
-  description     String   @db.Text
+  description     String
   location        String
   price           Float
   discountedPrice Float
-  duration        String   @default("5 Days / 4 Nights")
-  status          String   @default("active") // 'active' or 'draft'
-  rating          Float    @default(0)
-  views           Int      @default(0)
-  likes           Int      @default(0)
   image           String
+  rating          Float    @default(0)
   category        String
-
-  // Timestamps
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
+  duration        String   @default("5 Days / 4 Nights")
+  likes           Int      @default(0)
+  status          String   @default("active")
+  views           Int      @default(0)
 
   @@map("explorepage")
 }
@@ -56,8 +50,7 @@ model Category {
   id          Int      @id @default(autoincrement())
   name        String   @unique
   description String?
-  color       String?  // For UI colors
-
+  color       String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -68,21 +61,19 @@ model Hotel {
   id            Int      @id @default(autoincrement())
   name          String
   location      String
-  description   String   @db.Text
+  description   String
   pricePerNight Float
   originalPrice Float
   rating        Float    @default(4.0)
   reviews       Int      @default(0)
-  images        String[] // Array of image URLs
-  amenities     String[] // Array of amenity strings
+  amenities     String[]
   roomType      String
   capacity      String
-  status        String   @default("active") // 'active' or 'draft'
-  showInOffers Boolean @default(false)
-
-  // Timestamps
+  status        String   @default("active")
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
+  images        String[]
+  showInOffers  Boolean  @default(false)
 
   @@map("hotels")
 }
@@ -91,7 +82,7 @@ model Destination {
   id            Int      @id @default(autoincrement())
   name          String
   country       String
-  description   String   @db.Text
+  description   String
   image         String
   price         Float
   originalPrice Float
@@ -100,12 +91,10 @@ model Destination {
   duration      String
   groupSize     String   @map("group_size")
   category      String
-  status        String   @default("active") // 'active' or 'draft'
+  status        String   @default("active")
   featured      Boolean  @default(false)
   views         Int      @default(0)
   likes         Int      @default(0)
-
-  // Timestamps
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
 
@@ -113,24 +102,23 @@ model Destination {
 }
 
 model TrendingRoute {
-  id             Int      @id @default(autoincrement())
-  from           String
-  to             String
-  back           String?   @default("")
-  price          Float
-  currency       String   @default("£")
-  image          String   @default("")
-  airline        String
-  travelClass    String   @default("Economy") @map("travel_class")
-  checkinBaggage String   @map("checkin_baggage")
-  cabinBaggage   String   @map("cabin_baggage")
-  baseFare       Float    @map("base_fare")
-  status         String   @default("active") // 'active' or 'draft'
-  order          Int      @default(0)
-  importantNotices String[] @default([]) // Array of important information notices
-
-  createdAt      DateTime @default(now()) @map("created_at")
-  updatedAt      DateTime @updatedAt      @map("updated_at")
+  id               Int      @id @default(autoincrement())
+  from             String
+  to               String
+  price            Float
+  currency         String   @default("£")
+  image            String   @default("")
+  airline          String
+  travelClass      String   @default("Economy") @map("travel_class")
+  checkinBaggage   String   @map("checkin_baggage")
+  cabinBaggage     String   @map("cabin_baggage")
+  baseFare         Float    @map("base_fare")
+  status           String   @default("active")
+  order            Int      @default(0)
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+  back             String?  @default("")
+  importantNotices String[] @default([])
 
   @@map("trending_routes")
 }
@@ -138,43 +126,41 @@ model TrendingRoute {
 model SpecialOffer {
   id              Int      @id @default(autoincrement())
   title           String
-  description     String   @db.Text
+  description     String
   location        String   @default("")
   price           Float    @default(0)
-  discountedPrice Float    @default(0)  @map("discounted_price")
+  discountedPrice Float    @default(0) @map("discounted_price")
   image           String   @default("")
   rating          Float    @default(5)
-  status          String   @default("active") // 'active' or 'draft'
+  status          String   @default("active")
   views           Int      @default(0)
   likes           Int      @default(0)
-
   createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt      @map("updated_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
 
   @@map("special_offers")
 }
+
 model CarouselImage {
   id        Int      @id @default(autoincrement())
   src       String
   alt       String   @default("")
-  order     Int      @default(0)   // controls display order
-  status    String   @default("active") // 'active' or 'draft'
-
+  order     Int      @default(0)
+  status    String   @default("active")
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt      @map("updated_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("carousel_images")
 }
 
 model LandingHeroCarouselImage {
-  id  Int   @id @default(autoincrement())
-  src String
-  alt String @default("")
-  order Int  @default(0)
-  status String @default("active")
-
-   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt      @map("updated_at")
+  id        Int      @id @default(autoincrement())
+  src       String
+  alt       String   @default("")
+  order     Int      @default(0)
+  status    String   @default("active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("herocarousel_images")
 }
@@ -192,7 +178,6 @@ model OngoingFare {
   arrival         String
   expires         String
   status          String   @default("active")
-
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
 
@@ -203,13 +188,62 @@ model PopularDestination {
   id          Int      @id @default(autoincrement())
   name        String
   location    String
-  description String   @db.Text
+  description String
   src         String
   alt         String   @default("")
+  status      String   @default("active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("popular_destinations")
+}
+
+enum JourneyType {
+  TWO_WAY
+  ONE_WAY
+}
+
+model TermsVersion {
+  id          Int      @id @default(autoincrement())
+  version     String   @unique
+  title       String
+  
+  englishText String   @map("english_text")
+  nepaliText  String   @map("nepali_text")
   status      String   @default("active")
 
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  @@map("popular_destinations")
+  agreements  TermsAgreement[]
+
+  @@map("terms_versions")
+}
+
+model TermsAgreement {
+  id                Int         @id @default(autoincrement())
+
+  // ADMIN FILLS
+  name              String
+  phoneNumber       String      @map("phone_number")
+  sectorRoute       String      @map("sector_route")
+  journeyType       JourneyType @map("journey_type")
+
+  // SELECTED TERMS VERSION
+  termsVersionId    Int?         @map("terms_version_id")
+  termsVersion      TermsVersion? @relation(fields: [termsVersionId], references: [id])
+
+  // COPY OF THE TERMS AT CREATION TIME
+  termsSnapshot     String?      @map("terms_snapshot")
+
+  // CUSTOMER FILLS
+  date              DateTime?
+  acceptTerms       Boolean     @default(false) @map("accept_terms")
+  customerSignature String?     @map("customer_signature")
+
+  createdAt         DateTime    @default(now()) @map("created_at")
+  updatedAt         DateTime    @updatedAt @map("updated_at")
+
+  @@index([termsVersionId])
+  @@map("terms_agreements")
 }

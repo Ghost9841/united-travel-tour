@@ -12,6 +12,7 @@ import {
   MapPinHouse,
   CalendarPlus2,
   Birdhouse,
+  Handshake,
 } from "lucide-react"
 
 import {
@@ -61,6 +62,7 @@ const mainItems = [
   { title: "Offers", url: "/dashboard/offers", icon: FileText },
   { title: "Special Offers", url: "/dashboard/special-offers", icon: CalendarPlus2 },
   { title: "Destination", url: "/dashboard/destinations", icon: MapPinHouse },
+  { title: "Terms Agreement", url: "/dashboard/terms-agreement", icon: Handshake },
 ]
 
 // Bottom navigation items

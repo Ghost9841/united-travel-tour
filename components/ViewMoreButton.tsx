@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import Link from 'next/link';
 import styled, { keyframes } from 'styled-components';
 
@@ -76,7 +75,7 @@ const StyledButton = styled.a`
 
 const ViewMoreButton = ({ href, label = 'View More', className }: ViewMoreButtonProps) => {
   return (
-    <Link href={href} passHref legacyBehavior>
+    <Link href={href} passHref>
       <StyledButton className={className}>
         <span>{label}</span>
         <span className="stroke" />
