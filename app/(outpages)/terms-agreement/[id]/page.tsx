@@ -56,8 +56,6 @@ export default function CustomerTermsAgreementPage() {
 
   const [signature, setSignature] = useState("");
   const [signatureDate, setSignatureDate] = useState("");
-  const [departureDate, setDepartureDate] = useState("");
-  const [returnDate, setReturnDate] = useState("");
   const [acceptTerms, setAcceptTerms] = useState(false);
 
   useEffect(() => {
@@ -82,18 +80,6 @@ export default function CustomerTermsAgreementPage() {
           if (data.date) {
             setSignatureDate(
               new Date(data.date).toISOString().split("T")[0]
-            );
-          }
-
-          if (data.departureDate) {
-            setDepartureDate(
-              new Date(data.departureDate).toISOString().split("T")[0]
-            );
-          }
-
-          if (data.returnDate) {
-            setReturnDate(
-              new Date(data.returnDate).toISOString().split("T")[0]
             );
           }
 
@@ -127,23 +113,6 @@ export default function CustomerTermsAgreementPage() {
       return;
     }
 
-    if (!departureDate) {
-      setError("Please select the departure date.");
-      return;
-    }
-
-    // Validate return date for TWO_WAY
-    if (agreement?.journeyType === "TWO_WAY") {
-      if (!returnDate) {
-        setError("Please select the return date for TWO_WAY journey.");
-        return;
-      }
-      if (new Date(returnDate) < new Date(departureDate)) {
-        setError("Return date must be after departure date.");
-        return;
-      }
-    }
-
     if (!acceptTerms) {
       setError("You must accept the terms and conditions.");
       return;
@@ -152,16 +121,11 @@ export default function CustomerTermsAgreementPage() {
     try {
       setSubmitting(true);
 
-      const payload: any = {
+      const payload = {
         customerSignature: signature.trim(),
         date: new Date(signatureDate).toISOString(),
-        departureDate: new Date(departureDate).toISOString(),
         acceptTerms: true,
       };
-
-      if (returnDate) {
-        payload.returnDate = new Date(returnDate).toISOString();
-      }
 
       const response = await fetch(`/api/terms-agreement/${id}`, {
         method: "PATCH",
@@ -478,7 +442,7 @@ export default function CustomerTermsAgreementPage() {
                 </label>
               </div>
 
-              {/* Signature and Dates */}
+              {/* Signature and Date */}
               <div className="mt-6 space-y-5">
                 {/* Signature */}
                 <div>
@@ -507,43 +471,6 @@ export default function CustomerTermsAgreementPage() {
                     max={new Date().toISOString().split("T")[0]}
                   />
                 </div>
-
-                {/* Departure Date - Readonly (pre-filled by admin) */}
-                <div>
-                  <label className="mb-2 block text-xs font-bold text-gray-700 flex items-center gap-1">
-                    <PlaneTakeoff className="h-3.5 w-3.5" />
-                    DEPARTURE DATE / प्रस्थान मिति <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="date"
-                    value={departureDate}
-                    onChange={(e) => setDepartureDate(e.target.value)}
-                    className="h-12 w-full border-0 border-b-2 border-gray-300 bg-transparent px-1 text-sm outline-none focus:border-[#0b3558]"
-                    min={new Date().toISOString().split("T")[0]}
-                  />
-                </div>
-
-                {/* Return Date - Only for TWO_WAY */}
-                {agreement.journeyType === "TWO_WAY" && (
-                  <div>
-                    <label className="mb-2 block text-xs font-bold text-gray-700 flex items-center gap-1">
-                      <PlaneLanding className="h-3.5 w-3.5" />
-                      RETURN DATE / फिर्ता मिति <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="date"
-                      value={returnDate}
-                      onChange={(e) => setReturnDate(e.target.value)}
-                      className="h-12 w-full border-0 border-b-2 border-gray-300 bg-transparent px-1 text-sm outline-none focus:border-[#0b3558]"
-                      min={departureDate || new Date().toISOString().split("T")[0]}
-                    />
-                    {departureDate && returnDate && new Date(returnDate) < new Date(departureDate) && (
-                      <p className="mt-1 text-xs text-red-500">
-                        Return date must be after departure date
-                      </p>
-                    )}
-                  </div>
-                )}
               </div>
 
               {/* Submit Button */}
