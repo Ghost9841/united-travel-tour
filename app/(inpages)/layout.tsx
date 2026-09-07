@@ -5,19 +5,19 @@ import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const user = await currentUser()
+  // const user = await currentUser()
 
-  if (!user) {
-    return redirect('/login')
-  }
+  // if (!user) {
+  //   return redirect('/login')
+  // }
 
-  const isAdmin =
-    user.publicMetadata?.role === 'admin' ||
-    (process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',').map((e) => e.trim().toLowerCase()).includes(user.emailAddresses?.[0]?.emailAddress?.toLowerCase() || ''))
+  // const isAdmin =
+  //   user.publicMetadata?.role === 'admin' ||
+  //   (process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',').map((e) => e.trim().toLowerCase()).includes(user.emailAddresses?.[0]?.emailAddress?.toLowerCase() || ''))
 
-  if (!isAdmin) {
-    return redirect('/')
-  }
+  // if (!isAdmin) {
+  //   return redirect('/')
+  // }
     const cookieStore = await cookies()
   const sidebarOpen = cookieStore.get('sidebar:state')?.value === 'true'
 

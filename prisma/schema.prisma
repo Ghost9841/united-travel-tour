@@ -227,6 +227,7 @@ model TermsAgreement {
   name              String
   phoneNumber       String      @map("phone_number")
   sectorRoute       String      @map("sector_route")
+  airlineName      String?      @map("airline_name")
   journeyType       JourneyType @map("journey_type")
 
     // CUSTOMER FILLS - TWO DATES

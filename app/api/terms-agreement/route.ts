@@ -1,4 +1,3 @@
-// app/api/terms-agreement/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
 
@@ -33,25 +32,28 @@ export async function POST(req: NextRequest) {
     const {
       name,
       phoneNumber,
+      airlineName,
       sectorRoute,
       journeyType,
       termsVersionId,
-      departureDate,  // Admin provides this
-      returnDate,     // Admin provides this (optional for ONE_WAY)
+      departureDate,
+      returnDate,
     } = body;
 
     // Validate required fields
     if (
       !name ||
       !phoneNumber ||
+      !airlineName ||
       !sectorRoute ||
       !journeyType ||
       !termsVersionId ||
-      !departureDate  // departure date is always required
+      !departureDate
     ) {
       return NextResponse.json(
         {
-          error: "Name, phone number, sector/route, journey type, departure date, and terms version are required",
+          error:
+            "Name, phone number, airline name, sector/route, journey type, departure date, and terms version are required",
         },
         { status: 400 }
       );
@@ -77,14 +79,40 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Validate that return date is after departure date (if provided)
-    if (returnDate && new Date(returnDate) < new Date(departureDate)) {
+    // Validate dates
+    const departure = new Date(departureDate);
+
+    if (isNaN(departure.getTime())) {
       return NextResponse.json(
         {
-          error: "Return date must be after departure date",
+          error: "Invalid departure date",
         },
         { status: 400 }
       );
+    }
+
+    let returnDateValue: Date | null = null;
+
+    if (returnDate) {
+      returnDateValue = new Date(returnDate);
+
+      if (isNaN(returnDateValue.getTime())) {
+        return NextResponse.json(
+          {
+            error: "Invalid return date",
+          },
+          { status: 400 }
+        );
+      }
+
+      if (returnDateValue < departure) {
+        return NextResponse.json(
+          {
+            error: "Return date must be after departure date",
+          },
+          { status: 400 }
+        );
+      }
     }
 
     // Get the terms version
@@ -103,17 +131,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Create the agreement with all fields
+    // Create agreement
     const agreement = await prisma.termsAgreement.create({
       data: {
         name,
         phoneNumber,
+        airlineName,
         sectorRoute,
         journeyType,
 
-        // Admin provides these dates
-        departureDate: new Date(departureDate),
-        returnDate: returnDate ? new Date(returnDate) : null,
+        departureDate: departure,
+        returnDate: returnDateValue,
 
         termsVersion: {
           connect: {
@@ -126,7 +154,7 @@ export async function POST(req: NextRequest) {
           nepali: termsVersion.nepaliText,
         }),
 
-        // Customer fields - initially null/empty
+        // Customer fields - initially empty
         date: null,
         customerSignature: null,
         acceptTerms: false,

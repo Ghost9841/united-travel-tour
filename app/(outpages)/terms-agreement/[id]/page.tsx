@@ -10,10 +10,13 @@ import {
   PlaneTakeoff,
   PlaneLanding,
   CalendarDays,
+  Plane,
 } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import Image from "next/image";
+import { Download } from "lucide-react";
+import { DownloadAgreementPDF } from "../TermsAgreementPDF";
 
 interface TermsVersion {
   id: number;
@@ -30,6 +33,7 @@ interface Agreement {
   id: number;
   name: string;
   phoneNumber: string;
+  airlineName: string;
   sectorRoute: string;
   journeyType: "ONE_WAY" | "TWO_WAY";
   customerSignature: string | null;
@@ -165,16 +169,19 @@ export default function CustomerTermsAgreementPage() {
   if (error || !agreement) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#f5f7fa] p-6">
-        <div className="rounded-xl bg-white p-8 text-center shadow-lg max-w-md">
+        <div className="max-w-md rounded-xl bg-white p-8 text-center shadow-lg">
           <h1 className="text-xl font-bold text-gray-900">
             Agreement Not Found
           </h1>
+
           <p className="mt-2 text-sm text-gray-500">
-            {error || "The agreement you're looking for doesn't exist or has been removed."}
+            {error ||
+              "The agreement you're looking for doesn't exist or has been removed."}
           </p>
+
           <Link
             href="/"
-            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-[#0b3558] px-4 py-2 text-sm font-semibold text-white hover:bg-[#092c4a] transition"
+            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-[#0b3558] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#092c4a]"
           >
             <ArrowLeft className="h-4 w-4" />
             Go Home
@@ -188,14 +195,16 @@ export default function CustomerTermsAgreementPage() {
     if (agreement.termsVersion?.englishText) {
       return agreement.termsVersion.englishText;
     }
+
     if (agreement.termsSnapshot) {
       try {
         const parsed = JSON.parse(agreement.termsSnapshot);
         return parsed.english || "No English terms available";
-      } catch (e) {
+      } catch {
         return "No English terms available";
       }
     }
+
     return "No English terms available";
   };
 
@@ -203,24 +212,29 @@ export default function CustomerTermsAgreementPage() {
     if (agreement.termsVersion?.nepaliText) {
       return agreement.termsVersion.nepaliText;
     }
+
     if (agreement.termsSnapshot) {
       try {
         const parsed = JSON.parse(agreement.termsSnapshot);
         return parsed.nepali || "No Nepali terms available";
-      } catch (e) {
+      } catch {
         return "No Nepali terms available";
       }
     }
+
     return "No Nepali terms available";
   };
 
   const englishText = getEnglishText();
   const nepaliText = getNepaliText();
+
   const versionNumber = agreement.termsVersion?.version || "N/A";
-  const versionTitle = agreement.termsVersion?.title || "Terms & Conditions";
+  const versionTitle =
+    agreement.termsVersion?.title || "Terms & Conditions";
 
   const formatDate = (dateStr: string | null) => {
     if (!dateStr) return "Not set";
+
     return new Date(dateStr).toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "short",
@@ -231,34 +245,24 @@ export default function CustomerTermsAgreementPage() {
   return (
     <div className="min-h-screen bg-[#f1f5f8]">
       {/* Header */}
-      <header className="bg-[#0b3558] text-white rounded-b-2xl">
-        <div className="mx-auto max-w-5xl px-6 py-16">
-
-        </div>
-      </header>
-
       <main className="mx-auto max-w-5xl space-y-4 px-4 py-6 md:px-6">
-        <header className="bg-[#0b3558] text-white rounded-2xl">
+        <header className="rounded-2xl bg-[#0b3558] text-white">
           <div className="mx-auto max-w-5xl px-6 py-8">
-            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-              <div className="flex">
-
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div className="flex items-center">
                 <Image
                   src="/UNITED_Logo-01.svg"
                   alt="Logo"
                   width={256}
                   height={64}
                 />
-               
               </div>
 
               <div className="md:text-right">
-                <h2 className="text-xl font-bold">
-                  NON-REFUNDABLE TICKET
-                </h2>
-                <p className="mt-1 text-sm font-semibold text-orange-400">
+                <p className="text-sm font-semibold text-orange-400">
                   TERMS & CONDITIONS FORM
                 </p>
+
                 <p className="mt-1 text-xs text-gray-300">
                   ENGLISH + NEPALI
                 </p>
@@ -266,21 +270,31 @@ export default function CustomerTermsAgreementPage() {
             </div>
           </div>
         </header>
-        {/* Status Alert - if already submitted */}
+
+        {/* Status Alert */}
         {submitted && (
           <div className="flex items-center gap-3 rounded-xl border border-green-200 bg-green-50 p-4">
-            <CheckCircle2 className="h-6 w-6 text-green-600" />
+            <CheckCircle2 className="h-6 w-6 shrink-0 text-green-600" />
+
             <div>
               <p className="font-semibold text-green-800">
                 Agreement Already Submitted
               </p>
+
               <p className="text-sm text-green-700">
-                This agreement was already accepted on {formatDate(agreement.date)}.
+                This agreement was already accepted on{" "}
+                {formatDate(agreement.date)}.
               </p>
-              <div className="mt-1 text-xs text-green-600 space-y-0.5">
-                <p>Departure: {formatDate(agreement.departureDate)}</p>
+
+              <div className="mt-1 space-y-0.5 text-xs text-green-600">
+                <p>
+                  Departure: {formatDate(agreement.departureDate)}
+                </p>
+
                 {agreement.returnDate && (
-                  <p>Return: {formatDate(agreement.returnDate)}</p>
+                  <p>
+                    Return: {formatDate(agreement.returnDate)}
+                  </p>
                 )}
               </div>
             </div>
@@ -294,44 +308,59 @@ export default function CustomerTermsAgreementPage() {
           </h2>
 
           <div className="grid gap-5 md:grid-cols-2">
+            {/* Passenger Name */}
             <ReadonlyField
               label="PASSENGER NAME / यात्रुको नाम"
               value={agreement.name}
             />
 
+            {/* Phone Number */}
             <ReadonlyField
               label="PHONE NUMBER / फोन नम्बर"
               value={agreement.phoneNumber}
             />
 
+            {/* Airline Name */}
+            <ReadonlyField
+              label="AIRLINE NAME / एयरलाइन्सको नाम"
+              value={agreement.airlineName}
+              icon={<Plane className="h-4 w-4" />}
+            />
+
+            {/* Sector / Route */}
             <ReadonlyField
               label="SECTOR / ROUTE / सेक्टर / रुट"
               value={agreement.sectorRoute}
             />
 
+            {/* Journey Type */}
             <div>
               <p className="mb-2 text-xs font-bold text-gray-700">
                 JOURNEY TYPE / यात्राको प्रकार
               </p>
 
-              <div className="flex gap-6 text-sm">
+              <div className="flex flex-wrap gap-6 text-sm">
                 <span className="flex items-center gap-2">
                   <span
-                    className={`inline-block h-5 w-5 rounded border ${agreement.journeyType === "TWO_WAY"
+                    className={`inline-block h-5 w-5 rounded border ${
+                      agreement.journeyType === "TWO_WAY"
                         ? "border-[#0b3558] bg-[#0b3558]"
                         : "border-gray-400"
-                      }`}
+                    }`}
                   />
+
                   RETURN / TWO WAY
                 </span>
 
                 <span className="flex items-center gap-2">
                   <span
-                    className={`inline-block h-5 w-5 rounded border ${agreement.journeyType === "ONE_WAY"
+                    className={`inline-block h-5 w-5 rounded border ${
+                      agreement.journeyType === "ONE_WAY"
                         ? "border-[#0b3558] bg-[#0b3558]"
                         : "border-gray-400"
-                      }`}
+                    }`}
                   />
+
                   ONE WAY
                 </span>
               </div>
@@ -341,27 +370,31 @@ export default function CustomerTermsAgreementPage() {
 
         {/* Travel Dates */}
         <section className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-          <h2 className="mb-5 text-sm font-bold uppercase tracking-wide text-[#0b3558] flex items-center gap-2">
+          <h2 className="mb-5 flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-[#0b3558]">
             <CalendarDays className="h-4 w-4" />
             Travel Dates / यात्रा मितिहरू
           </h2>
 
           <div className="grid gap-5 md:grid-cols-2">
+            {/* Departure */}
             <div>
-              <p className="mb-2 text-xs font-bold text-gray-700 flex items-center gap-1">
+              <p className="mb-2 flex items-center gap-1 text-xs font-bold text-gray-700">
                 <PlaneTakeoff className="h-3.5 w-3.5" />
                 DEPARTURE DATE / प्रस्थान मिति
               </p>
+
               <div className="border-b border-gray-300 pb-2 text-sm text-gray-800">
                 {formatDate(agreement.departureDate)}
               </div>
             </div>
 
+            {/* Return */}
             <div>
-              <p className="mb-2 text-xs font-bold text-gray-700 flex items-center gap-1">
+              <p className="mb-2 flex items-center gap-1 text-xs font-bold text-gray-700">
                 <PlaneLanding className="h-3.5 w-3.5" />
                 RETURN DATE / फिर्ता मिति
               </p>
+
               <div className="border-b border-gray-300 pb-2 text-sm text-gray-800">
                 {agreement.journeyType === "TWO_WAY"
                   ? formatDate(agreement.returnDate)
@@ -372,31 +405,36 @@ export default function CustomerTermsAgreementPage() {
         </section>
 
         {/* Terms & Conditions */}
-        <section className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+        <section className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
           <div className="bg-[#0b3558] px-5 py-4">
             <h2 className="text-sm font-bold text-white">
               {versionTitle}
             </h2>
+
             <p className="text-xs text-gray-300">
               Version {versionNumber}
             </p>
           </div>
 
           <div className="grid divide-y md:grid-cols-2 md:divide-x md:divide-y-0">
+            {/* English */}
             <div className="p-5">
               <h3 className="mb-4 font-bold text-orange-500">
                 ENGLISH
               </h3>
-              <div className="whitespace-pre-wrap text-sm leading-7 text-gray-700 max-h-[400px] overflow-y-auto">
+
+              <div className="max-h-[400px] overflow-y-auto whitespace-pre-wrap text-sm leading-7 text-gray-700">
                 {englishText}
               </div>
             </div>
 
+            {/* Nepali */}
             <div className="p-5">
               <h3 className="mb-4 font-bold text-orange-500">
                 नेपाली
               </h3>
-              <div className="whitespace-pre-wrap text-sm leading-7 text-gray-700 max-h-[400px] overflow-y-auto">
+
+              <div className="max-h-[400px] overflow-y-auto whitespace-pre-wrap text-sm leading-7 text-gray-700">
                 {nepaliText}
               </div>
             </div>
@@ -436,6 +474,7 @@ export default function CustomerTermsAgreementPage() {
                     onChange={(e) => setAcceptTerms(e.target.checked)}
                     className="h-5 w-5 accent-[#0b3558]"
                   />
+
                   <span className="text-sm font-bold text-gray-800">
                     I ACCEPT ALL TERMS / म सबै शर्त स्वीकार गर्दछु
                   </span>
@@ -447,8 +486,10 @@ export default function CustomerTermsAgreementPage() {
                 {/* Signature */}
                 <div>
                   <label className="mb-2 block text-xs font-bold text-gray-700">
-                    CUSTOMER SIGNATURE / NAME <span className="text-red-500">*</span>
+                    CUSTOMER SIGNATURE / NAME{" "}
+                    <span className="text-red-500">*</span>
                   </label>
+
                   <input
                     value={signature}
                     onChange={(e) => setSignature(e.target.value)}
@@ -459,10 +500,12 @@ export default function CustomerTermsAgreementPage() {
 
                 {/* Signature Date */}
                 <div>
-                  <label className="mb-2 block text-xs font-bold text-gray-700 flex items-center gap-1">
+                  <label className="mb-2 flex items-center gap-1 text-xs font-bold text-gray-700">
                     <CalendarDays className="h-3.5 w-3.5" />
-                    SIGNATURE DATE / हस्ताक्षर मिति <span className="text-red-500">*</span>
+                    SIGNATURE DATE / हस्ताक्षर मिति{" "}
+                    <span className="text-red-500">*</span>
                   </label>
+
                   <input
                     type="date"
                     value={signatureDate}
@@ -477,35 +520,58 @@ export default function CustomerTermsAgreementPage() {
               <button
                 onClick={submitAgreement}
                 disabled={submitting}
-                className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-[#0b3558] py-3.5 text-sm font-bold text-white hover:bg-[#092c4a] disabled:opacity-60 transition"
+                className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-[#0b3558] py-3.5 text-sm font-bold text-white transition hover:bg-[#092c4a] disabled:opacity-60"
               >
                 {submitting && (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 )}
+
                 {submitting
                   ? "SUBMITTING..."
                   : "ACCEPT TERMS & SUBMIT"}
               </button>
             </>
           ) : (
-            /* Already Submitted Message */
             <div className="mt-6 flex items-center gap-3 rounded-lg border border-green-200 bg-green-50 p-4">
               <CheckCircle2 className="h-6 w-6 text-green-600" />
+
               <div>
                 <p className="font-semibold text-green-800">
                   Agreement Successfully Submitted
                 </p>
+
                 <p className="text-sm text-green-700">
                   Thank you. Your acceptance has been recorded.
                 </p>
-                <div className="mt-1 text-xs text-green-600 space-y-0.5">
-                  <p>Signed: {formatDate(agreement.date)}</p>
-                  <p>Departure: {formatDate(agreement.departureDate)}</p>
+
+                <div className="mt-1 space-y-0.5 text-xs text-green-600">
+                  <p>
+                    Signed: {formatDate(agreement.date)}
+                  </p>
+
+                  <p>
+                    Departure: {formatDate(agreement.departureDate)}
+                  </p>
+
                   {agreement.returnDate && (
-                    <p>Return: {formatDate(agreement.returnDate)}</p>
+                    <p>
+                      Return: {formatDate(agreement.returnDate)}
+                    </p>
                   )}
                 </div>
+
               </div>
+              <div className="flex justify-end">
+  <button
+    type="button"
+    className="inline-flex items-center gap-2 rounded-lg bg-[#0b3558] px-5 py-3 text-sm font-bold text-white hover:bg-[#092c4a]"
+  >
+    <Download className="h-4 w-4" />
+
+    <DownloadAgreementPDF agreement={agreement} />
+  </button>
+</div>
+
             </div>
           )}
 
@@ -527,13 +593,19 @@ export default function CustomerTermsAgreementPage() {
 function ReadonlyField({
   label,
   value,
+  icon,
 }: {
   label: string;
   value: string;
+  icon?: React.ReactNode;
 }) {
   return (
     <div>
-      <p className="mb-2 text-xs font-bold text-gray-700">{label}</p>
+      <p className="mb-2 flex items-center gap-1 text-xs font-bold text-gray-700">
+        {icon}
+        {label}
+      </p>
+
       <div className="border-b border-gray-300 pb-2 text-sm text-gray-800">
         {value || "—"}
       </div>

@@ -1,9 +1,17 @@
-// app/dashboard/terms-agreement/new/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft, Loader2, Save, User, Phone, FileText, CalendarDays, PlaneTakeoff, PlaneLanding } from "lucide-react";
+import {
+  ArrowLeft,
+  Loader2,
+  Save,
+  User,
+  Phone,
+  Plane,
+  PlaneTakeoff,
+  PlaneLanding,
+} from "lucide-react";
 
 interface TermsVersion {
   id: number;
@@ -28,6 +36,7 @@ export default function NewTermsAgreementPage() {
   const [form, setForm] = useState({
     name: "",
     phoneNumber: "",
+    airlineName: "",
     sectorRoute: "",
     journeyType: "TWO_WAY",
     termsVersionId: "",
@@ -43,6 +52,7 @@ export default function NewTermsAgreementPage() {
 
   useEffect(() => {
     fetchVersions();
+
     if (isEditMode) {
       fetchAgreement();
     }
@@ -51,14 +61,20 @@ export default function NewTermsAgreementPage() {
   async function fetchVersions() {
     try {
       const res = await fetch("/api/terms-agreement/terms-versions");
-      if (!res.ok) throw new Error("Failed to fetch versions");
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch versions");
+      }
+
       const data = await res.json();
+
       setVersions(data);
 
       if (data.length > 0 && !isEditMode) {
         const activeVersion = data.find(
           (version: TermsVersion) => version.status === "active"
         );
+
         setForm((prev) => ({
           ...prev,
           termsVersionId: String(activeVersion?.id ?? data[0].id),
@@ -74,21 +90,31 @@ export default function NewTermsAgreementPage() {
 
   async function fetchAgreement() {
     if (!editId) return;
-    
+
     try {
       setLoadingAgreement(true);
+
       const res = await fetch(`/api/terms-agreement/${editId}`);
-      if (!res.ok) throw new Error("Failed to fetch agreement");
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch agreement");
+      }
+
       const data = await res.json();
 
       setForm({
         name: data.name || "",
         phoneNumber: data.phoneNumber || "",
+        airlineName: data.airlineName || "",
         sectorRoute: data.sectorRoute || "",
         journeyType: data.journeyType || "TWO_WAY",
         termsVersionId: String(data.termsVersionId || ""),
-        departureDate: data.departureDate ? new Date(data.departureDate).toISOString().split("T")[0] : "",
-        returnDate: data.returnDate ? new Date(data.returnDate).toISOString().split("T")[0] : "",
+        departureDate: data.departureDate
+          ? new Date(data.departureDate).toISOString().split("T")[0]
+          : "",
+        returnDate: data.returnDate
+          ? new Date(data.returnDate).toISOString().split("T")[0]
+          : "",
       });
     } catch (error) {
       console.error(error);
@@ -103,30 +129,47 @@ export default function NewTermsAgreementPage() {
   // ==========================================
 
   function updateField(field: string, value: string) {
-    setForm((prev) => ({ ...prev, [field]: value }));
+    setForm((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
     setError("");
     setSuccess("");
 
+    // Validate airline
+    if (!form.airlineName.trim()) {
+      setError("Please enter the airline name.");
+      return;
+    }
+
+    // Validate terms version
     if (!form.termsVersionId) {
       setError("Please select a terms version.");
       return;
     }
 
+    // Validate departure date
     if (!form.departureDate) {
       setError("Please select a departure date.");
       return;
     }
 
+    // Validate return date for TWO_WAY
     if (form.journeyType === "TWO_WAY" && !form.returnDate) {
       setError("Return date is required for TWO_WAY journeys.");
       return;
     }
 
-    if (form.returnDate && new Date(form.returnDate) < new Date(form.departureDate)) {
+    // Validate return date
+    if (
+      form.returnDate &&
+      new Date(form.returnDate) < new Date(form.departureDate)
+    ) {
       setError("Return date must be after departure date.");
       return;
     }
@@ -134,15 +177,21 @@ export default function NewTermsAgreementPage() {
     setLoading(true);
 
     try {
-      const url = isEditMode ? `/api/terms-agreement/${editId}` : "/api/terms-agreement";
+      const url = isEditMode
+        ? `/api/terms-agreement/${editId}`
+        : "/api/terms-agreement";
+
       const method = isEditMode ? "PATCH" : "POST";
 
       const res = await fetch(url, {
         method,
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           name: form.name,
           phoneNumber: form.phoneNumber,
+          airlineName: form.airlineName,
           sectorRoute: form.sectorRoute,
           journeyType: form.journeyType,
           termsVersionId: Number(form.termsVersionId),
@@ -159,15 +208,21 @@ export default function NewTermsAgreementPage() {
 
       if (isEditMode) {
         setSuccess("Agreement updated successfully!");
-        // Refresh the form with updated data
+
+        // Refresh form with updated data
         setForm({
           name: data.name || "",
           phoneNumber: data.phoneNumber || "",
+          airlineName: data.airlineName || "",
           sectorRoute: data.sectorRoute || "",
           journeyType: data.journeyType || "TWO_WAY",
           termsVersionId: String(data.termsVersionId || ""),
-          departureDate: data.departureDate ? new Date(data.departureDate).toISOString().split("T")[0] : "",
-          returnDate: data.returnDate ? new Date(data.returnDate).toISOString().split("T")[0] : "",
+          departureDate: data.departureDate
+            ? new Date(data.departureDate).toISOString().split("T")[0]
+            : "",
+          returnDate: data.returnDate
+            ? new Date(data.returnDate).toISOString().split("T")[0]
+            : "",
         });
       } else {
         router.push(`/dashboard/terms-agreement/${data.id}`);
@@ -180,7 +235,7 @@ export default function NewTermsAgreementPage() {
   }
 
   // ==========================================
-  // LOADING STATES
+  // LOADING STATE
   // ==========================================
 
   if (loadingAgreement) {
@@ -210,10 +265,15 @@ export default function NewTermsAgreementPage() {
 
               <div>
                 <h1 className="text-2xl font-bold text-[#0b3558]">
-                  {isEditMode ? "Edit Terms Agreement" : "Create Terms Agreement"}
+                  {isEditMode
+                    ? "Edit Terms Agreement"
+                    : "Create Terms Agreement"}
                 </h1>
+
                 <p className="mt-1 text-sm text-gray-500">
-                  {isEditMode ? "Update passenger and booking details." : "Enter the passenger and booking details."}
+                  {isEditMode
+                    ? "Update passenger and booking details."
+                    : "Enter the passenger and booking details."}
                 </p>
               </div>
             </div>
@@ -229,7 +289,12 @@ export default function NewTermsAgreementPage() {
               ) : (
                 <Save className="h-4 w-4" />
               )}
-              {loading ? "Saving..." : isEditMode ? "Update Agreement" : "Create Agreement"}
+
+              {loading
+                ? "Saving..."
+                : isEditMode
+                  ? "Update Agreement"
+                  : "Create Agreement"}
             </button>
           </div>
         </div>
@@ -241,6 +306,7 @@ export default function NewTermsAgreementPage() {
           {error && (
             <div className="mb-6 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4">
               <span className="mt-0.5 text-red-600">✕</span>
+
               <p className="text-sm text-red-700">{error}</p>
             </div>
           )}
@@ -248,17 +314,25 @@ export default function NewTermsAgreementPage() {
           {success && (
             <div className="mb-6 flex items-start gap-3 rounded-xl border border-green-200 bg-green-50 p-4">
               <span className="mt-0.5 text-green-600">✓</span>
+
               <p className="text-sm text-green-700">{success}</p>
             </div>
           )}
 
           {/* FORM */}
-          <form id="agreement-form" onSubmit={handleSubmit} className="space-y-6">
+          <form
+            id="agreement-form"
+            onSubmit={handleSubmit}
+            className="space-y-6"
+          >
             <section className="rounded-xl border border-gray-200 bg-white shadow-sm">
               <div className="border-b border-gray-200 px-6 py-5">
-                <h2 className="font-semibold text-gray-900">Agreement Details</h2>
+                <h2 className="font-semibold text-gray-900">
+                  Agreement Details
+                </h2>
+
                 <p className="text-sm text-gray-500">
-                  Fill in the passenger information
+                  Fill in the passenger and booking information
                 </p>
               </div>
 
@@ -268,12 +342,16 @@ export default function NewTermsAgreementPage() {
                   <label className="mb-2 block text-sm font-semibold text-gray-700">
                     Passenger Name
                   </label>
+
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+
                     <input
                       type="text"
                       value={form.name}
-                      onChange={(e) => updateField("name", e.target.value)}
+                      onChange={(e) =>
+                        updateField("name", e.target.value)
+                      }
                       required
                       className="h-11 w-full rounded-lg border border-gray-200 pl-10 pr-4 text-sm outline-none focus:border-[#0b3558] focus:ring-2 focus:ring-[#0b3558]/10"
                       placeholder="Passenger name"
@@ -286,15 +364,41 @@ export default function NewTermsAgreementPage() {
                   <label className="mb-2 block text-sm font-semibold text-gray-700">
                     Phone Number
                   </label>
+
                   <div className="relative">
                     <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+
                     <input
                       type="tel"
                       value={form.phoneNumber}
-                      onChange={(e) => updateField("phoneNumber", e.target.value)}
+                      onChange={(e) =>
+                        updateField("phoneNumber", e.target.value)
+                      }
                       required
                       className="h-11 w-full rounded-lg border border-gray-200 pl-10 pr-4 text-sm outline-none focus:border-[#0b3558] focus:ring-2 focus:ring-[#0b3558]/10"
                       placeholder="Phone number"
+                    />
+                  </div>
+                </div>
+
+                {/* AIRLINE */}
+                <div>
+                  <label className="mb-2 block text-sm font-semibold text-gray-700">
+                    Airline Name
+                  </label>
+
+                  <div className="relative">
+                    <Plane className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+
+                    <input
+                      type="text"
+                      value={form.airlineName}
+                      onChange={(e) =>
+                        updateField("airlineName", e.target.value)
+                      }
+                      required
+                      className="h-11 w-full rounded-lg border border-gray-200 pl-10 pr-4 text-sm outline-none focus:border-[#0b3558] focus:ring-2 focus:ring-[#0b3558]/10"
+                      placeholder="e.g. Nepal Airlines"
                     />
                   </div>
                 </div>
@@ -304,10 +408,13 @@ export default function NewTermsAgreementPage() {
                   <label className="mb-2 block text-sm font-semibold text-gray-700">
                     Sector / Route
                   </label>
+
                   <input
                     type="text"
                     value={form.sectorRoute}
-                    onChange={(e) => updateField("sectorRoute", e.target.value)}
+                    onChange={(e) =>
+                      updateField("sectorRoute", e.target.value)
+                    }
                     required
                     className="h-11 w-full rounded-lg border border-gray-200 px-4 text-sm outline-none focus:border-[#0b3558] focus:ring-2 focus:ring-[#0b3558]/10"
                     placeholder="e.g. KTM - LHR"
@@ -319,6 +426,7 @@ export default function NewTermsAgreementPage() {
                   <label className="mb-2 block text-sm font-semibold text-gray-700">
                     Journey Type
                   </label>
+
                   <div className="flex gap-6">
                     <label className="flex items-center gap-2">
                       <input
@@ -328,14 +436,12 @@ export default function NewTermsAgreementPage() {
                         checked={form.journeyType === "TWO_WAY"}
                         onChange={(e) => {
                           updateField("journeyType", e.target.value);
-                          // Clear return date when switching to ONE_WAY
-                          if (e.target.value === "ONE_WAY") {
-                            updateField("returnDate", "");
-                          }
                         }}
                       />
+
                       Return / Two Way
                     </label>
+
                     <label className="flex items-center gap-2">
                       <input
                         type="radio"
@@ -344,12 +450,13 @@ export default function NewTermsAgreementPage() {
                         checked={form.journeyType === "ONE_WAY"}
                         onChange={(e) => {
                           updateField("journeyType", e.target.value);
-                          // Clear return date when switching to ONE_WAY
+
                           if (e.target.value === "ONE_WAY") {
                             updateField("returnDate", "");
                           }
                         }}
                       />
+
                       One Way
                     </label>
                   </div>
@@ -357,40 +464,59 @@ export default function NewTermsAgreementPage() {
 
                 {/* DEPARTURE DATE */}
                 <div>
-                  <label className="mb-2 block text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  <label className="mb-2 flex items-center gap-2 text-sm font-semibold text-gray-700">
                     <PlaneTakeoff className="h-4 w-4" />
-                    Departure Date <span className="text-red-500">*</span>
+
+                    Departure Date
+
+                    <span className="text-red-500">*</span>
                   </label>
+
                   <input
                     type="date"
                     value={form.departureDate}
-                    onChange={(e) => updateField("departureDate", e.target.value)}
+                    onChange={(e) =>
+                      updateField("departureDate", e.target.value)
+                    }
                     required
                     className="h-11 w-full rounded-lg border border-gray-200 px-4 text-sm outline-none focus:border-[#0b3558] focus:ring-2 focus:ring-[#0b3558]/10"
                     min={new Date().toISOString().split("T")[0]}
                   />
                 </div>
 
-                {/* RETURN DATE - Only for TWO_WAY */}
+                {/* RETURN DATE */}
                 {form.journeyType === "TWO_WAY" && (
                   <div>
-                    <label className="mb-2 block text-sm font-semibold text-gray-700 flex items-center gap-2">
+                    <label className="mb-2 flex items-center gap-2 text-sm font-semibold text-gray-700">
                       <PlaneLanding className="h-4 w-4" />
-                      Return Date <span className="text-red-500">*</span>
+
+                      Return Date
+
+                      <span className="text-red-500">*</span>
                     </label>
+
                     <input
                       type="date"
                       value={form.returnDate}
-                      onChange={(e) => updateField("returnDate", e.target.value)}
+                      onChange={(e) =>
+                        updateField("returnDate", e.target.value)
+                      }
                       required
                       className="h-11 w-full rounded-lg border border-gray-200 px-4 text-sm outline-none focus:border-[#0b3558] focus:ring-2 focus:ring-[#0b3558]/10"
-                      min={form.departureDate || new Date().toISOString().split("T")[0]}
+                      min={
+                        form.departureDate ||
+                        new Date().toISOString().split("T")[0]
+                      }
                     />
-                    {form.departureDate && form.returnDate && new Date(form.returnDate) < new Date(form.departureDate) && (
-                      <p className="mt-1 text-xs text-red-500">
-                        Return date must be after departure date
-                      </p>
-                    )}
+
+                    {form.departureDate &&
+                      form.returnDate &&
+                      new Date(form.returnDate) <
+                        new Date(form.departureDate) && (
+                        <p className="mt-1 text-xs text-red-500">
+                          Return date must be after departure date
+                        </p>
+                      )}
                   </div>
                 )}
 
@@ -399,20 +525,34 @@ export default function NewTermsAgreementPage() {
                   <label className="mb-2 block text-sm font-semibold text-gray-700">
                     Terms & Conditions Version
                   </label>
+
                   {loadingVersions ? (
-                    <p className="text-sm text-gray-500">Loading versions...</p>
+                    <p className="text-sm text-gray-500">
+                      Loading versions...
+                    </p>
                   ) : (
                     <select
                       value={form.termsVersionId}
-                      onChange={(e) => updateField("termsVersionId", e.target.value)}
+                      onChange={(e) =>
+                        updateField("termsVersionId", e.target.value)
+                      }
                       required
                       className="h-11 w-full rounded-lg border border-gray-200 px-4 text-sm outline-none focus:border-[#0b3558] focus:ring-2 focus:ring-[#0b3558]/10"
                     >
-                      <option value="">Select terms version</option>
+                      <option value="">
+                        Select terms version
+                      </option>
+
                       {versions.map((version) => (
-                        <option key={version.id} value={version.id}>
+                        <option
+                          key={version.id}
+                          value={version.id}
+                        >
                           {version.version} — {version.title}
-                          {version.status === "active" ? " (Active)" : ""}
+
+                          {version.status === "active"
+                            ? " (Active)"
+                            : ""}
                         </option>
                       ))}
                     </select>
@@ -425,17 +565,24 @@ export default function NewTermsAgreementPage() {
             <div className="flex gap-3">
               <button
                 type="button"
-                onClick={() => router.push("/dashboard/terms-agreement")}
+                onClick={() =>
+                  router.push("/dashboard/terms-agreement")
+                }
                 className="rounded-lg border border-gray-200 px-5 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50"
               >
                 Cancel
               </button>
+
               <button
                 type="submit"
                 disabled={loading || loadingVersions}
                 className="flex-1 rounded-lg bg-[#0b3558] px-5 py-3 text-sm font-semibold text-white hover:bg-[#092c4a] disabled:opacity-50"
               >
-                {loading ? "Saving..." : isEditMode ? "Update Agreement" : "Create Agreement"}
+                {loading
+                  ? "Saving..."
+                  : isEditMode
+                    ? "Update Agreement"
+                    : "Create Agreement"}
               </button>
             </div>
           </form>

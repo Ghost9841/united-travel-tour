@@ -1,4 +1,3 @@
-// app/api/terms-agreement/[id]/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
 
@@ -34,6 +33,7 @@ export async function GET(
     return NextResponse.json(agreement);
   } catch (error) {
     console.error("GET AGREEMENT ERROR:", error);
+
     return NextResponse.json(
       { error: "Failed to fetch agreement" },
       { status: 500 }
@@ -73,19 +73,41 @@ export async function PATCH(
     const updateData: any = {};
 
     // Admin fields
-    if (body.name !== undefined) updateData.name = body.name;
-    if (body.phoneNumber !== undefined) updateData.phoneNumber = body.phoneNumber;
-    if (body.sectorRoute !== undefined) updateData.sectorRoute = body.sectorRoute;
-    
+    if (body.name !== undefined) {
+      updateData.name = body.name;
+    }
+
+    if (body.phoneNumber !== undefined) {
+      updateData.phoneNumber = body.phoneNumber;
+    }
+
+    // Airline name
+    if (body.airlineName !== undefined) {
+      updateData.airlineName = body.airlineName;
+    }
+
+    if (body.sectorRoute !== undefined) {
+      updateData.sectorRoute = body.sectorRoute;
+    }
+
+    // Journey type
     if (body.journeyType !== undefined) {
-      // When changing journey type, ensure return date is handled
-      if (body.journeyType === "ONE_WAY") {
-        updateData.returnDate = null; // Clear return date for ONE_WAY
+      if (!["ONE_WAY", "TWO_WAY"].includes(body.journeyType)) {
+        return NextResponse.json(
+          { error: "Invalid journey type" },
+          { status: 400 }
+        );
       }
+
+      // ONE_WAY should never have a return date
+      if (body.journeyType === "ONE_WAY") {
+        updateData.returnDate = null;
+      }
+
       updateData.journeyType = body.journeyType;
     }
-    
-    // Admin date fields
+
+    // Departure date
     if (body.departureDate !== undefined) {
       if (!body.departureDate) {
         return NextResponse.json(
@@ -93,32 +115,76 @@ export async function PATCH(
           { status: 400 }
         );
       }
-      updateData.departureDate = new Date(body.departureDate);
+
+      const departureDate = new Date(body.departureDate);
+
+      if (isNaN(departureDate.getTime())) {
+        return NextResponse.json(
+          { error: "Invalid departure date" },
+          { status: 400 }
+        );
+      }
+
+      updateData.departureDate = departureDate;
     }
 
+    // Return date
     if (body.returnDate !== undefined) {
-      // For ONE_WAY, return date should be null
-      if (body.journeyType === "ONE_WAY" || existingAgreement.journeyType === "ONE_WAY") {
+      const journeyType =
+        body.journeyType ?? existingAgreement.journeyType;
+
+      // ONE_WAY => always clear return date
+      if (journeyType === "ONE_WAY") {
         updateData.returnDate = null;
       } else if (body.returnDate) {
-        // Validate return date is after departure date
-        const departure = body.departureDate ? new Date(body.departureDate) : existingAgreement.departureDate;
-        if (departure && new Date(body.returnDate) < departure) {
+        const departureDate = body.departureDate
+          ? new Date(body.departureDate)
+          : existingAgreement.departureDate;
+
+        const returnDate = new Date(body.returnDate);
+
+        if (isNaN(returnDate.getTime())) {
           return NextResponse.json(
-            { error: "Return date must be after departure date" },
+            { error: "Invalid return date" },
             { status: 400 }
           );
         }
-        updateData.returnDate = new Date(body.returnDate);
+
+        if (departureDate && returnDate < departureDate) {
+          return NextResponse.json(
+            {
+              error: "Return date must be after departure date",
+            },
+            { status: 400 }
+          );
+        }
+
+        updateData.returnDate = returnDate;
       } else {
         updateData.returnDate = null;
       }
     }
-    
-    // Terms version update (with snapshot update)
+
+    // If changing to TWO_WAY, make sure a return date exists
+    if (
+      body.journeyType === "TWO_WAY" &&
+      body.returnDate === undefined &&
+      !existingAgreement.returnDate
+    ) {
+      return NextResponse.json(
+        {
+          error: "Return date is required for TWO_WAY journeys",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Terms version update
     if (body.termsVersionId !== undefined) {
       const termsVersion = await prisma.termsVersion.findUnique({
-        where: { id: Number(body.termsVersionId) },
+        where: {
+          id: Number(body.termsVersionId),
+        },
       });
 
       if (!termsVersion) {
@@ -129,22 +195,27 @@ export async function PATCH(
       }
 
       updateData.termsVersionId = Number(body.termsVersionId);
+
+      // Update snapshot whenever terms version changes
       updateData.termsSnapshot = JSON.stringify({
         english: termsVersion.englishText,
         nepali: termsVersion.nepaliText,
       });
     }
 
-    // Customer fields - signature (admin can update these too)
+    // Customer signature
     if (body.customerSignature !== undefined) {
       updateData.customerSignature = body.customerSignature;
     }
 
     // Customer signature date
     if (body.date !== undefined) {
-      updateData.date = body.date ? new Date(body.date) : null;
+      updateData.date = body.date
+        ? new Date(body.date)
+        : null;
     }
 
+    // Terms acceptance
     if (body.acceptTerms !== undefined) {
       updateData.acceptTerms = body.acceptTerms;
     }
@@ -160,6 +231,7 @@ export async function PATCH(
     return NextResponse.json(updatedAgreement);
   } catch (error) {
     console.error("UPDATE AGREEMENT ERROR:", error);
+
     return NextResponse.json(
       { error: "Failed to update agreement" },
       { status: 500 }
@@ -203,6 +275,7 @@ export async function DELETE(
     );
   } catch (error) {
     console.error("DELETE AGREEMENT ERROR:", error);
+
     return NextResponse.json(
       { error: "Failed to delete agreement" },
       { status: 500 }
