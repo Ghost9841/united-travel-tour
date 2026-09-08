@@ -253,3 +253,32 @@ model TermsAgreement {
   @@index([termsVersionId])
   @@map("terms_agreements")
 }
+
+// prisma/schema.prisma
+
+model Enquiry {
+  id            String    @id @default(cuid())
+  name          String
+  email         String
+  phoneNumber   String
+  enquiryMessage String?
+  airlineName   String?
+  sectorRoute   String?
+  journeyType   JourneyType?
+  departureDate DateTime?
+  returnDate    DateTime?
+  status        EnquiryStatus @default(PENDING)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([email])
+  @@index([status])
+  @@map("enquiries")
+}
+
+enum EnquiryStatus {
+  PENDING
+  CONTACTED
+  COMPLETED
+  CANCELLED
+}

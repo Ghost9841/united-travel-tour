@@ -7,12 +7,11 @@ import {
   Hotel,
   Plane,
   Settings,
-  User,
-  HelpCircle,
   MapPinHouse,
   CalendarPlus2,
   Birdhouse,
   Handshake,
+  SquarePen,
 } from "lucide-react"
 
 import {
@@ -25,8 +24,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarHeader,
-  SidebarFooter,
-  useSidebar,
 } from "@/components/ui/sidebar"
 
 import {
@@ -35,21 +32,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import Image from "next/image"
 
 // Main navigation items
@@ -63,14 +45,14 @@ const mainItems = [
   { title: "Special Offers", url: "/dashboard/special-offers", icon: CalendarPlus2 },
   { title: "Destination", url: "/dashboard/destinations", icon: MapPinHouse },
   { title: "Terms Agreement", url: "/dashboard/terms-agreement", icon: Handshake },
+  { title: "Enquiry", url: "/dashboard/enquiry", icon: SquarePen },
 ]
 
 // Bottom navigation items
 const bottomItems = [
   { title: "Settings", url: "/dashboard/settings", icon: Settings },
-  { title: "Profile", url: "/dashboard/profile", icon: User },
-  { title: "Help", url: "/dashboard/help", icon: HelpCircle },
 ]
+
 
 function BottomNav({ items }: { items: typeof bottomItems }) {
   return (
